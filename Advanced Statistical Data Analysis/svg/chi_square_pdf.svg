@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="chi-square_pdf" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" width="600" height="400">
+
+  <title>The chi-Square distribution</title>
+  <desc>
+     chi-square distribution
+     f_k(x) = x^(n/2-1) * exp(-x/2) / (2^(n/2) * gamma(n/2))
+     
+     from Wikimedia Commons
+     plot-range: 0 to 8
+     plotted with cubic bezier-curves
+     the bezier-controll-points are calculated to give a very accurate result.
+     accuracy is 0.00001 units
+     symbols in "Computer Modern" (TeX) font embedded
+     created with a plain text editor using GNU/Linux
+
+     about: http://commons.wikimedia.org/wiki/Image:chi-square_pdf.svg
+     source: http://commons.wikimedia.org/
+     rights: GNU Free Documentation license,
+             Creative Commons Attribution ShareAlike license
+  </desc>
+
+  <defs>
+    <!-- pstricks-style arrow, zoom 1.5 -->
+    <marker id="Arrow" refX="2.52" refY="2.25" markerUnits="strokeWidth" markerWidth="6" markerHeight="4.5" orient="auto">
+      <path d="M 2.52 2.25 L 0 4.5 L 6 2.25 L 0 0 z"/>
+    </marker>
+
+    <!-- now the used chars in "Computer Modern" font. They are implemented
+         as plain paths and not as glyphs just because it didn't work -->
+
+    <!-- f: horiz-adv-x="489.6"-->
+    <path id="f" d="M 53 0 m 314 400 h 86 c 20 0 30 0 30 20 c 0 11 -10 11 -27 11 h -83           c 11 58 10 56 21 114 c 4 21 18 92 24 104 c 9 19 26 34 47 34           c 4 0 30 0 49 -18 c -44 -4 -54 -39 -54 -54 c 0 -23 18 -35 37 -35           c 26 0 55 22 55 60 c 0 46 -46 69 -87 69 c -34 0 -97 -18 -127 -117           c -6 -21 -9 -31 -33 -157 h -69 c -19 0 -30 0 -30 -19           c 0 -12 9 -12 28 -12 h 66 l -75 -395 c -18 -97 -35 -188 -87 -188           c -4 0 -29 0 -48 18 c 46 3 55 39 55 54 c 0 23 -18 35 -37 35           c -26 0 -55 -22 -55 -60 c 0 -45 44 -69 85 -69 c 55 0 95 59 113 97           c 32 63 55 184 56 191 z"/>
+    <!-- k: horiz-adv-x="520.6"-->
+    <path id="k" d="M 55 0 m 232 683 c 0 1 0 11 -13 11 c -23 0 -96 -8 -122 -10           c -8 -1 -19 -2 -19 -20 c 0 -12 9 -12 24 -12 c 48 0 50 -7 50 -17           l -3 -20 l -145 -576 c -4 -14 -4 -16 -4 -22 c 0 -23 20 -28 29 -28           c 13 0 28 9 34 21 c 5 9 50 194 56 219 c 34 -3 116 -19 116 -85           c 0 -7 0 -11 -3 -21 c -2 -12 -4 -24 -4 -35 c 0 -59 40 -99 92 -99           c 30 0 57 16 79 53 c 25 44 36 99 36 101 c 0 10 -9 10 -12 10           c -10 0 -11 -4 -14 -18 c -20 -73 -43 -124 -87 -124           c -19 0 -32 11 -32 47 c 0 17 4 40 8 56 c 4 17 4 21 4 31           c 0 65 -63 94 -148 105 c 31 18 63 50 86 74 c 48 53 94 96 143 96           c 6 0 7 0 9 -1 c 12 -2 13 -2 21 -8 c 2 -1 2 -2 4 -4           c -48 -3 -57 -42 -57 -54 c 0 -16 11 -35 38 -35 c 26 0 55 22 55 61           c 0 30 -23 63 -68 63 c -28 0 -74 -8 -146 -88           c -34 -38 -73 -78 -111 -93 z"/>
+    <!-- x: horiz-adv-x="527.8"-->
+    <path id="x" d="M 29 0 m 305 302 c 6 26 29 118 99 118 c 5 0 29 0 50 -13           c -28 -5 -48 -30 -48 -54 c 0 -16 11 -35 38 -35 c 22 0 54 18 54 58           c 0 52 -59 66 -93 66 c -58 0 -93 -53 -105 -76 c -25 66 -79 76 -108 76           c -104 0 -161 -129 -161 -154 c 0 -10 10 -10 12 -10 c 8 0 11 2 13 11           c 34 106 100 131 134 131 c 19 0 54 -9 54 -67 c 0 -31 -17 -98 -54 -238           c -16 -62 -51 -104 -95 -104 c -6 0 -29 0 -50 13 c 25 5 47 26 47 54           c 0 27 -22 35 -37 35 c -30 0 -55 -26 -55 -58 c 0 -46 50 -66 94 -66           c 66 0 102 70 105 76 c 12 -37 48 -76 108 -76 c 103 0 160 129 160 154           c 0 10 -9 10 -12 10 c -9 0 -11 -4 -13 -11           c -33 -107 -101 -131 -133 -131 c -39 0 -55 32 -55 66           c 0 22 6 44 17 88 z"/>
+    <!-- chi: horiz-adv-x="625.7"-->
+    <path id="chi" d="M 31 0 m 552 403 c 11 11 11 13 11 16 c 0 6 -4 12 -12 12           c -6 0 -10 -5 -16 -12 l -229 -255 c -40 127 -48 152 -71 205           c -11 23 -33 73 -121 73 c -58 0 -84 -52 -84 -66 c 0 -1 0 -10 12 -10           c 9 0 11 6 13 11 c 15 39 47 43 53 43 c 30 0 60 -76 77 -120           c 32 -79 64 -195 64 -198 c 0 -1 0 -3 -8 -11 l -230 -257           c -11 -11 -11 -13 -11 -16 c 0 -6 6 -12 12 -12 c 7 0 12 7 16 11           l 229 257 c 32 -104 44 -143 68 -199 c 13 -30 35 -80 124 -80           c 58 0 85 52 85 65 c 0 5 -2 11 -12 11 c -10 0 -11 -4 -14 -14           c -9 -24 -34 -40 -53 -40 c -51 0 -119 242 -141 319 z"/>
+    <!-- (: horiz-adv-x="388.9"-->
+    <path id="parleft" d="M 99 0 m 232 -240 c 0 3 0 5 -17 22 c -125 126 -157 315 -157 468           c 0 174 38 348 161 473 c 13 12 13 14 13 17 c 0 7 -4 10 -10 10           c -10 0 -100 -68 -159 -195 c -51 -110 -63 -221 -63 -305           c 0 -78 11 -199 66 -312 c 60 -123 146 -188 156 -188 c 6 0 10 3 10 10           z"/>
+    <!-- ): horiz-adv-x="388.9"-->
+    <path id="parright" d="M 57 0 m 232 250 c 0 78 -11 199 -66 312 c -60 123 -146 188 -156 188           c -6 0 -10 -4 -10 -10 c 0 -3 0 -5 19 -23 c 98 -99 155 -258 155 -467           c 0 -171 -37 -347 -161 -473 c -13 -12 -13 -14 -13 -17           c 0 -6 4 -10 10 -10 c 10 0 100 68 159 195 c 51 110 63 221 63 305 z"/>
+    <!-- =: horiz-adv-x="777.8"-->
+    <path id="equal" d="M 56 0 m 631 327 c 15 0 34 0 34 20 c 0 20 -19 20 -33 20 h -599           c -14 0 -33 0 -33 -20 c 0 -20 19 -20 34 -20 z M 90 327 m 598 -194           c 14 0 33 0 33 20 c 0 20 -19 20 -34 20 h -597 c -15 0 -34 0 -34 -20           c 0 -20 19 -20 33 -20 z"/>
+    <!-- 0: horiz-adv-x="500"-->
+    <path id="zero" d="M 39 0 m 421 320 c 0 80 -5 160 -40 234 c -46 96 -128 112 -170 112           c -60 0 -133 -26 -174 -119 c -32 -69 -37 -147 -37 -227           c 0 -75 4 -165 45 -241 c 43 -81 116 -101 165 -101           c 54 0 130 21 174 116 c 32 69 37 147 37 226 z M 460 320 m -211 -320           c -39 0 -98 25 -116 121 c -11 60 -11 152 -11 211 c 0 64 0 130 8 184           c 19 119 94 128 119 128 c 33 0 99 -18 118 -117           c 10 -56 10 -132 10 -195 c 0 -75 0 -143 -11 -207           c -15 -95 -72 -125 -117 -125 z"/>
+    <!-- 1: horiz-adv-x="500"-->
+    <path id="one" d="M 89 0 m 205 640 c 0 24 0 26 -23 26 c -62 -64 -150 -64 -182 -64 v -31           c 20 0 79 0 131 26 v -518 c 0 -36 -3 -48 -93 -48 h -32 v -31           c 35 3 122 3 162 3 c 40 0 127 0 162 -3 v 31 h -32           c -90 0 -93 11 -93 48 z"/>
+    <!-- 2: horiz-adv-x="500"-->
+    <path id="two" d="M 50 0 m 399 174 h -25 c -5 -30 -12 -74 -22 -89 c -7 -8 -73 -8 -95 -8           h -180 l 106 103 c 156 138 216 192 216 292 c 0 114 -90 194 -212 194           c -113 0 -187 -92 -187 -181 c 0 -56 50 -56 53 -56 c 17 0 52 12 52 53           c 0 26 -18 52 -53 52 c -8 0 -10 0 -13 -1 c 23 65 77 102 135 102           c 91 0 134 -81 134 -163 c 0 -80 -50 -159 -105 -221 l -192 -214           c -11 -11 -11 -13 -11 -37 h 371 z"/>
+    <!-- 3: horiz-adv-x="500"-->
+    <path id="three" d="M 42 0 m 248 352 c 82 27 140 97 140 176 c 0 82 -88 138 -184 138           c -101 0 -177 -60 -177 -136 c 0 -33 22 -52 51 -52 c 31 0 51 22 51 51           c 0 50 -47 50 -62 50 c 31 49 97 62 133 62 c 41 0 96 -22 96 -112           c 0 -12 -2 -70 -28 -114 c -30 -48 -64 -51 -89 -52           c -8 -1 -32 -3 -39 -3 c -8 -1 -15 -2 -15 -12 c 0 -11 7 -11 24 -11           h 44 c 82 0 119 -68 119 -166 c 0 -136 -69 -165 -113 -165           c -43 0 -118 17 -153 76 c 35 -5 66 17 66 55 c 0 36 -27 56 -56 56           c -24 0 -56 -14 -56 -58 c 0 -91 93 -157 202 -157           c 122 0 213 91 213 193 c 0 82 -63 160 -167 181 z"/>
+    <!-- 4: horiz-adv-x="500"-->
+    <path id="four" d="M 28 0 m 0 165 h 266 v -87 c 0 -36 -2 -47 -76 -47 h -21 v -31           c 41 3 93 3 135 3 c 42 0 95 0 136 -3 v 31 h -21 c -74 0 -76 11 -76 47           v 87 h 100 v 31 h -100 v 455 c 0 20 0 26 -16 26 c -9 0 -12 0 -20 -12           l -307 -469 z M 28 196 m 272 0 h -244 l 244 373 z"/>
+    <!-- 5: horiz-adv-x="500"-->
+    <path id="five" d="M 50 0 m 399 201 c 0 119 -82 219 -190 219 c -48 0 -91 -16 -127 -51           v 195 c 20 -6 53 -13 85 -13 c 123 0 193 91 193 104 c 0 6 -3 11 -10 11           c -1 0 -3 0 -8 -3 c -20 -9 -69 -29 -136 -29 c -40 0 -86 7 -133 28           c -8 3 -10 3 -12 3 c -10 0 -10 -8 -10 -24 v -296 c 0 -18 0 -26 14 -26           c 7 0 9 3 13 9 c 11 16 48 70 129 70 c 52 0 77 -46 85 -64           c 16 -37 18 -76 18 -126 c 0 -35 0 -95 -24 -137           c -24 -39 -61 -65 -107 -65 c -73 0 -130 53 -147 112 c 3 -1 6 -2 17 -2           c 33 0 50 25 50 49 c 0 24 -17 49 -50 49 c -14 0 -49 -7 -49 -53           c 0 -86 69 -183 181 -183 c 116 0 218 96 218 223 z"/>
+    <!-- 6: horiz-adv-x="500"-->
+    <path id="six" d="M 42 0 m 90 328 v 24 c 0 253 124 289 175 289 c 24 0 66 -6 88 -40           c -15 0 -55 0 -55 -45 c 0 -31 24 -46 46 -46 c 16 0 46 9 46 48           c 0 60 -44 108 -127 108 c -128 0 -263 -129 -263 -350           c 0 -267 116 -338 209 -338 c 111 0 206 94 206 226           c 0 127 -89 223 -200 223 c -68 0 -105 -51 -125 -99 z M 132 328           m 119 -322 c -63 0 -93 60 -99 75 c -18 47 -18 127 -18 145           c 0 78 32 178 122 178 c 16 0 62 0 93 -62 c 18 -37 18 -88 18 -137           c 0 -48 0 -98 -17 -134 c -30 -60 -76 -65 -99 -65 z"/>
+    <!-- 7: horiz-adv-x="500"-->
+    <path id="seven" d="M 56 0 m 420 609 c 9 12 9 14 9 35 h -243 c -122 0 -124 13 -128 32           h -25 l -33 -206 h 25 c 3 16 12 79 25 91 c 7 6 85 6 98 6 h 207           c -11 -16 -90 -125 -112 -158 c -90 -135 -123 -274 -123 -376           c 0 -10 0 -55 46 -55 c 46 0 46 45 46 55 v 51 c 0 55 3 110 11 164           c 4 23 18 109 62 171 z"/>
+    <!-- 8: horiz-adv-x="500"-->
+    <path id="eight" d="M 42 0 m 121 457 c -46 30 -50 64 -50 81 c 0 61 65 103 136 103           c 73 0 137 -52 137 -124 c 0 -57 -39 -105 -99 -140 z M 287 377           m 22 -15 c 72 37 121 89 121 155 c 0 92 -89 149 -180 149           c -100 0 -181 -74 -181 -167 c 0 -18 2 -63 44 -110           c 11 -12 48 -37 73 -54 c -58 -29 -144 -85 -144 -184           c 0 -106 102 -173 207 -173 c 113 0 208 83 208 190           c 0 36 -11 81 -49 123 c -19 21 -35 31 -99 71 z M 309 362 m -100 -42           c 28 -17 75 -47 123 -78 c 28 -19 75 -49 75 -110           c 0 -74 -75 -126 -157 -126 c -86 0 -158 62 -158 145           c 0 58 32 122 117 169 z"/>
+    <!-- 9: horiz-adv-x="500"-->
+    <path id="nine" d="M 42 0 m 325 318 v -32 c 0 -234 -104 -280 -162 -280           c -17 0 -71 2 -98 36 c 44 0 52 29 52 46 c 0 31 -24 46 -46 46           c -16 0 -46 -9 -46 -48 c 0 -67 54 -108 139 -108           c 129 0 251 136 251 351 c 0 269 -115 337 -204 337           c -55 0 -104 -18 -147 -63 c -41 -45 -64 -87 -64 -162           c 0 -125 88 -223 200 -223 c 61 0 102 42 125 100 z M 367 318           m -124 -77 c -16 0 -62 0 -93 63 c -18 37 -18 87 -18 136           c 0 54 0 101 21 138 c 27 50 65 63 100 63 c 46 0 79 -34 96 -79           c 12 -32 16 -95 16 -141 c 0 -83 -34 -180 -122 -180 z"/>
+    <!-- .: horiz-adv-x="277.8"-->
+    <path id="dot" d="M 192 378 m 0 -325 c 0 29 -24 53 -53 53 c -29 0 -53 -24 -53 -53           c 0 -29 24 -53 53 -53 c 29 0 53 24 53 53 z"/>
+  </defs>
+
+
+
+  <rect id="background" x="0" y="0" width="600" height="400" fill="none"/>
+
+  <g transform="translate(61.5, 362.5)">
+    <!-- grid -->
+    <g id="grid" transform="scale(1,-1)" style="stroke:black; opacity:0.4; stroke-width:0.5; stroke-linecap:butt">
+      <path id="gridx" d="M   60,0 V 300.5             M  120,0 V 300.5             M  180,0 V 300.5             M  240,0 V 300.5             M  300,0 V 300.5             M  360,0 V 300.5             M  420,0 V 300.5             M  480,0 V 300.5"/>
+      <path id="gridy" d="M 0, 60 H 480             M 0,120 H 480             M 0,180 H 480             M 0,240 H 480             M 0,300 H 480"/>
+    </g>
+
+    <!-- ticks -->
+    <g id="ticks" transform="scale(1,-1)" style="stroke:black; stroke-width:1; stroke-linecap:square">
+      <path id="ticksx" d="M    0,-5 V 5             M   60,-5 V 5             M  120,-5 V 5             M  180,-5 V 5             M  240,-5 V 5             M  300,-5 V 5             M  360,-5 V 5             M  420,-5 V 5             M  480,-5 V 5"/>
+      <path id="ticksy" d="M -5,  0 H 5             M -5, 60 H 5             M -5,120 H 5             M -5,180 H 5             M -5,240 H 5             M -5,300 H 5"/>
+    </g>
+
+    <!-- axes -->
+    <line id="x-axis" x1="0." x2="510.5" y1="0" y2="0" stroke="black" stroke-width="2" stroke-linecap="butt" marker-end="url(#Arrow)"/>
+    <line id="y-axis" x1="0" x2="0" y1="0" y2="-330.5" stroke="black" stroke-width="2" stroke-linecap="butt" marker-end="url(#Arrow)"/>
+
+    <!-- labels -->
+    <g id="chik">
+      <g id="chil" transform="translate(248,-332) scale(0.025,-0.025)">
+        <use xlink:href="#chi" x="-625.7" y="0"/>
+      </g>
+      <g id="kchi" transform="translate(248,-332) scale(0.0173,-0.0173)">
+        <use xlink:href="#k" x="0" y="-400"/>
+      </g>
+      <g id="chi2" transform="translate(248,-332) scale(0.0173,-0.0173)">
+        <use xlink:href="#two" x="0" y="600"/>
+      </g>
+    </g>
+    <g id="xl" transform="translate(521,18) scale(0.025,-0.025)">
+      <use xlink:href="#x" x="-285.75" y="0"/>
+    </g>
+    <g id="fkx">
+      <g id="fx" transform="translate(-3,-340) scale(0.025,-0.025)">
+        <use xlink:href="#f" x="-2156.1" y="0"/>
+        <use xlink:href="#parleft" x="-1305.6" y="0"/>
+        <use xlink:href="#x" x="-916.7" y="0"/>
+        <use xlink:href="#parright" x="-388.9" y="0"/>
+      </g>
+      <g id="kf" transform="translate(-3,-340) scale(0.0173,-0.0173)">
+        <use xlink:href="#k" x="-2404.3" y="-200"/>
+      </g>
+    </g>
+    <g id="xlabels" transform="translate(0,29)">
+      <g id="x0" transform="translate(0,0) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-250" y="0"/>
+      </g>
+      <g id="x1" transform="translate(60,0) scale(0.025,-0.025)">
+        <use xlink:href="#one" x="-250" y="0"/>
+      </g>
+      <g id="x2" transform="translate(120,0) scale(0.025,-0.025)">
+        <use xlink:href="#two" x="-250" y="0"/>
+      </g>
+      <g id="x3" transform="translate(180,0) scale(0.025,-0.025)">
+        <use xlink:href="#three" x="-250" y="0"/>
+      </g>
+      <g id="x4" transform="translate(240,0) scale(0.025,-0.025)">
+        <use xlink:href="#four" x="-250" y="0"/>
+      </g>
+      <g id="x5" transform="translate(300,0) scale(0.025,-0.025)">
+        <use xlink:href="#five" x="-250" y="0"/>
+      </g>
+      <g id="x6" transform="translate(360,0) scale(0.025,-0.025)">
+        <use xlink:href="#six" x="-250" y="0"/>
+      </g>
+      <g id="x7" transform="translate(420,0) scale(0.025,-0.025)">
+        <use xlink:href="#seven" x="-250" y="0"/>
+      </g>
+      <g id="x8" transform="translate(480,0) scale(0.025,-0.025)">
+        <use xlink:href="#eight" x="-250" y="0"/>
+      </g>
+    </g>
+    <g id="ylabels" transform="translate(-11,8)">
+      <g id="y00" transform="translate(0,0) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#zero" x="-500" y="0"/>
+      </g>
+      <g id="y01" transform="translate(0,-60) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#one" x="-500" y="0"/>
+      </g>
+      <g id="y02" transform="translate(0,-120) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#two" x="-500" y="0"/>
+      </g>
+      <g id="y03" transform="translate(0,-180) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#three" x="-500" y="0"/>
+      </g>
+      <g id="y04" transform="translate(0,-240) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#four" x="-500" y="0"/>
+      </g>
+      <g id="y05" transform="translate(0,-300) scale(0.025,-0.025)">
+        <use xlink:href="#zero" x="-1277.8" y="0"/>
+        <use xlink:href="#dot" x="-777.8" y="0"/>
+        <use xlink:href="#five" x="-500" y="0"/>
+      </g>
+    </g>
+
+    <!-- the controll points lie on the tangents of the function.
+         they are furthermore positioned in a way to minimize the average
+         quadratic distance between the bezier-curve and the function. -->
+         
+    <!-- chi-square distribution curve -->
+    <g transform="scale(60, -60)">
+      <path id="curve-1" fill="none" stroke="#cccc00" stroke-width="0.05px" stroke-linecap="butt" d="M 0.41879,5.00000             C 0.59805,3.48177 0.88514,2.42762 1.38309,1.69883             C 1.76965,1.13308 2.27787,0.77142 2.94497,0.53318             C 3.50676,0.33256 4.19518,0.21445 5.05985,0.14129             C 5.82729,0.07636 6.77056,0.04370 8.00000,0.02583"/>
+      <path id="curve-2" fill="none" stroke="#00dd00" stroke-width="0.05px" stroke-linecap="butt" d="M 0.00000,5.00000             C 0.66088,3.34781 1.41027,2.29306 2.28409,1.59583             C 3.01510,1.01255 3.85544,0.66171 4.85611,0.44104             C 5.71844,0.25088 6.73560,0.14947 8.00000,0.09158"/>
+      <path id="curve-3" fill="none" stroke="#00cccc" stroke-width="0.05px" stroke-linecap="butt" d="M 0.00000,0.00000             C 0.00000,0.48303 0.04405,0.98887 0.14338,1.40612             C 0.22197,1.73620 0.31706,1.93541 0.39570,2.05905             C 0.54542,2.29445 0.72306,2.39316 0.91361,2.41492             C 1.17665,2.44495 1.48733,2.33094 1.85016,2.15158             C 2.22323,1.96716 2.65577,1.71153 3.17829,1.45161             C 3.67610,1.20398 4.22774,0.96632 4.89444,0.76374             C 5.80675,0.48654 6.80321,0.31488 8.00000,0.20667"/>
+      <path id="curve-4" fill="none" stroke="#0000ff" stroke-width="0.05px" stroke-linecap="butt" d="M 0.00000,0.00000             C 0.46450,1.16126 0.98412,1.65141 1.58171,1.79309             C 2.08518,1.91246 2.65512,1.78716 3.32771,1.57573             C 3.89916,1.39610 4.54795,1.15334 5.34399,0.92336             C 6.12639,0.69733 6.96547,0.50842 8.00000,0.36631"/>
+      <!-- <path id="curve-5" fill="none" stroke="#000000"
+         stroke-width="0.05px" stroke-linecap="butt"
+         d="M 0.00000,0.00000
+            C 0.00038,0.00000 0.01607,0.00010 0.04916,0.01414
+            C 0.10830,0.03924 0.17676,0.08888 0.22921,0.13013
+            C 0.39130,0.25761 0.58811,0.45313 0.81740,0.65304
+            C 1.09474,0.89485 1.40740,1.13242 1.78662,1.29980
+            C 2.23195,1.49636 2.69352,1.56280 3.21389,1.53620
+            C 3.88754,1.50176 4.63047,1.31321 5.51283,1.09334
+            C 6.22929,0.91481 7.02267,0.71944 8.00000,0.55112" />-->
+      <path id="curve-6" fill="none" stroke="#aa00aa" stroke-width="0.05px" stroke-linecap="butt" d="M 0.00000,0.00000             C 0.31080,0.00000 0.65409,0.18103 1.04552,0.40505             C 1.38115,0.59714 1.75087,0.82004 2.18272,0.99978             C 2.58666,1.16790 3.00745,1.28261 3.48992,1.32949             C 4.14009,1.39266 4.81620,1.32433 5.57530,1.19607             C 6.29011,1.07528 7.07470,0.90210 8.00000,0.73263"/>
+      <!-- <path id="curve-7" fill="none" stroke="#000000"
+         stroke-width="0.05px" stroke-linecap="butt"
+         d="M 0.00000,0.00000
+            C 0.09478,0.00000 0.22222,0.00086 0.37894,0.01945
+            C 0.64208,0.05066 0.90144,0.12157 1.19694,0.22913
+            C 1.71179,0.41655 2.25853,0.68644 2.90492,0.89507
+            C 3.42620,1.06333 3.96287,1.17573 4.58997,1.20961
+            C 5.62622,1.26559 6.70319,1.09620 8.00000,0.88179" />-->
+      <!-- <path id="curve-8" fill="none" stroke="#000000"
+         stroke-width="0.05px" stroke-linecap="butt"
+         d="M 0.00000,0.00000
+            C 0.24453,0.00000 0.51074,0.00010 0.83189,0.03956
+            C 1.16925,0.08102 1.49268,0.15678 1.84815,0.26099
+            C 2.42897,0.43126 3.02860,0.65766 3.71662,0.83391
+            C 4.25527,0.97189 4.80920,1.06912 5.44409,1.10493
+            C 6.25859,1.15088 7.08278,1.08883 8.00000,0.97683" />-->
+      <path id="curve-9" fill="none" stroke="#ff0000" stroke-width="0.05px" stroke-linecap="butt" d="M 0.00000,0.00000             C 0.27399,0.00000 0.51503,-0.00029 0.76856,0.01030             C 1.13354,0.02553 1.48981,0.06215 1.90621,0.14009             C 2.47660,0.24684 3.02998,0.40678 3.62900,0.56357             C 4.24905,0.72587 4.89446,0.87841 5.64345,0.96531             C 6.40781,1.05399 7.16171,1.06056 8.00000,1.00776"/>
+      <!-- <path id="curve-10" fill="none" stroke="#000000"
+         stroke-width="0.05px" stroke-linecap="butt"
+         d="M 0.00000,0.00000
+            C 0.32387,0.00000 0.55747,-0.00013 0.78633,0.00269
+            C 1.19849,0.00777 1.60191,0.02275 2.05960,0.06693
+            C 2.57660,0.11683 3.06040,0.19412 3.57238,0.28433
+            C 4.28000,0.40902 5.00156,0.55119 5.81830,0.65086
+            C 6.51464,0.73583 7.21138,0.78147 8.00000,0.78147" />-->
+    </g>
+    
+    <g id="legend" transform="translate(397,-334)">
+      <rect id="legend_background" x="0.5" y="0.5" width="120" height="190" fill="white" opacity="0.8"/>
+      <g id="legend_lines" transform="translate(46.5,20)">
+		   <path id="curvel-1" transform="translate(0,0)" fill="none" stroke="#cccc00" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		   <path id="curvel-2" transform="translate(0,30)" fill="none" stroke="#00dd00" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		   <path id="curvel-3" transform="translate(0,60)" fill="none" stroke="#00cccc" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		   <path id="curvel-4" transform="translate(0,90)" fill="none" stroke="#0000ff" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		   <path id="curvel-6" transform="translate(0,120)" fill="none" stroke="#aa00aa" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		   <path id="curvel-9" transform="translate(0,150)" fill="none" stroke="#ff0000" stroke-width="3px" stroke-linecap="butt" d="M 0,0 H -30"/>
+		</g>
+      <g id="legend_labels" transform="translate(59,26)">
+        <g id="k_is_1" transform="translate(0,0) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#one" x="1420.6" y="0"/>
+        </g>
+        <g id="k_is_2" transform="translate(0,30) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#two" x="1420.6" y="0"/>
+        </g>
+        <g id="k_is_3" transform="translate(0,60) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#three" x="1420.6" y="0"/>
+        </g>
+        <g id="k_is_4" transform="translate(0,90) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#four" x="1420.6" y="0"/>
+        </g>
+        <g id="k_is_6" transform="translate(0,120) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#six" x="1420.6" y="0"/>
+        </g>
+        <g id="k_is_9" transform="translate(0,150) scale(0.025,-0.025)">
+          <use xlink:href="#k" x="0" y="0"/>
+          <use xlink:href="#equal" x="581.7" y="0"/>
+          <use xlink:href="#nine" x="1420.6" y="0"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
