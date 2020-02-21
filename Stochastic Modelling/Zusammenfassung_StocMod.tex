@@ -66,6 +66,49 @@ For errors or improvement raise an issue or make a pull request on the \href{htt
 
 
 \section{Introduction}
-This is the introduction
+
+Return Value Stock Market
+\begin{equation*}
+	\log_{10}\left(\frac{S_t}{S_{t-1}}\right)
+\end{equation*}
+
+Despite the variety of random sources there is structure in the noise. The goal is to make meaningful predictions from these structures.
+
+\begin{theorem}
+	Given the set of events $\Omega$
+	\begin{enumerate}[label=\Roman*.]
+		\item $P: \{\text{Events in }\Omega\}\rightarrow [0,1]$ such that $\text{E} \mapsto P(\text{E})\in[0,1]$
+		\item $P(\Omega) = 1$
+		\item For every sequence of mutually incompatible Events $E_i$ ($E_i\cap E_j$ if $i\neq j$)
+		\begin{equation*}
+			P\left(\bigcup_{i=1}^\infty E_i\right) = \sum_{i=1}^{\infty} P(E_i)
+		\end{equation*}
+	\end{enumerate}
+	$P(\text E)$ is referred to as the probability of the event $E$.
+\end{theorem}
+
+\subsection{Conditional Probability}
+\begin{theorem}
+	The conditional probability of the event $E$ given $F$
+	\begin{equation*}
+		P\left( E \middle| F \right) = \frac{P(E\cap F)}{P(F)}
+	\end{equation*}
+\end{theorem}
+
+\begin{theorem}
+	Bayes' rule is given by
+	\begin{equation*}
+		P(E|F) = \frac{P(F|E)\cdot P(E)}{P(F)}
+	\end{equation*}
+\end{theorem}
+
+If $A$ and $B$ are incompatible then $A\cap B = \emptyset$.
+\begin{theorem}
+	Two events $A$ and $B$ are independent if
+	\begin{equation*}
+		P(A\cup B) = P(A)\cdot P(B)
+	\end{equation*}
+\end{theorem}
+
 
 \end{document}
