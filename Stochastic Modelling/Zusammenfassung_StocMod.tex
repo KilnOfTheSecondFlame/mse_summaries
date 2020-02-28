@@ -12,6 +12,7 @@
 \usepackage[x11names]{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
@@ -36,6 +37,10 @@
 \usepackage{float}
 
 \newmdtheoremenv{theorem}{Theorem}
+\theoremstyle{definition}
+\newmdtheoremenv{definition}{Definition}[section]
+
+
 \geometry{a4paper, margin=2.4cm}
 
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
@@ -74,7 +79,7 @@ Return Value Stock Market
 
 Despite the variety of random sources there is structure in the noise. The goal is to make meaningful predictions from these structures.
 
-\begin{theorem}
+\begin{definition}
 	Given the set of events $\Omega$
 	\begin{enumerate}[label=\Roman*.]
 		\item $P: \{\text{Events in }\Omega\}\rightarrow [0,1]$ such that $\text{E} \mapsto P(\text{E})\in[0,1]$
@@ -85,30 +90,185 @@ Despite the variety of random sources there is structure in the noise. The goal 
 		\end{equation*}
 	\end{enumerate}
 	$P(\text E)$ is referred to as the probability of the event $E$.
-\end{theorem}
+\end{definition}
+
+\subsection{Law of Total Probability}
+\begin{minipage}{0.7\linewidth}
+	Given $E \in \Omega$ and the probability $P$ on $\Omega$, $P(E)$ can be calculated for a finite partition $\{A_k\}_{1\leq k\leq n}$ of $\Omega$ as follows
+	\begin{equation*}
+	P(E) = \sum_{k=1}^{n} P(E|A_k)P(A_k)
+	\end{equation*}
+\end{minipage}
+\begin{minipage}{0.3\linewidth}
+	\begin{center}
+		\includegraphics[width=0.9\linewidth]{img/law_total_probability}
+	\end{center}
+\end{minipage}
+
+\begin{definition}
+	\textbf{Bayes' Law}
+	\begin{equation*}
+	\textbf{P}(\textbf{A}|\textbf{E}) = \frac{P(A\cap E)}{P(E)} P \frac{P(A\cap E) P(A)}{P(E)}\frac{P(A)}{P(A)} = \frac{\textbf{P}(\textbf{E}|\textbf{A})\textbf{P}(\textbf{A})}{\textbf{P}(\textbf{E})}
+	\end{equation*}
+	Together with the Law of Total Probability
+	\begin{equation*}
+		P(A|E) = \frac{P(E|A)P(A)}{P(E|A)P(A) + P(E|\bar{A})P(\bar{A})}
+	\end{equation*}
+\end{definition}
 
 \subsection{Conditional Probability}
-\begin{theorem}
+\begin{definition}
 	The conditional probability of the event $E$ given $F$
 	\begin{equation*}
 		P\left( E \middle| F \right) = \frac{P(E\cap F)}{P(F)}
 	\end{equation*}
-\end{theorem}
-
-\begin{theorem}
-	Bayes' rule is given by
+	Together with Bayes' law
 	\begin{equation*}
 		P(E|F) = \frac{P(F|E)\cdot P(E)}{P(F)}
 	\end{equation*}
-\end{theorem}
+\end{definition}
 
 If $A$ and $B$ are incompatible then $A\cap B = \emptyset$.
-\begin{theorem}
+\begin{definition}
 	Two events $A$ and $B$ are independent if
 	\begin{equation*}
 		P(A\cup B) = P(A)\cdot P(B)
 	\end{equation*}
-\end{theorem}
+	Or equivalently (assuming $P(F)>0$)
+	\begin{equation*}
+		P(E|F) = P(F)
+	\end{equation*}
+\end{definition}
+
+\section{Random Variables}
+
+\begin{definition}
+	A random variable $X$ is a function with values in $\mathbb{R}^n$, defined on the sample space $\Omega$ of a random experiment
+	\begin{equation*}
+		X: \Omega \rightarrow \mathbb{R}
+	\end{equation*}
+\end{definition}
+
+\begin{tabularx}{\linewidth}{lX}
+	Expectation of continuous $X$: & $\mu := E(X) = \int_{-\infty}^{\infty} x f(x) dx$\\
+	Expectation of continuous $g(X)$: & $E(X) = \int_{-\infty}^{\infty} x f(x) dx$\\
+	Expectation of discrete $X$: & $\mu := E(X) = \sum_{i=1}^{\infty} x_i P(X = x_i)$\\
+	Expectation of discrete $g(X)$: & $E(X) = \sum_{i=1}^{\infty} g(x_i) P(X = x_i)$\\
+	\textbf{Estimator for $E(X)$}: & $ \bar{x} = \frac{1}{n} \sum_{i=1}^{\infty} g(x_i)$
+\end{tabularx}
+
+\textbf{The expectation operator $E(\cdot)$ is a linear operator}
+\begin{equation*}
+E(\alpha X_1 + \beta X_2) = \alpha E(X_1) + \beta E(X_2)
+\end{equation*}
+
+
+\begin{tabularx}{\linewidth}{lX}
+	Variance of continuous $X$: & $ E((X-\mu)^2) = \int_{\infty}^infty (x-\mu)^2 dx $\\
+	Variance of discrete $X$: & $ E((X-\mu)^2) = \sum (x-\mu)^2 P(X=x_i)  $\\
+	\textbf{Estimator for $V(X)$}: & $\sigma^2(X) = \frac{1}{n-1} \sum_{i=1}^{n}(x_i - \bar{x})^2$\\
+	\textbf{Estimator for k'th moment of $X$}: & $M_k = \frac{1}{n}\sum_{i=1}^{n}(x_i)^k$
+\end{tabularx}
+
+\textbf{The variance operator $V(\cdot)$ is not a linear operator}
+\begin{align*}
+	V(\alpha X_1) &= \alpha^2 V(X_1)\\
+	V(X_1 + X_2) &= V(X_1) + V(X_2) + \text{Cov}(X_1,X_2)
+\end{align*}
+where $\text{Cov}(\cdot)$ is the \textbf{covariance}
+
+\begin{tabularx}{\linewidth}{lX}
+	Cumulative distribution function: & $ F(x) = P(X\leq x) = \int_{-\infty}^{x}f(y)dy$\\
+	Cumulative distribution function: & $ F(x) = P(X\leq x) = \sum_{x_i \leq x} P(X=x_i)$\\
+	Density function: & $ f(x) = \frac{dF(x)}{dx} = \frac{d}{dx}\int_{-\infty}^{x}f(y)dy$\\
+	Probability mass function: & $ P(X = x_i) = F(x_i) - F(x_{i-1})$\\
+\end{tabularx}
+
+\begin{tabularx}{\linewidth}{lX}
+	Moment generating function of $X$: & $ \phi(t) := E(e^{tX}) = \int_{-\infty}^{\infty} e^{tx}f(x) dx$\\
+	Moment generating function of $X$: & $ \phi(t) := E(e^{tX}) = \sum e^{tx}P(X=x_i)$
+\end{tabularx}
+
+$\phi$ is the \emph{moment generating function} because
+\begin{align*}
+	\dot{\phi}(0) = \left.\frac{\text{d}\phi(t)}{\text{d}t}\right|_{t=0} = \left. E(X e^{tX})\right|_{t=0} &= E(X)\\
+	\phi^{(n)}(0) = \left.\frac{\text{d}^n\phi(t)}{\text{d}t^n}\right|_{t=0} = \left. E(X^n e^{tX})\right|_{t=0} &= E(X^n)
+\end{align*}
+
+\subsection{Bernoulli Random Variable}
+A random variable $X$ is a Bernoulli random variable if $X$ takes on \textbf{two} values $x_1$ (success) and $x_2$ (failure) and if there exists $p\in[0,1]$ such that the probability distribution is
+\begin{align*}
+	P(X=x_1) &= p\\
+	P(X=x_2) &= 1-p
+\end{align*}
+
+A random variable $X$ is a Binomial random variable with parameter $(\textbf{n}, \textbf{p})$, if $X$ can be written as the sum of $n$ independent and identically distributed Bernoulli variables with parameter $p$:
+
+\begin{equation*}
+	X = \sum_{k=1}^{n} X_k\quad X_k \sim \text{Bernoulli}(p)
+\end{equation*}
+
+If the $X_k$ takes on values in ${0,1}$ then $X$ takes values in ${0,1,\dots,n}$ and the probability distribution is
+\begin{equation*}
+	P(X=i) = \binom{n}{i} p^i(1-p)^{n-1}\quad i=0,1,\dots, n
+\end{equation*}
+
+\subsection{Poisson Random Variable}
+
+A random variable with value in $\mathbb{N}_0 = {0,1,2,\dots}$ has a \textbf{Poisson distribution} with parameter $\lambda$, if for some $\lambda>0$ we have
+\begin{equation*}
+	P({X=i}) = \frac{\lambda^i}{i!}^{-\lambda}\quad i=0,1,2,\dots
+\end{equation*}
+
+Poisson random variables are excellent approximations for binomial random variables $\text{Binom}(n,p)$ in case $n$ is large and $p$ is small, or said differently \textbf{rare events with large trials are Poisson like events with $\lambda = np$}
+
+\subsection{Uniform Random Variable}
+A random variable $X$ taking on values in the interval $[\alpha,\beta]$ has a \textbf{uniform distribution} it its probability density function is
+\begin{equation*}
+	f(x) = \left\{ \begin{matrix}
+	\frac{1}{\beta - \alpha}&\text{if } \alpha\leq x\leq \beta\\
+	0 & \text{else}
+	\end{matrix} \right.
+\end{equation*}
+
+Denoted as $X\sim \text{U}(\alpha,\beta)$.
+
+\subsection{Exponential Random Variable}
+A random variable $X$ taking on values in $\mathbb{R}^+$ has an \textbf{exponential distribution} with parameters $\lambda>0$ it its probability density function is
+\begin{equation*}
+	f_X(x) = \left\{ \begin{matrix}
+	\lambda e^{-\lambda x} & \text{if } x\geq 0\\
+	0 & \text{if } x< 0
+	\end{matrix} \right.
+\end{equation*}
+
+Denoted as $X\sim \text{Exp}(\lambda)$.
+\begin{align*}
+	\text{E}(X) = \frac{1}{\lambda}\\
+	\text{V}(X) = \frac{1}{\lambda^2}
+\end{align*}
+
+\subsection{Normal Random Variable}
+A random variable $X$ taking on values in $\mathbb{R}$ has a \textbf{normal distribution} with parameters $\mu$ and $\sigma^2$ if its probability density function is
+
+\begin{equation*}
+	f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{\frac{-(x-\mu)^2 }{2\sigma^2}}\qquad -\infty<x<\infty
+\end{equation*}
+
+Denoted as $X \sim \mathcal{N}(\mu, \sigma^2)$
+
+\subsection{Affine Transformations}
+If $X\sim\mathcal{N}(\mu, \sigma^2)$ then $Y := \alpha X + \beta$ is still normally distributed, but with parameters $(\alpha\mu + \beta, \alpha^2 \sigma^2)$.
+
+In particular if $X\sim \mathcal{N}(\mu, \sigma^2)$ then
+\begin{equation*}
+	Y = \frac{X-\mu}{\sigma} \sim \mathcal{N}(0,1)
+\end{equation*}
+Such a random variable $Y$ is said to have the \emph{standard normal distribution}. Its associated cumulative distribution function is denoted
+\begin{equation*}
+	\Phi(x) := \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x} e^{-\frac{y^2}{2}} dy
+\end{equation*}
+
 
 
 \end{document}

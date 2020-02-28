@@ -12,6 +12,7 @@
 \usepackage[x11names]{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
@@ -37,6 +38,7 @@
 
 \newmdtheoremenv{theorem}{Theorem}
 \geometry{a4paper, margin=2.4cm}
+\newtheorem*{remark}{Remark}
 
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
 \newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
@@ -221,6 +223,100 @@ Not as straightforward as one may think
 
 \subsubsection{Sentence Segmentation}
 Can be easier or more difficult depending on the source text formatting. If no particular information is available from the layout, punctuations and casing can be used. While question and exclamation marks are quite reliable indicator of sentences periods are not. A good approach is to try to combine Tokenisation and Sentence Splitting, focusing on full stops.
+
+\section{Text Classification}
+The goal of text classification is to assign text documents to one or more categories. There is a predefined set of classes, in which previously unseen documents are assigned to. If there are only two classes this is a binary classification problem.
+
+To tackle this problem there are different strategies: (a) have hard-coded rules carefully crafted by an expert on the basis on combinations of words or other features, (b) through supervised machine learning with understanding building on semantic representation of texts and labels or (c) supervised machine learning without understanding where word-based features are derived from text and the relationship between features and labels from the training texts.
+
+Stopwords are words like conjunctions or preposition, which may not have meaning given the task at hand.
+
+\subsection{Formalising Text Classification}
+
+\begin{itemize}[label=]
+	\item Input
+	\begin{itemize}
+		\item a set of documents $D$
+		\item a fixed set $N$ of classes $C$
+		\item a training set of $M$ hand-labelled documents $(d_1 C_1),(d_2 C_2), \dots (d_M C_M)$
+	\end{itemize}
+	\item Output
+	\begin{itemize}
+		\item a mapping $D\rightarrow C$ that associates a predicted class $c\in C$ to each document $d\in D$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Naïve Bayes Classifier}
+For a document $d$ and a class $c$
+
+\begin{equation*}
+	P(c|d) = \frac{P(d|c)P(c)}{P(d)}
+\end{equation*}
+
+\noindent
+Maximum A Posteriori (MAP) classifier:
+\begin{equation*}
+	c_{\text{MAP}} = \underset{c\in C}{\text{argmax}} \frac{P(d|c) P(c)}{P(d)} = \underset{c\in C}{\text{argmax}} P(d|c) P(c)
+\end{equation*}
+
+Dropping the denominator does not change $c_{\text{MAP}}$ because $P(d)$ has no effect on argmax. In practice, the evidence a machine can observe is not the human-readable document $d$, but a number of features $x_1,\dots,x_N$ obtained based on $d$ and a MAP-classifier
+\begin{equation*}
+	c_MAP = \underset{c\in C}{\text{argmax}} P(x_1, x_2, \dots , x_N | c) P(c)
+\end{equation*}
+
+\noindent
+Given a vocabulary of V words a feature can be if a word appears in a document $d$ or how often it appears
+\begin{itemize}
+	\item \textbf{Bernoulli Model} represent $d$ as $(e_1, \dots, e_V)$ where $e_i =1$ if the word $i$ is in $d$ and $e_i = 0$ otherwise
+	\item \textbf{Multinomial Model} represent $d$ as $f_1, \dots, f_V)$ where $f_i$ is the number of occurrences of word $i$ in $d$
+\end{itemize}
+
+The Naïve Bayes independence assumption is that given a class $c$ the \textbf{features are independent}
+\begin{equation*}
+	P(x_1, x_2, \dots , x_N | c) = P(x_1|c)\cdot P(x_2|c) \cdots P(x_N|c) = \prod_{k=1}^{n}P(x_k|c)
+\end{equation*}
+
+$P(c)$ and $P(x_k|c)$ need to be computed, $P(c)$ can be estimated based on the frequency of each class in the training data, and $P(x_k|c)$ depends on the chosen feature representation.
+
+In the so called Bag-Of-Word Model $x_k$ is the feature representation of the words in the documents. The position of the individual words can usually be ignored.
+
+\subsection{Multinomial Naïve Bayes}
+Represent every token in $d$ as a feature vector $x_i = f_i$ , where $f_i$ is the number of occurrences of token $i$ in $d$. Then $P(x_i|c)$ can be estimated as $\frac{\text{number of occurrences of token }i\text{ in }c}{\text{total number of tokens in }c}$. For simplicity $P(w|c)$ can be written to refer to the probability of finding token $w$ in class $c$.
+
+\begin{enumerate}
+	\item Normalise the training data (remove stop words, remove punctuation, set all characters to lowercase)
+	\item Assemble vocabulary (list of unique meaningful words)
+	\item Count the number of occurrences of each word in each class and divide by the total number of words in each class
+\end{enumerate}
+
+\subsection{Practical Complications}
+If a word $w$ from the vocabulary (which contains $V$ tokens) is never in class $c$ in the training data, we will estimate $P(w|c) = 0$, which causes $c_{\text{corpus}}=\underset{c\in C}{\text{argmax}}P(c)\prod_{k=1}^{N}P(x_k|c)=0$.
+
+\begin{remark}
+	Zero probabilities cannot be conditioned away, no matter the other evidence!\\ - Dan Jurafsky
+\end{remark}
+
+The typical solution to this is to do Laplace Smoothing like this
+\begin{equation*}
+	P(w|c)\text{ can be estimated as }\frac{\text{number of occurrences of token $w$ in class } c + 1}{\text{total number of tokens in class } c+V}
+\end{equation*}
+This prevents probabilities of zero to occur.
+
+\subsection{Metrics}
+\begin{itemize}[leftmargin=*, labelindent=3cm, labelsep=1cm]
+	\item[True Positive] Sample $c$ classified correctly
+	\item[False Positive] Non-$c$ sample incorrectly classified as $c$
+	\item[True Negative] Non-$c$ sample classified correctly
+	\item[False Negative] Sample $c$ classified incorrectly as non-$c$
+\end{itemize}
+
+\begin{tabularx}{\linewidth}{rX}
+	Accuracy & $ \frac{\sum TP}{\sum \text{all elements}} $ \\
+	Precision & $\frac{TP}{TP + FP}$\\
+	Recall & $ \frac{TP}{TP + FN} $\\
+\end{tabularx}
+
+
 
 
 \end{document}
