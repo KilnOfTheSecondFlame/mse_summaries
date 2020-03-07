@@ -316,6 +316,109 @@ This prevents probabilities of zero to occur.
 	Recall & $ \frac{TP}{TP + FN} $\\
 \end{tabularx}
 
+\section{Sentiment Analysis}
+Sentiment analysis tries to understand the emotional state of the author of a text, and is also called opinion mining but can be extremely hard. In principle text classification and sentiment analysis are very different, but there are some striking similarities as the text can reflect a positive or a negative emotional state which can be utilised.
+
+\subsection{Framing Sentiment Analysis}
+Sentiment analysis is commonly framed as \textbf{attitude detection}
+\begin{itemize}
+	\item \emph{Attitude} is an enduring disposition toward someone or something with an emotional connotation
+	\item The attitude can be broken down in quintuplets
+	\begin{enumerate}
+		\item opinion holder
+		\item target entity
+		\item aspect: specific feature of the target that the opinion is about
+		\item type: most commonly {\color{green} positive}, {\color{red} negative}, {\color{gray} neutral} and with an indication of strength
+		\item time when this opinion was expressed
+	\end{enumerate}
+	\item knowing the opinion without knowing the opinion target is of limited use
+\end{itemize}
+
+\subsection{Tokenisation Challenges}
+\begin{itemize}
+	\item Isolating emoticons
+	\item Respecting domain-specific markup like \mintinline{html}{<strong>really bad idea</strong>}
+	\item Capturing masked curses
+	\item Selective true-casing
+	\item Normalised lengthening, as "YAAAAAAY" is equivalent to "YAY" no matter how it is written
+	\item Capturing important multi-word expressions and idioms
+\end{itemize}
+
+\subsubsection{Dealing With Negations}
+A simple effective workaround by Das and Chen is to prepend \texttt{NOT\_} to every word between a negation and a clause-level punctuation mark.
+
+\subsubsection{More Complications}
+\begin{itemize}
+	\item Modal adverbs like \emph{quite possibly, totally}
+	\item Thwarted expectations "\emph{It was hailed as brilliant, unprecedented artistic achievement worthy of multiple Oscars}"
+	\item Non-literal language "\emph{Like 50 hours long}"
+\end{itemize}
+
+\subsection{Various Degrees of Complexity}
+In principle, all quintuplets in a document should be discovered, which would allow to represent unstructured information in a structured form. However, this is extremely hard to do. In practice, simplified forms of sentiment analysis are typically solved
+\begin{itemize}
+	\item Document-level sentiment classification
+	\item Sentence-level sentiment classification
+	\item Aspect-level sentiment classification
+\end{itemize}
+Though simplified, these forms of sentiment analysis are still hard to do with subtlety and sarcasm complicating the task.
+
+\subsubsection{Document-level Sentiment Classification}
+Does the document reflect an overall {\color{green} positive} or {\color{red} negative} view? The approach is the same as for text classification
+\begin{enumerate}
+	\item tokenisation
+	\item feature extraction
+	\item classification (Naïve Bayes, MaxEnt, SVM)
+	\item Two or Three classes \{ {\color{green} positive} $\vert$ {\color{red} negative} $\vert$ ({\color{gray} neutral}) \}
+\end{enumerate}
+
+\subsection{Generative versus Discriminative Models}
+In Naïve Bayes, for a document $d$ and each class $c$:
+\begin{itemize}
+	\item Estimate $P(d|c)$ and $P(c)$ directly from the training data
+	\item Learn a model of $P(d\cap c) = P(d|c)\cdot P(c)$
+	\item Use Bayes' rule to compute $P(c|d)=\dfrac{P(d|c)\cdot P(c)}{P(d)}$
+	\item Pick the class that maximises $P(c|d)$ over all classes
+\end{itemize}
+This is called a \textbf{generative model}: Which class $c$ is most likely to have generated my test sample $d$, given the $P(d\cap c)$ that was estimated.
+
+\noindent
+The alternative is a \textbf{discriminative model} that models $P(c|d)$ directly.
+
+\subsection{Discriminative Model: Maximum Entropy}
+Entropy in information theory refers to a measure of the information content, where highly probable events carry very little information and if all events are equally likely there is maximum entropy. A prediction on which one will occur is impossible and when a event occurs there is a lot of learning.
+\begin{itemize}
+	\item Suppose movie reviews get classified into \{ {\color{green} positive} $\vert$ {\color{red} negative} $\vert$ ({\color{gray} neutral}) \}
+	\item In the training corpus 90\% of the sample containing the word \texttt{love} are tagged as {\color{green} positive}
+	\item Let it further be that a test sample with the word \texttt{love} is 90\% likely to be positive and equally likely to be either {\color{red} negative} (10\%) or {\color{gray} neutral} (10\%)
+	\item All other things unknown are assumed to be equally likely (maximum entropy)
+\end{itemize}
+Unlike in text classification, topic words are not as important as \textbf{sentiment words} that carry an emotional charge, but the mapping between emotional states and the written word can be exceedingly subtle
+\begin{itemize}[label=-]
+	\item {\color{green} good}, {\color{green} splendid}, {\color{green} nice}
+	\item {\color{red} bad}, {\color{red} racist}, {\color{red} dismal}
+\end{itemize}
+
+\subsection{Unsupervised Sentiment Classification}
+\begin{enumerate}
+	\item Use a Part-Of-Speech tagger to identify phrases with adjectives and adverbs
+	\item Estimate the semantic orientation
+	\item Classify based on the average semantic orientation
+\end{enumerate}
+Semantic orientation is computed based on Pointwise Mutual Informaiton (PMI)
+\begin{equation*}
+	\text{PMI} (w_1,w_2) = \log_2 \left( \frac{P(w_1,w_2)}{P(w_1)P(w_2)} \right) = \log_2 \left( \frac{P(w_1 | w_2)}{P(w_1)} \right) = \log_2 \left( \frac{P(w_2 | w_1)}{P(w2)} \right)
+\end{equation*}
+PMI is computed using approximate probabilities with normalised word counts in a corpus. Or the web can be used as a corpus using the number of hits from a search engine when $w_1$ and $w_2$ are searched. Following Barrière (2016) the number of hits of \texttt{the, a, of} are used, which results in a total of $2.527\cdot 10^10$ hits.
+\subsubsection{Example PMI of Academy and Awards}
+\begin{itemize}
+	\item $w_1 = \text{\texttt{Academy}}$, $w_2 = \text{\texttt{Awards}}$
+	\item $P(w_1,w_2) \propto \text{\#\texttt{Academy} AND \texttt{Awards}} \approx 1.01\cdot 10^9\text{hits}$
+	\item $P(w_1) \propto \text{\#\texttt{Academy}} \approx 1.94\cdot 10^9 \text{hits}$
+	\item $P(w_2) \propto\text{\#\texttt{Awards}} \approx 5.57\cdot 10^9\text{hits} $
+	\item $\text{PMI}(w_1,w_2) \approx \log_2\left( \frac{1.01\cdot 10^9\cdot2.527\cdot 10^10}{1.94\cdot 10^9\cdot 5.57\cdot 10^9} \right)\approx 1.24 $
+\end{itemize}
+Two words with high PMI are very likely to occur jointly, while two words with low PMI are very likely to occur separately. PMI can also be used to compute Semantic Orientation (SO), by computing the PMI of selected bigrams with reference words.
 
 
 
