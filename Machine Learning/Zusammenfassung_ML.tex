@@ -120,8 +120,18 @@ Any target function $f$ over an instance $X$ is learnable given an expressive en
 
 Better questions are what size of \textbf{$D_{\text{train}}$} are large enough and given a large enough training set, how well does the \textbf{training error predict generalisability}. These questions are in the domain of \emph{computational learning theory}.
 
-% TODO PAC Learnability and VC Complexity
+\subsection{Probably Approximate Correct Learning and Vapnik-Chervonenkis Complexity}
+Sample complexity bounds using $\abs{\mathcal{H}}$ usually do substantially overestimate, thus the assumption that $\bm{f} \in \mathcal{H}$ is unrealistic.
 
+Measuring Vapnik-Chervonenkis (VC) dimension for infinite $\mathcal{H}$:
+$h\in\mathcal{H}$ is \textbf{shattering a set of instances} $S\in X$ \textbf{iif} $h$ can partition $S$ in any way possible.\\
+$VC(\mathcal{H}) := \abs{\{S\in X | S \text{ is the largest subset of } X \text{ shattered by any } h\in\mathcal{H}\}}$. $VC(\mathcal{H})$ can be used as an alternative measure of $\abs{\mathcal{H}}$ to compute sample complexity.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio,width=0.9\linewidth]{VC_shattering}
+	\caption{A two-dimensional linear classifier can shatter three points, $VC(\text{two-dimensional straight lines}=3$ but $\abs{\mathcal{H}} = \infty$}
+\end{figure}
 
 \section{Formulating Learning Problems}
 \subsection{Designing a Learning Solution}
@@ -140,14 +150,114 @@ There is a necessity to have a distinct conceptual approach to model data. Focus
 
 \section{Machine Learning Guiding Principles}
 
-% TODO Cost Function $J$
+\subsection{Cost Function J}
+Choose $\theta_0, \theta_1$ in such a way that $h(x)$ is close to $y$ for the training examples $(x,y)$. Let a function $J$ \textbf{number the cost of errors made} for the specific set of parameters.
 
-% TODO Optimisation by Gradient Descent
+\begin{equation*}
+	J_{MSE}(\theta_0, \theta_1) = \frac{1}{2N} \sum_{i=1}^{N} \left(h(x_i, \vec{\theta}) - y_i\right)^2
+\end{equation*}
 
+The objective is to minimise $J$ with regards to $\theta_0, \theta_1$
 
+\subsection{Optimisation by Gradient Descent}
+Algorithm
+\begin{itemize}
+	\item Start with a random $\theta_0, \theta_1$
+	\item Keep changing $\theta_0, \theta_1$ in a way to reduce $J(\theta_0, \theta_1)$
+	\item End at a local minimum
+\end{itemize}
 
+\begin{align*}
+	\text{\texttt{tmp\_0}} &:= \theta_0 - \alpha \cdot \frac{\partial J}{\partial \theta_0} J(\theta_0,\theta_1)\\
+	\text{\texttt{tmp\_1}} &:= \theta_1 - \alpha \cdot \frac{\partial J}{\partial \theta_1} J(\theta_0,\theta_1)\\
+	\theta_0 &:= \text{\texttt{tmp\_0}}\\
+	\theta_1 &:= \text{\texttt{tmp\_1}}\\
+\end{align*}
 
+$\alpha$ is called the learning rate, and is a data-dependent hyper-parameter of the algorithm.
 
+\section{Model Assessment and Selection}
+
+\subsection{Data Handling for Model Evaluation}
+Search for methods that help to learn and evaluate algorithms based on \emph{limited data} and help to \emph{deduce the true error} from the training error.
+
+\begin{itemize}[leftmargin=*, labelindent=3cm, labelsep=1cm]
+	\item[Model Assessment] \textbf{Evaluate} a model's \textbf{performance}
+	\item[Model Selection] \textbf{Select} among competing models the one with the \textbf{proper level of flexibility}
+\end{itemize}
+
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{img/model_flexibility}
+\end{center}
+
+\subsection{Optimal Usage of a Small Dataset}
+Split into Training, Validation and Test set. Do k-fold Cross Validation on Training and Validation set, final test on Test set. Train k times on $(l - 1)$ folds, validate on the remaining one (until each fold was used for validation once), then average the error.
+
+\subsection{Observable and Unobservable Errors}
+True error $E_D$ is the probability that $h$ will misclassify a random instance from the \textbf{complete domain} $\bm{E}$ and is unobservable.
+
+The empirical test error $E_{emp}$ is the proportion of \textbf{sample $S\in D$} misclassified by $h$ is en estimate for the true error and gets better with more error.
+
+\begin{itemize}
+	\item Assumption that training and test data are representative of underlying distribution of $D$
+	\item $S$ and $h$ are usually not chosen independently, that means that the test error is \textbf{optimistically biased}
+	\item The test error usually varies for different $S\in D$, that means it has a higher variance than the true error
+\end{itemize}
+
+\subsection{Error Sources}
+
+The chosen hypothesis $\mathcal{H}$ is the \textbf{best hypothesis at a distance of the true function}. Different chosen samples $X$ give \textbf{different information}.
+
+\noindent
+Error decomposition:
+\begin{equation*}
+	E_{MSE} = \underbrace{\text{systematic error}}_{\text{bias}} + \underbrace{\text{dependence on specific sample}}_{\text{variance}}  + \underbrace{\text{random nature of process}}_{\text{irreducible noise or Bayes rate}}
+\end{equation*}
+
+\subsection{ROC Curve}
+First used in signal detection to show trade-off between \textbf{hit rate} and \textbf{false alarm rate} over noisy channel
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/ROC_curve}
+\end{center}
+
+\noindent
+\textbf{Interpretation}
+\begin{itemize}[leftmargin=*, labelindent=3cm, labelsep=1cm]
+	\item[Straight Line] Indicates a random process
+	\item[Jagged Curve] Created with one set of test data
+	\item[Smooth Curve] Created using averages
+\end{itemize}
+
+\subsection{Error Measures}
+\begin{tabularx}{\linewidth}{lX}
+	Mean Square Error & $ E_{MSE} = \frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 $\\
+	Root Mean-Squared Error & $E_{RMSE} = \sqrt{\frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 } $\\
+	Mean Absolute Error & $ E_{MAE} = \frac{1}{F}\sum_{i=1}^{N} \abs{\widehat{y}_i - y_i}$\\
+	(less sensitive to outliers)
+\end{tabularx}
+
+\subsection{Evaluating Clustering Methods}
+\textbf{Without Labels}:\\
+Use the \textbf{silhouette coefficient}, which is a measure for cluster validity or consistency, do a visual inspection of dendrograms and a visual comparison of the dimension reduction o the feature vectors.
+
+\vspace{1em}
+\noindent
+\textbf{With ground truth available}
+Check \textbf{purity}, \textbf{rand index} and \textbf{misclassification rate}.
+
+\subsection{Selection Among Competing Models}
+On what basis can one \emph{algorithm be favoured over another} and how probable is it that the chosen method is \emph{truly significantly better}.
+
+\subsection{Maximum Likelihood and Ockham's Razor}
+Given competing $h_i \in \mathcal{H}_j$ \textbf{maximum likelihood parameters} can be found by \textbf{calculating the likelihood} $p(X|h_i)$ and \textbf{selecting the best} $\hat{h} = \underset{h_i}{\max} p(X|h_i)$.
+
+The goal is to find a compromise between model complexity and accuracy on the validation data. Ockham's razor, an axiom in machine learning, states that "given two models with the \textbf{same empirical error}, the simpler one should be preferred because \textbf{simplicity is desirable in itself}". The reasoning is that for a simple hypothesis the \textbf{probability of it having unnecessary conditions is reduced}.
+
+\subsection{Determining True Best Classifier}
+In practice tenfold cross validation is often good enough and it does not matter which classifier is really better. Otherwise the \textbf{Student's t-test} can be used to compare two samples. Generally, the difference between $\mu_{\mathcal{L}_A}$ and $\mu_{\mathcal{L}_A}$ of the obtained cross-validation error estimates follows a Student's distribution with $m-1$ degrees of freedom.
+
+If the number of features $p$ is large in comparison to the number of instances $N$ use \textbf{boosting} or \textbf{SVM}. If the data set is \emph{severely imbalanced}, \textbf{non-standard loss functions} that take class distribution in account or \textbf{Bayesian methods} and appropriate prior probabilities should be considered.
 
 
 \end{document}

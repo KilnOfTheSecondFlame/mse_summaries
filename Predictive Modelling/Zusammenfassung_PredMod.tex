@@ -48,9 +48,16 @@
 \newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 
-\newcommand\sample[1]{\overline{#1}}
-
-
+\newcommand*\samplemean[1]{\overline{#1}}
+\newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
+\newcommand*\R{\mathbb{R}}
+\newcommand*\Z{\mathbb{Z}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
+\newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
+\newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
+\newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -76,11 +83,9 @@ For errors or improvement raise an issue or make a pull request on the \href{htt
 
 
 \section{Introduction}
-Statistical Modelling means finding a density function that produces your given data.
+Statistical Modelling means finding a density function that produces your given data. From Wikipedia:
 
-From Wikipedia: "Predictive modeling uses statistics to predict outcomes. Most often the event one wants to predict is in the future, but predictive modelling can be applied to any type of unknown event, regardless of when it occurred.
-
-In many cases the model is chosen on the basis of detection theory to try to guess the probability of an outcome given a set amount of input data."
+"Predictive modeling uses statistics to predict outcomes. Most often the event one wants to predict is in the future, but predictive modelling can be applied to any type of unknown event, regardless of when it occurred. In many cases the model is chosen on the basis of detection theory to try to guess the probability of an outcome given a set amount of input data."
 
 Predictive modelling is done with Supervised Models, the major challenge in using data to make predictions is distinguishing what is a meaningful signal from the noise.
 
@@ -97,11 +102,11 @@ The set of all possible outcomes of a random experiment is called sample space $
 \begin{definition}
 	The \textbf{expected value} of a continuous random variable is defined as
 	\begin{equation*}
-			\text{E}(X) = \int_{-\infty}^{\infty} x\cdot f(x) dx
+			\ev{X} = \int_{-\infty}^{\infty} x\cdot f(x) dx
 	\end{equation*}
 	The \textbf{variance} of a continuous random variable is defined as
 	\begin{equation*}
-		\text{Var}(X) = \sigma_X^2 = \text{E}((X - \text{E}(X))^2) = \int_{-\infty}^{\infty} (x - \text{E}(X))^2 f(x) dx = \text{E}(X^2) - \text{E}(X)^2
+		\text{Var}(X) = \sigma_X^2 = \ev{((X - \ev{X})^2} = \int_{-\infty}^{\infty} (x - \ev{X})^2 f(x) dx = \ev{X^2} - \ev{X}^2
 	\end{equation*}
 	A \textbf{quantile} $q(\alpha) (0<\alpha<1)$ of a continuous random variable $X$, respectively of a probability distribution is defined as
 	\begin{equation*}
@@ -120,11 +125,11 @@ The set of all possible outcomes of a random experiment is called sample space $
 	\end{equation*}
 	\textbf{Sample mean} is defined by
 	\begin{equation*}
-		\sample{X}_n = \frac{S_n}{n} \sim(\mu, \frac{\sigma_X^2}{n})
+		\samplemean{X}_n = \frac{S_n}{n} \sim(\mu, \frac{\sigma_X^2}{n})
 	\end{equation*}
 	\textbf{Law of Large Numbers} states that
 	\begin{equation*}
-		\sample{X}_n \longrightarrow \mu(n\rightarrow \infty)
+		\samplemean{X}_n \longrightarrow \mu(n\rightarrow \infty)
 	\end{equation*}
 \end{definition}
 
@@ -193,7 +198,7 @@ Infinitesimal intervals $\text{d}x_i$ do not depend on parameter value $\theta$,
 If assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\mathcal{L}(\theta)$.
 
 \subsection{Maximum Likelihood for Exponential Distribution}
-Given observation $X_1, X_2, \dots, X_n\text{ i.i.d. }\sim \text{Exp}(\lambda)$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
+Given observation $X_1, X_2, \dots, X_n\text{ i.i.d. }\sim \Exp{\lambda}$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
 \begin{equation*}
 	\mathcal{L} = \prod_{i=1}^{n} \lambda e^{-\lambda x_i}
 \end{equation*}
@@ -213,7 +218,7 @@ In the z-Test the value of $\sigma_X$ is known.
 	\item \textbf{Null Hypothesis} $H_0: \mu = \mu_0$\\ \textbf{Alternative Hypothesis} $H_A: \mu \neq \mu_0 \text{ or } \mu < \mu_0 \text{ or } \mu > \mu_0$
 	\item \textbf{Test statistic}
 	\begin{equation*}
-		Z = \frac{\sample{X}_n - \mu_0}{\sigma_{\sample{X}_n}} = \frac{\sample{X}_n - \mu_0}{\sigma_X / \sqrt{n}} = \frac{\text{observed} - \text{expected}}{\text{standard error}}
+		Z = \frac{\samplemean{X}_n - \mu_0}{\sigma_{\samplemean{X}_n}} = \frac{\samplemean{X}_n - \mu_0}{\sigma_X / \sqrt{n}} = \frac{\text{observed} - \text{expected}}{\text{standard error}}
 	\end{equation*}
 	\textbf{Null distribution} $Z \sim \mathcal{N}(0,1)$
 	\item \textbf{Significance Level} $\alpha$
@@ -245,6 +250,177 @@ In the z-Test the value of $\sigma_X$ is known.
 
 \subsection{Confidence Intervals}
 % TODO Confidence Interval
+
+
+\section{Multivariate Probability Distributions}
+
+\subsection{Discrete Joint Probability Distributions}
+The joint distribution of two discrete random variables $X$ and $Y$, having their values in $W_X$ and in $W_Y$ respectively, is defined by the joint probability distribution of $X$ and $Y$, that is by the following probabilities
+\begin{equation*}
+	P(X=x, Y=y), x\in W_X, y\in W_Y
+\end{equation*}
+Single distributions $P(X = x)$ of $X$ and $P(Y = y)$ of $Y$ are called marginal distributions of the joint random variable $(X,Y)$. Marginal distributions can be calculated based on their joint distribution
+\begin{equation*}
+	P(X=x) = \sum_{y\in W_Y} P(X = x, Y = y),\qquad x\in W_X
+\end{equation*}
+The conditional probability of $X$ given $Y=y$ is defined as
+\begin{equation*}
+	P(X = x | Y = y) = \frac{P(X = x, Y = y)}{P(Y=y)}
+\end{equation*}
+The marginal distributions can then be expressed as follows
+\begin{equation*}
+	P(X=x) = \sum_{y\in W_y} P(X=x|Y=y)P(Y=y),\qquad x\in W_X
+\end{equation*}
+The conditional expected value of $Y$ given $X=x$ is defined as
+\begin{equation*}
+	\ev{Y|X=x} = \sum_{y\in W_Y} y\cdot P(Y=y|X=x)
+\end{equation*}
+
+\subsection{Joint Probability Density}
+The probability that the joint random variable $(X,Y)$ lies in a two-dimensional region $A$, that is $A\subset \R^2$, is given by
+\begin{equation*}
+	P\left( (X,Y) \in A \right) = \iint_{A} f_{X,Y}(x,y) \diff x \diff y
+\end{equation*}
+This integral corresponds to the volume enclosed by by the surface of the joint density function $f_{X,Y}(x,y)$ and by the region $A$, in particular $\iint_{\R^2} f_{X,Y}(x,y) \diff x\diff y = 1$
+
+\subsubsection{Life Expectancy of Two Machines Example}
+Consider two machines with exponentially distributed life expectancy $X\sim \Exp{\lambda_1}$ and $Y\sim\Exp{\lambda_2}$, where $X$ and $Y$ are independent random variables. What is the probability that machine one runs longer than machine two?
+
+The density functions for life expectancy of the two machines are:
+\begin{equation*}
+	f_X(x) = \lambda_1 e^{-\lambda_1 x}\text{ and } f_Y(y) = \lambda_2 e^{-\lambda_2 y}
+\end{equation*}
+Due to \textbf{independence} of the two random variables, the \textbf{joint density} can be calculated as follows
+\begin{align}
+	f_{X,Y} (x,y) &= f_X(x) \cdot f_Y(y)\\
+	&= \lambda_1 e^{-y\lambda_1} \cdot \lambda_2 e^{-\lambda_2 y}
+\end{align}
+\begin{minipage}{0.6\linewidth}
+	Relevant Set:
+	\begin{equation*}
+		A = \{(x,y)|0\leq y\leq x\}
+	\end{equation*}
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+	\begin{center}
+		\includegraphics[width=0.6\linewidth]{img/area_A_under_xy}
+	\end{center}	
+\end{minipage}
+Probability that machine one runs longer than machine two:
+\begin{align*}
+	P(Y<X) &= \int_{0}^{\infty}(\int_{0}^{x} \lambda_1 e^{-y\lambda_1} \cdot \lambda_2 e^{-\lambda_2 y} \diff y )\diff x\\
+	&= \int_{0}^{\infty} \lambda_1e^{-\lambda_1 x} (1 - e^{-\lambda_2 x})\diff x\\
+	&= \frac{\lambda_2}{\lambda_1 + \lambda_2}
+\end{align*}
+
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/marginal_density_xy}
+\end{center}
+
+Using the joint density, the marginal densities of $X$ and of $Y$ are obtained by integrating over the other variable
+\begin{equation*}
+	f_X(x) = \int_{-\infty}^{\infty}f_{X,Y}(x,y)\diff y \qquad\qquad f_Y(y) = \int_{-\infty}^{\infty}f_{X,Y}(x,y)\diff x
+\end{equation*}
+
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/conditional_probability_xy}
+\end{center}
+
+The conditional probability of $Y$ given $X = x$ is defined as
+\begin{equation*}
+	f_{(Y | X=x)} = f_Y (y | X=x) = \frac{f_{X,Y}(x,y)}{f_X(x)}
+\end{equation*}
+Conditional probability density corresponds to \textbf{longitudinal section} of the joint density
+
+\subsection{Covariance and Correlation}
+
+\subsubsection{Empirical Covariance}
+\begin{minipage}{0.4\linewidth}
+	\begin{center}
+		\includegraphics[width=0.9\linewidth]{img/empirical_covariance}
+	\end{center}
+\end{minipage}
+\begin{minipage}{0.6\linewidth}
+	The empirical covariance is the average value of the product of the deviation of $x_i$ from its mean $\samplemean{x}$ and the deviation of $y_i$ from its mean $\samplemean{y}$
+	\begin{equation*}
+		q_{xy} = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \samplemean{x} )(y-\samplemean{y})
+	\end{equation*}
+\end{minipage}
+
+\subsubsection{Theoretical Covariance}
+\begin{definition}
+	The \textbf{covariance} of two random variables $X$ and $Y$ is defined as
+	\begin{equation*}
+		\Cov{X,Y} = \ev{(X-\mu_x)(Y-\mu_y)}
+	\end{equation*}
+\end{definition}
+The covariance is the average value of the product of the deviation of $X$ from its mean $\mu_X$ and the deviation of $Y$ from its mean $\mu_Y$. If $X$ and $Y$ are \textbf{positively} associated, that is when $X$ is larger than its mean Y tends to be larger than its mean as well, the \textbf{covariance} will be \textbf{positive}. If the association between $X$ and $Y$ is \textbf{negative}, that is when $X$ is larger than its mean $Y$ tends to be smaller than its mean, the \textbf{covariance} is \textbf{negative}.
+
+\subsection{Correlation}
+\begin{definition}
+	The correlation of $X$ and $Y$, denoted by $\rho$ is
+	\begin{equation*}
+		\Cor{X,Y} = \rho_{XY} = \frac{\Cov{X,Y}}{\sigma_X\sigma_Y}
+	\end{equation*}
+\end{definition}
+Correlation is simply a standardized version of the covariance. Contrary to the covariance, the correlation is thus a dimensionless quantity. 
+
+\subsubsection{Properties of the Correlation}
+$\rho$ has the following property
+\begin{equation*}
+	-1 \leq \Cor{X,Y} \leq 1
+\end{equation*}
+The correlation is a measure for the strength and direction of the linear dependency between $X$ and $Y$. We have
+\begin{align*}
+	\Cor{X,Y} &= +1 \qquad\text{iff}\qquad Y=a+bX \text{ for $a\in\R$ and $b>0$}\\
+	\Cor{X,Y} &= -1 \qquad\text{iff}\qquad Y=a+bX \text{ for $a\in\R$ and $b<0$}\\
+\end{align*}
+If $\abs{\Cor{X,Y}} = 1$, then there is a perfectly linear relationship between $X$ and $Y$.
+\begin{figure}[tbh]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/correlation_contour_lines}
+	\caption{Contour lines of bivariate normal distributions for different correlation coefficients}
+	\label{fig:correlationcontourlines}
+\end{figure}
+
+\begin{definition}
+	If $\Cor{X,Y}=0$ then $X$ and $Y$ are \textbf{uncorrelated}. In this case there is no linear relationship between $X$ and $Y$. There may be a non-linear relationship however.
+\end{definition}
+
+\subsubsection{Uncorrelatedness and Independence}
+\begin{equation*}
+	X\text{ and } Y \text{ independent} \Rightarrow \Cor{X,Y}=0\Rightarrow \Cov{X,Y}=0
+\end{equation*}
+However, the converse is generally not true, that is independence does not follow from uncorrelatedness.
+
+\vspace{1em}
+\noindent
+These relations follow immediately from the definition of the covariance
+\begin{enumerate}
+	\item $\Var{X} = \Cov{X,Y}$
+	\item $\Cov{X,Y} = \ev{XY} - \ev{X}\ev{Y}$
+	\item $\ev{XY} = \ev{X}\ev{Y}\qquad (X,Y \text{ independent})$
+	\item
+	\begin{equation*}
+		\Var{\sum_{i=1}^{n}X_i} = \sum_{i=1}^{n}\Var{X_i} + 2\sum_{i<j}^{n}\Cov{X_i,X_j}
+	\end{equation*}
+	in particular in the case of two random variables
+	\begin{equation*}
+		\Var{X + Y} = \Cov{X + Y, X + Y} = \Var{X} + \Var{Y} + 2\Cov{X,Y}
+	\end{equation*}
+	\item For $X_1,\dots,X_2$ independent:
+	\begin{equation*}
+		\Var{X_1+\dots+X_n} = \Var{X_1} + \dots + \Var{X_n}
+	\end{equation*}
+\end{enumerate}
+
+% TODO Bivariate Normal Distribution
+
+% TODO Principal Component Analysis
+
+
+
+
 
 
 

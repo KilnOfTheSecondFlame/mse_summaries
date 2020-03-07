@@ -28,6 +28,7 @@
 
 % Code highlighting
 \usepackage{minted}
+\usepackage{pythonhighlight}
 \surroundwithmdframed{minted}
 
 % Be able to caption equations and float them in place
@@ -67,7 +68,7 @@ For errors or improvement raise an issue or make a pull request on the \href{htt
 
 \section{Image Handling in Python}
 
-\begin{minted}{python}
+\begin{minted}[tabsize=2]{python}
 plt.imshow(np.hstack((im_float, im_float)), cmap="gray", vmin=0, vmax=1);
 \end{minted}
 
@@ -76,8 +77,7 @@ plt.imshow(np.hstack((im_float, im_float)), cmap="gray", vmin=0, vmax=1);
 \end{center}
 
 \subsection{Fading an Image}
-
-\begin{minted}{python}
+\begin{minted}[tabsize=2]{python}
 im = skimage.io.imread("data/snoopy.png")
 im = im/255 # tip: use floating point values
 
@@ -97,12 +97,13 @@ plt.imshow(np.hstack(ims),vmin=0, vmax=1, cmap="gray")
 \end{center}
 
 \subsubsection{IPyWidgets}
-\begin{minted}{python}
+\begin{minted}[tabsize=2]{python}
 @interact(thresh=widgets.FloatSlider(min=0.0, max=0.5, step=0.01, value=0.2))
 def threshold(thresh):
 	im_thresh = []
 	for line in im:
-		im_thresh.append([pixel if pixel > np.min(line) + thresh else float(0) for pixel in line])
+		im_thresh.append([pixel if pixel > np.min(line) 
+			+ thresh else float(0) for pixel in line])
 	plt.imshow(im_thresh, cmap="gray", vmin=0, vmax=1)
 	plt.show()
 \end{minted}
@@ -196,10 +197,82 @@ The larger the value of $\sigma$ the more smoothing is applied and different kin
 	\item Derivative filters yield large responses at points with high contrast
 \end{itemize}
 
-% TODO Canny Edge Detection
+\subsection{Canny Edge Detection}
+Same base approach but enhanced with edge thinning and hysteresis thresholding.
+\begin{enumerate}
+	\item Approximate gradients along axes by derivative of Gaussian filters
+	\item Compute gradient magnitude
+	\item Make edge one pixel wide, thinning through \textbf{non-maxima suppression} along perpendicular direction to the edge
+	\item Only keep strong edges through hysteresis thresholding 
+\end{enumerate}
 
-% TODO Hysteresis Thresholding
+\subsection{Hysteresis Thresholding}
+This stage decides which are all edges are really edges and which are not. For this, we need two threshold values, minVal and maxVal. Any edges with intensity gradient more than maxVal are sure to be edges and those below minVal are sure to be non-edges, so discarded. Those who lie between these two thresholds are classified edges or non-edges based on their connectivity. If they are connected to "sure-edge" pixels, they are considered to be part of edges. Otherwise, they are also discarded.
+	
+\begin{figure}[H]
+	\centering
+	\includegraphics[keepaspectratio,width=0.6\linewidth]{hysteresis_thresholding}
+	\caption{Hysteresis thresholding with A) sure edge, B) non-edge and C) a non-edge connected to a sure edge}
+\end{figure}
 
+\section{Model Fitting - Line and Circle Detection}
+Edge detection is usually not enough as there are usually more than one line in an image and many edges that do not belong to a line. There might be noise in the edges belonging to a line which brings them out of alignment. Lines might also not be complete.
 
+\subsection{Model Fitting}
+Model fitting is an algorithm finds or fits a high-level explanation or model that explain the observation well. In this case the edges are the observations and the model are one or more line.
+
+\subsection{Voting Algorithms}
+Voting algorithms are a general technique for decision methods.
+
+\begin{enumerate}
+	\item Every feature casts votes for all models that are compatible with it
+	\item Choose models that accumulate a lot of votes
+\end{enumerate}
+
+Clutter and noise will cast a lot of votes, but are inconsistent. Instead, features belonging to a model will concentrate a lot of votes for that model.
+
+\subsection{Hough Transform}
+\begin{enumerate}
+	\item Every \textbf{edge point} casts votes for \textbf{all lines that are compatible} with it
+	\item Choose \textbf{lines} that accumulated a lot of votes
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth,keepaspectratio]{img/line_representation_hough}
+	\caption{Line representation in Hough space}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/points_representation_hough}
+	\caption{Points on a line in normal space almost intersect in Hough space}
+	\label{fig:pointsrepresentationhough}
+\end{figure}
+
+\noindent
+The problem with this approach is that
+\begin{enumerate}[label=\alph*.]
+	\item the parameter space $(m,b)$ is \textbf{not bounded}
+	\item \textbf{vertical lines} can not be represented
+\end{enumerate}
+
+\subsection{Representation of Lines in Polar Coordinates}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/line_representation_polar}
+	\caption{Line representation with polar parameters}
+	\label{fig:linerepresentationpolar}
+\end{figure}
+
+This approach solves both the problem of unboundedness and representation. The parameter $\theta$ is bounded by $[0,2\pi]$ and $d$ by $[0,\text{imagewidth}]$.
+
+For every point in normal space there will be a Sinusoid the polar Hough space.
+
+\subsection{Hough Transformation Algorithm}
+The algorithm transforms each edge point in the image to the Hough space, where an Accumulator array gets filled with votes. The bin size of the accumulator is an important hyperparameter, if the size is too small, there will be many weak peak due to noise, if too large accuracy of locating a line drops and many votes from clutter might end up in the same bin. A solution is to keep the bin size small but also count votes from neighbours.
+
+% TODO Hough circles
 
 \end{document}
