@@ -50,6 +50,19 @@
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
 
+\newcommand*\samplemean[1]{\overline{#1}}
+\newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
+\newcommand*\R{\mathbb{R}}
+\newcommand*\N{\mathbb{N}}
+\newcommand*\Z{\mathbb{Z}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
+\newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
+\newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
+\newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
+
+
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
 
@@ -143,9 +156,9 @@ If $A$ and $B$ are incompatible then $A\cap B = \emptyset$.
 \section{Random Variables}
 
 \begin{definition}
-	A random variable $X$ is a function with values in $\mathbb{R}^n$, defined on the sample space $\Omega$ of a random experiment
+	A random variable $X$ is a function with values in $\R^n$, defined on the sample space $\Omega$ of a random experiment
 	\begin{equation*}
-		X: \Omega \rightarrow \mathbb{R}
+		X: \Omega \rightarrow \R
 	\end{equation*}
 \end{definition}
 
@@ -154,7 +167,7 @@ If $A$ and $B$ are incompatible then $A\cap B = \emptyset$.
 	Expectation of continuous $g(X)$: & $E(X) = \int_{-\infty}^{\infty} x f(x) dx$\\
 	Expectation of discrete $X$: & $\mu := E(X) = \sum_{i=1}^{\infty} x_i P(X = x_i)$\\
 	Expectation of discrete $g(X)$: & $E(X) = \sum_{i=1}^{\infty} g(x_i) P(X = x_i)$\\
-	\textbf{Estimator for $E(X)$}: & $ \bar{x} = \frac{1}{n} \sum_{i=1}^{\infty} g(x_i)$
+	Estimator for $E(X)$: & $ \bar{x} = \frac{1}{n} \sum_{i=1}^{\infty} g(x_i)$
 \end{tabularx}
 
 \textbf{The expectation operator $E(\cdot)$ is a linear operator}
@@ -166,16 +179,16 @@ E(\alpha X_1 + \beta X_2) = \alpha E(X_1) + \beta E(X_2)
 \begin{tabularx}{\linewidth}{lX}
 	Variance of continuous $X$: & $ E((X-\mu)^2) = \int_{\infty}^infty (x-\mu)^2 dx $\\
 	Variance of discrete $X$: & $ E((X-\mu)^2) = \sum (x-\mu)^2 P(X=x_i)  $\\
-	\textbf{Estimator for $V(X)$}: & $\sigma^2(X) = \frac{1}{n-1} \sum_{i=1}^{n}(x_i - \bar{x})^2$\\
-	\textbf{Estimator for k'th moment of $X$}: & $M_k = \frac{1}{n}\sum_{i=1}^{n}(x_i)^k$
+	Estimator for $V(X)$: & $\sigma^2(X) = \frac{1}{n-1} \sum_{i=1}^{n}(x_i - \bar{x})^2$\\
+	Estimator for k'th moment of $X$: & $M_k = \frac{1}{n}\sum_{i=1}^{n}(x_i)^k$
 \end{tabularx}
 
-\textbf{The variance operator $V(\cdot)$ is not a linear operator}
+The variance operator $V(\cdot)$ is not a linear operator
 \begin{align*}
 	V(\alpha X_1) &= \alpha^2 V(X_1)\\
-	V(X_1 + X_2) &= V(X_1) + V(X_2) + \text{Cov}(X_1,X_2)
+	V(X_1 + X_2) &= V(X_1) + V(X_2) + \Cov{X_1,X_2}
 \end{align*}
-where $\text{Cov}(\cdot)$ is the \textbf{covariance}
+where $\Cov(\cdot)$ is the \textbf{covariance}
 
 \begin{tabularx}{\linewidth}{lX}
 	Cumulative distribution function: & $ F(x) = P(X\leq x) = \int_{-\infty}^{x}f(y)dy$\\
@@ -215,7 +228,7 @@ If the $X_k$ takes on values in ${0,1}$ then $X$ takes values in ${0,1,\dots,n}$
 
 \subsection{Poisson Random Variable}
 
-A random variable with value in $\mathbb{N}_0 = {0,1,2,\dots}$ has a \textbf{Poisson distribution} with parameter $\lambda$, if for some $\lambda>0$ we have
+A random variable with value in $\N_0 = {0,1,2,\dots}$ has a \textbf{Poisson distribution} with parameter $\lambda$, if for some $\lambda>0$ we have
 \begin{equation*}
 	P({X=i}) = \frac{\lambda^i}{i!}^{-\lambda}\quad i=0,1,2,\dots
 \end{equation*}
@@ -234,7 +247,7 @@ A random variable $X$ taking on values in the interval $[\alpha,\beta]$ has a \t
 Denoted as $X\sim \text{U}(\alpha,\beta)$.
 
 \subsection{Exponential Random Variable}
-A random variable $X$ taking on values in $\mathbb{R}^+$ has an \textbf{exponential distribution} with parameters $\lambda>0$ it its probability density function is
+A random variable $X$ taking on values in $\R^+$ has an \textbf{exponential distribution} with parameters $\lambda>0$ it its probability density function is
 \begin{equation*}
 	f_X(x) = \left\{ \begin{matrix}
 	\lambda e^{-\lambda x} & \text{if } x\geq 0\\
@@ -249,7 +262,7 @@ Denoted as $X\sim \text{Exp}(\lambda)$.
 \end{align*}
 
 \subsection{Normal Random Variable}
-A random variable $X$ taking on values in $\mathbb{R}$ has a \textbf{normal distribution} with parameters $\mu$ and $\sigma^2$ if its probability density function is
+A random variable $X$ taking on values in $\R$ has a \textbf{normal distribution} with parameters $\mu$ and $\sigma^2$ if its probability density function is
 
 \begin{equation*}
 	f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{\frac{-(x-\mu)^2 }{2\sigma^2}}\qquad -\infty<x<\infty
@@ -269,6 +282,59 @@ Such a random variable $Y$ is said to have the \emph{standard normal distributio
 	\Phi(x) := \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x} e^{-\frac{y^2}{2}} dy
 \end{equation*}
 
+\section{Introduction to Stochastic Processes}
+\subsection{Covariance}
+A random vector $(X,Y)$ is known if:
+\begin{enumerate}[label=(\alph*)]
+	\item the joint probability mass function in case of discrete random variables $X$ and $Y$ is known
+	\begin{equation*}
+		p(x,y) = P(X=x,Y=y)\quad \text{for all values $x$ and $y$}
+	\end{equation*}
+	\item the joint probability density function in case of continuos random variables $X$ and $Y$ is known
+	\begin{equation*}
+		P(X\in [a,b], >\in [c,d]) = \int_{a}^{b}\int_{d}^{c} f(x,y)\diff y\diff x\quad \text{for all } a,b,c,d
+	\end{equation*}
+\end{enumerate}
+For any two random variables $X$ and $Y$, th joint cumulative probability distribution is given by
+\begin{equation*}
+	F(a,b) = P(X\leq a, Y\leq b)\quad -\infty < a, b<\infty
+\end{equation*}
+
+\begin{equation*}
+	\Cov{X,Y} = \ev{(X-\ev{X})(Y-\ev{Y})} = \ev{XY} - \ev{X}\ev{Y}
+\end{equation*}
+In the discrete case this definition reduces to
+\begin{equation*}
+	\Cov{X,Y} = \sum_{x_i,x_j} (x_i - \ev{X})(y_i - \ev{Y})\cdot P(X=x_i,Y=y_i)
+\end{equation*}
+and in the continuous case
+\begin{equation*}
+	\Cov{X,Y} = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}(x-\ev{X})(y-\ev{Y})\cdot f(x,y)\diff x\diff y
+\end{equation*}
+The correlation coefficient $\rho$ is the normalised covariance
+\begin{equation*}
+	\rho := \frac{\Cov{X,Y}}{\sqrt{\Var{X}}\sqrt{\Var{Y}}}
+\end{equation*}
+
+\subsection{Correlation}
+$X$ and $Y$ are \textbf{positively} correlated if $\Cov{X,Y} > 0$ and \textbf{negatively} correlated if $\Cov{X,Y} < 0$. $X$ and $Y$ are not correlated if $\Cov{X,Y} = 0$, that is $\ev{XY} = \ev{X} + \ev{Y}$ in which case $\Var{X + Y} = \Var{X} + \Var{Y}$.
+
+\subsection{The Bivariate Normal}
+
+Density function of $(X_1,X_2)$
+\begin{align*}
+	f_{X_1, X_2}(x_y,x_2) &:= \frac{1}{2\pi\sigma_1\sigma_2\cdot\sqrt{1-\rho^2}}\\
+	& e^{-\frac{1}{2(1-\rho^2)}} \left[ \left(\frac{x_1 - \mu_1}{\sigma_1}\right)^2 - 2 \rho\frac{x_1 - \mu_1}{\sigma_1}\frac{x_2- \mu_2}{\sigma_2} - \left(\frac{x_2 - \mu_2}{\sigma_2}\right)^2 \right]
+\end{align*}
+
+%TODO Marginal densities
+
+\subsection{The Multivariate Normal}
+$\textbf{X}$ follows a multivariate normal with mean vector $\bm{\mu}$ and covariance matrix $\textbf{C}$ if the density function of $\textbf{X}$ can be written as
+\begin{equation*}
+	f_{\textbf{X}}(\textbf{x}) = \frac{1}{(2\pi)^{\frac{n}{2}}\sqrt{\det \textbf{C}}} e^{- \frac{1}{2} (\textbf{x}-\bm{\mu})^T \textbf{C}^{-1}(\textbf{x}-\bm{\mu})}
+\end{equation*}
+And the notation is $\textbf{X}\sim \mathcal{N}(\bm{\mu}, \textbf{C})$
 
 
 \end{document}
