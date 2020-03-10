@@ -12,6 +12,7 @@
 \usepackage[x11names]{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
@@ -36,6 +37,10 @@
 \usepackage{float}
 
 \newmdtheoremenv{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newmdtheoremenv{definition}{Definition}[section]
+
 \geometry{a4paper, margin=2.4cm}
 
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
@@ -82,9 +87,9 @@ In risk management not only technical or organisational risks have to be conside
 Personal data in the wrong hands may harm the person in question in various forms. Privacy and the \emph{right to forget} is essential in personal development. An owner with a big collection of such personal data gets a lot of power with little oversight or control. One of the main tasks of a state is to protect its citizen, this includes protection from attacks on personal data.
 
 \paragraph{One of the Most Vital Legal Questions}
-\begin{theorem}
+\begin{definition}
 	{\scriptsize (1)} \textbf{Who} wants from {\scriptsize (2)} \textbf{whom} {\scriptsize (3)}\textbf{what} based on what {\scriptsize (4)}\textbf{title} or right?
-\end{theorem}
+\end{definition}
 
 \begin{figure}[H]
 	\centering
@@ -486,9 +491,63 @@ This means that any editing of personal data is \textbf{nota bene illegal}. Unle
 \subsection{EU-Law Is Applicable for Swiss Companies}
 
 \begin{itemize}
-	\item \textbf{EU-GDPR}
-	\item \textbf{Directly applicable for all swiss companies if they address to customers in the EU  and are collecting personal data}
+	\item EU-GDPR
+	\item Directly applicable for all swiss companies if they address to customers in the EU  and are collecting personal data
 \end{itemize}
+
+\section{General Data Protection Regulation}
+GDPR is directly applicable for Swiss companies if they
+\begin{itemize}
+	\item offer products and services in the EU/EWR and handle personal data for that purpose
+	\item collect and exploit the personal data of website visitors from the EU
+	\item send regular newsletter to recipients in the EU
+	\item handle personal data by order of or as a concern or part of a company domiciled in the EU
+\end{itemize}
+EU supervisory authorities have the power to conduct inspections, to request relevant information, to give orders and, in cases of severe disregard of the GDPR, to levy fines up to €10-20 Mio. or up to 2-4\% of the worldwide annual revenue.
+
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{img/gdpr_swiss_side}
+\end{center}
+
+\subsection{GDPR in Detail}
+\begin{itemize}
+	\item Augmenting of the peoples rights (Art 5/6 GDPR)
+	\item Data storing only as long as it is necessary (storage limitation, Art 5 GDPR)
+	\item Data protection by default by design (Art 25 GDPR)
+	\item Big Data: Duty to do a Data protections impact assessment (Art 35 DSGVO)
+	\item Duty to notify the supervisory authority of a personal data breach (Art 33 GDPR) and the data subject directly in cases of a high risk to the rights and freedoms of natural persons (Art 34 GDPR)
+	\item Designation of a data protection officer (Art 37 GDPR). And if the requirements are met, a representative in the EU. (Art 27 Abs 1 DSGVO)
+	\item When the processing is to be carried out on behalf of a controller: Only with sufficient guarantees, that is a contract (Art 28 Abs 1 GDPR)
+	\item Right to data portability in a structured, commonly used and machine-readable format (Art 20 GDPR)
+	\item Responsibility of the controller and duty to implement and document appropriate technical and organisational measures (Art 24 GDPR)
+	\item No sub-sub-processing without written consent of the concerned party (Art 28 Abs 2 GDPR)
+\end{itemize}
+
+\subsection{Steps to Take}
+\begin{center}
+	\includegraphics[width=\linewidth]{img/gdpr_step_by_step_plan}
+\end{center}
+The base of any data protection audit is to assess the actual situation.
+\begin{itemize}[noitemsep]
+	\item What personal data does exist?
+	\item In what form and where?
+	\item For what reason?
+	\item Who is responsible?
+	\item Who has access?
+	\item How long will be the data stored?
+	\item How is the data protected technically and organisationally?
+	\item What are the estimated possible risks of a data breach and their consequences?
+\end{itemize}
+The GDPR requires to adapt existing contracts, declarations (terms of use) and proceedings. Companies have an augmented duty to document. Appointing and naming a Data Protection Officer and, for Swiss companies, a representative located in the EU is mandatory.
+
+Implement Technical \& Operational Measures, do a thorough and detailed documentation of data systems and their organisation.
+
+\subsection{Cookies}
+The European Court of Justice (ECJ) decided that explicit consent is required for cookies. The website operator is obliged to provide evidence.
+
+
+
+
 
 
 \end{document}
