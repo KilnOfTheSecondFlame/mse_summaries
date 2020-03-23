@@ -215,7 +215,7 @@ This stage decides which are all edges are really edges and which are not. For t
 	\caption{Hysteresis thresholding with A) sure edge, B) non-edge and C) a non-edge connected to a sure edge}
 \end{figure}
 
-\section{Model Fitting - Line and Circle Detection}
+\section{Model Fitting and Line and Circle Detection}
 Edge detection is usually not enough as there are usually more than one line in an image and many edges that do not belong to a line. There might be noise in the edges belonging to a line which brings them out of alignment. Lines might also not be complete.
 
 \subsection{Model Fitting}
@@ -274,5 +274,32 @@ For every point in normal space there will be a Sinusoid the polar Hough space.
 The algorithm transforms each edge point in the image to the Hough space, where an Accumulator array gets filled with votes. The bin size of the accumulator is an important hyperparameter, if the size is too small, there will be many weak peak due to noise, if too large accuracy of locating a line drops and many votes from clutter might end up in the same bin. A solution is to keep the bin size small but also count votes from neighbours.
 
 % TODO Hough circles
+
+\subsubsection{Voting Algorithm for Finding Lines}
+\begin{enumerate}
+	\item Every edge point casts votes for all circles that are compatible with it
+	\item We choose circles that accumulated a lot of votes
+\end{enumerate}
+
+\begin{theorem}
+	Parametrisation of a circle
+	\begin{equation*}
+		(x_i - a)^2 + (y_i - b)^2 = r^2
+	\end{equation*}
+	With centre $(a,b)$ and radius $r$
+\end{theorem}
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/hough_circle_accumulator}
+\end{center}
+
+\subsection{Hough Space for Circles With Unknown Radius}
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/hough_circle_accumulator_point}
+\end{center}
+
+
+
 
 \end{document}
