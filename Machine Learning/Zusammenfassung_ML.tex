@@ -12,6 +12,7 @@
 \usepackage[x11names]{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
@@ -36,6 +37,11 @@
 \usepackage{float}
 
 \newmdtheoremenv{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newmdtheoremenv{definition}{Definition}[section]
+
+
 \geometry{a4paper, margin=2.4cm}
 
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
@@ -44,6 +50,17 @@
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+\newcommand*\samplemean[1]{\overline{#1}}
+\newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
+\newcommand*\R{\mathbb{R}}
+\newcommand*\Z{\mathbb{Z}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
+\newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
+\newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
+\newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
 
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
@@ -258,6 +275,159 @@ The goal is to find a compromise between model complexity and accuracy on the va
 In practice tenfold cross validation is often good enough and it does not matter which classifier is really better. Otherwise the \textbf{Student's t-test} can be used to compare two samples. Generally, the difference between $\mu_{\mathcal{L}_A}$ and $\mu_{\mathcal{L}_A}$ of the obtained cross-validation error estimates follows a Student's distribution with $m-1$ degrees of freedom.
 
 If the number of features $p$ is large in comparison to the number of instances $N$ use \textbf{boosting} or \textbf{SVM}. If the data set is \emph{severely imbalanced}, \textbf{non-standard loss functions} that take class distribution in account or \textbf{Bayesian methods} and appropriate prior probabilities should be considered.
+
+\section{Support Vector Machines}
+
+Each observation is a vector of values ($p$-dimensional) for which the SVM \textbf{constructs a hyperplane} to separate class members. There are different support vectors for different tasks
+\begin{enumerate}
+	\item Maximal margin \textbf{hyperplane} classifier, for linearly separable data
+	\item Support vector \textbf{classifier}, for almost linearly separable data
+	\item Support vector \textbf{machine}, for non-linearly separable data
+\end{enumerate}
+
+\subsection{Maximal Margin Classifier}
+\begin{minipage}{0.6\linewidth}
+	Chooses the hyperplane maximising the distance from the hyperplane to the closest training point, denoted the support vectors, and can be represented as a linear combination of only a few training points.
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+	\centering
+	\includegraphics[keepaspectratio,width=0.8\linewidth]{img/maximum_margin_classifier.png}
+\end{minipage}
+
+\begin{definition}
+	Definition of a hyperplane
+	\begin{equation*}
+		\{ \vec{x}: \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p = 0 \}
+	\end{equation*}
+\end{definition}
+Separating hyperrplanes for classes encoded $\pm 1$
+\begin{align*}
+	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &> 0 \qquad \text{ if } y_i = 1\\
+	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &< 0 \qquad \text{ if } y_i = -1\\
+	\intertext{Equivalently}
+	y_i\cdot (\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip}) &> 0
+\end{align*}
+Evaluating the hyperplane formula for a point $x$ gives its distance to the hyperplane, if $\bm{\beta}$ is a normal vector.
+
+\subsection{Formulation of Optimisation Problem}
+Intuitive Optimisation
+\begin{itemize}[noitemsep]
+	\item $\underset{\beta_0,\beta_1,\dots,\beta_p}{\text{maximise}} M$
+	\begin{itemize}
+		\item subject to $\sum_{j=1}^{p}\beta_j^2 = 1$
+		\item and $y_i\cdot (\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip}) \geq M\qquad\forall i = 1..N$
+	\end{itemize}
+\end{itemize}
+This can be reformulated using {\color{DodgerBlue2} Lagrange multipliers}
+\begin{itemize}[noitemsep]
+	\item Find $L_D = \sum_{i=1}^{N} \alpha_i - \frac{1}{2} \sum_{i=1}^{N}\left( \sum_{k=1}^{N} \alpha_i \alpha_k \bm{x}_i^T \bm{x}_k \right) $
+		\begin{itemize}
+		\item subject to $ \alpha_i \geq 0 $ and $\sum_{i=1}^{N} \alpha_i y_i = 0$
+		\item Once the alphas are computed $\beta = \sum_{i=1}^{N} \alpha_i y_i \bm{x}_i$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Support Vector Classifier}
+Based on the assumption that the data is not perfectly linearly separable any more, the idea is to introduce soft margins that allow for \emph{some} misclassifications. The number of misclassifications is controlled by a {\color{DodgerBlue2} penalty factor} $C$.
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/support_vector_classifier}
+\end{center}
+
+\subsubsection{Support Vector Classifier Optimisation}
+\begin{minipage}{0.6\linewidth}
+Intuitive Optimisation
+\begin{itemize}[noitemsep,nosep]
+	\item $\underset{\beta_0,\beta_1,\dots,\beta_p}{\text{maximise}} M$
+	\begin{itemize}
+		\item subject to $\sum_{j=1}^{p}\beta_j^2 = 1$
+		\item and $y_i\cdot (\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip}) \geq M(1 - \xi_i)   \qquad\forall i = 1..N$
+		\item $\xi_i \geq 0, \sum_{i=1}^{N}\xi_i \leq \tilde{C}$
+		\item where $\xi_i$ is a slack variable to allow instance $i$ to lie on the wrong side of the margin
+		\item $\tilde{C}$ is the total budget for misclassifications
+	\end{itemize}
+\end{itemize}
+Equivalent technical optimisation, so called "dual form"
+\begin{itemize}[noitemsep,nosep]
+	\item maximise\\
+	$L_D = \sum_{i=1}^{N} \alpha_i - \frac{1}{2} \sum_{i=1}^{N}\sum_{k=1}^{N} \alpha_i \alpha_k y_i y_k x_i^T x_k$
+	\begin{itemize}
+		\item subject to $0 \leq \alpha_i \leq C$ and $\sum_{i=1}^{N}\alpha_i y_i = 0$
+		\item $\beta = \sum_{i=1}^{N} \alpha_i y_i x_i$ is minimised
+	\end{itemize}
+\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=0.8\linewidth]{img/support_vector_classifier_penalty}
+\end{minipage}
+
+\subsection{Support Vector Machines}
+A possible solution for linearly completely non-separable data is to map the data into a higher-dimensional space. In this space a separating hyperplane may be defined. 
+
+\subsubsection{Variable Transformation}
+The same idea applies, transform a non-linearly separable input function in $\R^n$ to $\R^{n+k}, k\geq 1$ where it may be linearly separable.
+
+\begin{center}
+	\includegraphics[keepaspectratio,width=0.6\linewidth]{variable_transformation.png}
+\end{center}
+
+The power of feature space transformation lies in the fact, that with an appropriately chosen feature space of sufficient dimensionality any consistent training set can be made separable.
+\begin{equation*}
+	\left\langle \begin{pmatrix}x_i\\x_i^2\end{pmatrix} \cdot\begin{pmatrix}x_{i'}\\x_{i'}^2\end{pmatrix} \right\rangle = x_i x_{i' } + x_i^2 x_{i' }^2 := K(x_i,x_{i'})
+\end{equation*}
+$K$ is known as a \textbf{kernel} function. It can be used to efficiently compute feature space transformations. Instead of calculating the inner product, the kernel $K(\cdot,\cdot)$ gets calculated. As soon as some $K$ is used, the resulting SVC becomes a SVM.
+
+The following Kernels are common
+\begin{itemize}[noitemsep]
+	\item {\color{DodgerBlue2} Identity (inner product)}
+	\begin{equation*}
+		K(x_i,x_{i'}) = \sum_{j=1}^{p} x_{ij}x_{i'j}
+	\end{equation*}
+	this yields the standard support vector classifier
+	\item {\color{DodgerBlue2} Polynomial of degree $d$}
+	\begin{equation*}
+		K(x_i,x_{i'}) = \left(1 + \sum_{j=1}^{p} x_{ij}x_{i'j}\right)^d
+	\end{equation*}
+	the polynomial kernel of degree $d = 1$ is just the identity kernel
+	\item {\color{DodgerBlue2} Radial basis or Gaussian}
+	\begin{equation*}
+		K(x_i,x_{i'}) = e^{\left( -\gamma \sum_{j=1}^{p}(x_{ij} - x_{i'j})^2 \right)}
+	\end{equation*}
+	the Gaussian kernel computes a very local neighbourhood, with $\gamma$ being the hyper-parameter controlling the width of that neighbourhood. A low $\gamma$ yields a great width. The feature space spanned by the Gaussian kernel is implicit and infinite-dimensional.
+\end{itemize}
+
+\subsection{Multiclass Classification With Support Vector Machine}
+With one versus rest or all classification, the binary classifier SVM can be adapted to choose between multiple classes.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/support_vector_machine_multiclass}
+\end{center}
+Assume $k$ classes, learn all $\frac{k(k-1)}{2}$ pairwise comparisons and classify unknown instances by majority vote among all pairwise comparisons.
+
+\section{Ensemble Methods}
+The goal of ensembles is to increase performance by \textbf{combining multiple complementary classifiers}. The intuition behind it is to build different experts and let them decide by vote. This is {\color{Green3} very effective in practice} and has {\color{Green3}good theoretical guarantees}, but while being {\color{Green3} easy to implement} the result {\color{Firebrick3} lacks in transparency}, {\color{Firebrick3}interpretability} and a {\color{Firebrick3} compact representation}.
+
+The formal problem description is: Given $T$ binary classification hypotheses $(h_1,\dots, h_T)$, find a combined classifier with better performance of the form
+\begin{equation*}
+	\hat{h}(x) = \text{sign}\left( \sum_{t=1}^{T} \alpha_t h_t (x) \right)
+\end{equation*}
+For regression the average is used.
+
+Ensembles work because they average the error, in statistical terms the bias remains equal but the variance is reduced.
+
+\subsection{AdaBoost}
+\subsubsection{Boosting}
+The general idea is to boost the performance of weak learners iteratively by making misclassified examples more important and then combining hypotheses. This way, each stage additively corrects shortcomings of previous stages by reweighing and majority voting on the result. The \textbf{Ada}ptive \textbf{Boost}ing algorithm works by
+\begin{minted}[escapeinside=||,mathescape=true,fontsize=\small]{python}
+initialize weights: |$w_i := \frac{1}{N}$|
+for |$ t:=1..T $|
+	|$ h_t $| := train decision stump on the |$ x_i $|, weighted by the |$ w_i $|
+	|$ \varepsilon_t $| := |$ \frac{\sum_{i=1}^{N} w_i \cdot I(y_i\neq h_t(x_i) }{\sum_{i=1}^{N} w_i} $| # compute error, $ I() $ is the identity function
+	|$ \alpha_t $| := |$ \log\left(\frac{1-\varepsilon_t}{\varepsilon_t} \right) $| # compute influence of weak learner
+	|$ w_i $| := |$ w_i\cdot e^{\alpha_t\cdot I(y_i \neq h_t(x))} $| # increase weight by exp(Influence) in case of error
+return |$ \hat{h} $| := |$ \text{sign}\left(\sum_{t=1}^T \alpha_t\cdot h_t(x)\right) $| # majority vote
+\end{minted}
+
 
 
 \end{document}
