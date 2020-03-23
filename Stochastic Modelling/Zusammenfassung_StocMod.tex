@@ -336,5 +336,108 @@ $\textbf{X}$ follows a multivariate normal with mean vector $\bm{\mu}$ and covar
 \end{equation*}
 And the notation is $\textbf{X}\sim \mathcal{N}(\bm{\mu}, \textbf{C})$
 
+\subsection{Law of Large Numbers}
+\begin{theorem}
+	Let $X_1, X_2, \dots$ be a sequence of independent and identically distributed random variables with $\ev{X} = \mu$. Then, with probability 1,
+	\begin{equation*}
+		\frac{X_1 + X_2 + \dots + X_n}{n} \longrightarrow \mu \qquad\text{as }\mu\rightarrow\infty
+	\end{equation*}
+\end{theorem}
+
+% TODO Central Limit Theorem 
+
+\section{Stochastic Processes}
+
+\begin{definition}
+	Let $P$ be a probability function on the sample space $\Omega$. A stochastic process $X = \left\{ X_t | t\in \mathbb{T} \right\}$ with state space $S$ is a collection of random variables with values in the set $S$
+	\begin{equation*}
+		X_t : \Omega \rightarrow S\qquad t\in\mathbb{T}
+	\end{equation*}
+	where $\mathbb{T}$ is an ordered set, called the index set of the process.
+\end{definition}
+
+\pagebreak
+\subsection{Classification}
+\begin{equation*}
+	X_t : \Omega \rightarrow S\qquad t\in\mathbb{T}
+\end{equation*}
+\begin{tabularx}{\linewidth}{|X||c|c|}
+	\hline
+	& $\bm{\mathbb{T}}$ \textbf{discrete} & $\bm{\mathbb{T}}$ \textbf{continuous}\\
+	\hline
+	\hline
+	$\bm{S}$ \textbf{discrete} & random walk & Poisson process\\
+	\hline
+	$\bm{S}$ \textbf{continuous} & time series & Brownian motion\\
+	\hline
+\end{tabularx}
+
+\begin{definition}
+	A stochastic process $X$ is \textbf{strict sense stationary}, if the finite dimensional distribution function is invariant under time shift.
+\end{definition}
+
+\begin{definition}
+	A stochastic process $X$ is \textbf{wide sense stationary}, if the mean $E(X_t) = m$ is constant and if the autocorrelation function $R_X(t_1,t_2)$ only depends on the difference $t_2-t_1$.
+\end{definition}
+
+\begin{definition}
+	The \textbf{(power) spectral density} of a wide sense stationary stochastic process $X$ is the Fourier transform $S_X(k)$ of its autocorrelation function $R_X(t)$
+	\begin{equation*}
+		S_X(k) = \int_{-\infty}^{\infty}e^{-jkt} R_X(t)\diff{t}
+	\end{equation*}
+\end{definition}
+
+\section{Markov Chain}
+The stochastic process $X$ has the Markov property if a step $X(t_n)$ is only dependent on the preceding step $X(t_{n-1})$
+\begin{equation*}
+	P\left(X(t_n)\leq x_n \middle| \{X_t\}_{t\leq t_{n-1}} \right) = P\left(X(t_n)\leq x_n \middle| X(t_{n-1}) \right)\qquad\text{for }t_{n-1}<t_n
+\end{equation*}
+A sequence of integer valued random variables $X_0, X_1,\dots$ is called a Markov chain if for $n \geq 1$
+\begin{equation*}
+	P\left( X_{n+1}=x_{n+1} \middle| X_{n}=x_{n},\dots,X_{0}=x_{0} \right) = \underbrace{P\left( X_{n+1}=x_{n+1} \middle| X_{n}=x_{n} \right)}_{\text{transition probability}}
+\end{equation*}
+
+The conditional probabilities $P\left(X_{k+1}=j \middle| X_k = i\right)$ of a Markov chain $X$ are called transition probabilities. A Markov chain is called time-homogenous, if the transition probabilities do not depend on time $k$ and the following notation is used
+\begin{equation*}
+	p_{ij} = P\left(X_{k+1}=j\middle| X_k = i\right)
+\end{equation*}
+for homogeneous transition probabilities. The associated matrix, indexed by the state space $S = \{1,2,\dots,n\}$ is the transition matrix
+\begin{equation*}
+	\bm{P} = \begin{pmatrix}
+	p_{11} & \dots & p_{1n}\\
+	\vdots & \ddots & \vdots \\
+	p_{n1} & \dots & p_{nn}
+	\end{pmatrix}
+\end{equation*}
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/discrete_markov_chain}
+\end{center}
+This diagram says that the state space is the finite set ${0,1}$, and that
+\begin{equation*}
+	\bm{P} = \begin{pmatrix}
+	1-a & a\\
+	b & 1-b
+	\end{pmatrix}
+\end{equation*}
+\subsection{The Chapmann-Kolmogorov Equations}
+Define the probability of going from state $i$ (at time zero) to state $j$ in $m$ steps
+\begin{equation*}
+	p_{ij}^{(m)} = P\left( X_m = j \middle| X_0 = i \right)
+\end{equation*}
+In particular
+\begin{equation*}
+	p_{ij}^{(1)} = p_{ij}\text{ and } p_{ij}^{(0)} = \delta_{ij} = \left\{\begin{matrix}
+	1 & i=j\\
+	0 & i\neq j
+	\end{matrix}
+	\right.
+\end{equation*}
+The $m$-step transition probabilities satisfy the Chapman-Kolmogorov equation
+\begin{equation*}
+	p_{ij}^{(n+m)} = \sum_{k} p_{ik}^{(n)} p_{kj}^{(m)}
+\end{equation*}
+
+
+
 
 \end{document}
