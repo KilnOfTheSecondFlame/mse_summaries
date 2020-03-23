@@ -388,15 +388,15 @@ The alternative is a \textbf{discriminative model} that models $P(c|d)$ directly
 \subsection{Discriminative Model: Maximum Entropy}
 Entropy in information theory refers to a measure of the information content, where highly probable events carry very little information and if all events are equally likely there is maximum entropy. A prediction on which one will occur is impossible and when a event occurs there is a lot of learning.
 \begin{itemize}
-	\item Suppose movie reviews get classified into \{ {\color{green} positive} $\vert$ {\color{red} negative} $\vert$ ({\color{gray} neutral}) \}
-	\item In the training corpus 90\% of the sample containing the word \texttt{love} are tagged as {\color{green} positive}
-	\item Let it further be that a test sample with the word \texttt{love} is 90\% likely to be positive and equally likely to be either {\color{red} negative} (10\%) or {\color{gray} neutral} (10\%)
+	\item Suppose movie reviews get classified into \{ {\color{Green3} positive} $\vert$ {\color{Firebrick3} negative} $\vert$ ({\color{gray} neutral}) \}
+	\item In the training corpus 90\% of the sample containing the word \texttt{love} are tagged as {\color{Green3} positive}
+	\item Let it further be that a test sample with the word \texttt{love} is 90\% likely to be positive and equally likely to be either {\color{Firebrick3} negative} (10\%) or {\color{gray} neutral} (10\%)
 	\item All other things unknown are assumed to be equally likely (maximum entropy)
 \end{itemize}
 Unlike in text classification, topic words are not as important as \textbf{sentiment words} that carry an emotional charge, but the mapping between emotional states and the written word can be exceedingly subtle
 \begin{itemize}[label=-]
-	\item {\color{green} good}, {\color{green} splendid}, {\color{green} nice}
-	\item {\color{red} bad}, {\color{red} racist}, {\color{red} dismal}
+	\item {\color{Green3} good}, {\color{Green3} splendid}, {\color{Green3} nice}
+	\item {\color{Firebrick3} bad}, {\color{Firebrick3} racist}, {\color{Firebrick3} dismal}
 \end{itemize}
 
 \subsection{Unsupervised Sentiment Classification}
@@ -407,7 +407,7 @@ Unlike in text classification, topic words are not as important as \textbf{senti
 \end{enumerate}
 Semantic orientation is computed based on Pointwise Mutual Informaiton (PMI)
 \begin{equation*}
-	\text{PMI} (w_1,w_2) = \log_2 \left( \frac{P(w_1,w_2)}{P(w_1)P(w_2)} \right) = \log_2 \left( \frac{P(w_1 | w_2)}{P(w_1)} \right) = \log_2 \left( \frac{P(w_2 | w_1)}{P(w2)} \right)
+\text{PMI} (w_1,w_2) = \log_2 \left( \frac{P(w_1,w_2)}{P(w_1)P(w_2)} \right) = \log_2 \left( \frac{P(w_1 | w_2)}{P(w_1)} \right) = \log_2 \left( \frac{P(w_2 | w_1)}{P(w2)} \right)
 \end{equation*}
 PMI is computed using approximate probabilities with normalised word counts in a corpus. Or the web can be used as a corpus using the number of hits from a search engine when $w_1$ and $w_2$ are searched. Following Barrière (2016) the number of hits of \texttt{the, a, of} are used, which results in a total of $2.527\cdot 10^10$ hits.
 \subsubsection{Example PMI of Academy and Awards}
@@ -419,6 +419,174 @@ PMI is computed using approximate probabilities with normalised word counts in a
 	\item $\text{PMI}(w_1,w_2) \approx \log_2\left( \frac{1.01\cdot 10^9\cdot2.527\cdot 10^10}{1.94\cdot 10^9\cdot 5.57\cdot 10^9} \right)\approx 1.24 $
 \end{itemize}
 Two words with high PMI are very likely to occur jointly, while two words with low PMI are very likely to occur separately. PMI can also be used to compute Semantic Orientation (SO), by computing the PMI of selected bigrams with reference words.
+
+\section{Representation and Querying}
+User has information needs and expresses them as a text query, the system matches the query with the documents and returns results. The system is using system-specific document or query representations to make comparison possible. The problem is, that computers have difficulties to work with text directly, so the text has to be transformed into something the machine can work with, usually a vector of numbers.
+
+\subsection{Document Representation}
+The idea is to count the words that are shared between documents. The higher the score, the more words are shared, the higher the apparent similarity between documents. But lexemes and capitalisation makes this task harder.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/preprocessing_pipeline}
+	\caption{Preprocessing pipeline for text}
+	\label{fig:preprocessingpipeline}
+\end{figure}
+The actual steps taken in the preprocessing depends heavily on the use case.
+
+\subsubsection{Clean Text}
+\begin{itemize}[noitemsep]
+	\item Remove markup
+	\item Expand contractions
+	\item Truecase
+	\item Remove stopwords
+	\item Only keep specific word forms
+\end{itemize}
+
+\subsubsection{Tokenise}
+\begin{itemize}[noitemsep]
+	\item Tokenise
+	\item Lemmatisation
+	\item Stemming\\
+	Reduces inflected words to their stem, the root or base forms, even if the stem itself is not a valid word in the language
+\end{itemize}
+
+\subsection{Scoring with Jaccard Similarity}
+The idea to count the words that are shared between documents to account for similarity stays the same. But the Jaccard Similarity is defined as the size of intersection divided by the size of the union of two sets.
+
+\noindent
+\begin{minipage}{0.6\linewidth}
+	\begin{equation*}
+	J(\text{document}_1,\text{document}_2) = \frac{\text{document}_1\cap\text{document}_2}{\text{document}_1\cup\text{document}_2}
+	\end{equation*}
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+	\begin{center}
+		\includegraphics[width=0.9\linewidth]{img/jaccard_set}
+	\end{center}
+\end{minipage}
+Jaccard similarity has the issue of preferring short documents and that it ignores the number a word is occurring.
+
+\subsection{Bag of Words Model}
+Focuses on the number of occurrence of words, with the intuition that if a queried word occurs more in the document it is more relevant.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/bagofwords_model}
+\end{center}
+However the Bag of Words model does not consider the ordering of words in a document, and the words must precisely match.
+
+\subsection{Term Frequency Weighting and Transformation}
+The raw term frequency is not necessarily the most desirable attribute. A document where a query word occurs more should be handled as more relevant, but a document with 50 occurrences should not be treated 50 times more important than a document with only five occurrences. Thus the relevance should increase sublinear with term frequency
+\begin{equation*}
+	\text{TF}_{\text{document}} = \underset{\text{word}\in\text{query}\cap\text{document}}{\sum}\log\left( 1 + \text{count}(\text{word},\text{document}) \right)
+\end{equation*}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/term_frequency_transformation}
+	\caption{A sublinear transformation avoids the dominance of single words}
+	\label{fig:termfrequencytransformation}
+\end{figure}
+
+\subsubsection{(Best Matching) BM25 Term Frequency Transformation}
+\begin{equation*}
+	y = \frac{(k+1)\cdot c(w,d)}{k+c(w,d)}
+\end{equation*}
+
+\subsection{Inverse Document Frequency}
+The problem with term frequency lies in the fact that highly frequent words dominate the analysis, but rare and domain specific words may be more informative semantically. Thus positive weights for frequent words but lower weights than for rare words are desirable.
+\begin{itemize}[label=]
+	\item $\text{DF}_w$: Document Frequency, the number of documents containing word $w$, is the inverse measure of the informativeness of word $w$
+	\item $N$: total number of documents in the collection
+\end{itemize}
+\begin{equation*}
+	\text{IDF}_{word}=\log\left(\frac{N}{\text{DF}_{word}}\right)
+\end{equation*}
+The logarithm is used to dampen the effect of IDF.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/popular_terms_penalty}
+	\caption{Popular terms are penalised}
+	\label{fig:populartermspenalty}
+\end{figure}
+
+\subsection{TF-IDF}
+\begin{equation*}
+	\text{TF-IDF}_{word} = \text{TF}_{word,doc}\cdot\text{IDF}_{word,coll}
+\end{equation*}
+Increases with the number of word occurrences within a document and the rarity of the word in the collection. Ranking of documents for a query is done by
+\begin{equation*}
+	\text{Score}_{query,doc} = \underset{word\in query\cap doc}{\sum} \text{TF-IDF}_{word,doc,coll}
+\end{equation*}
+\begin{minipage}{\textwidth}
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabularx}{\linewidth}{|l|X|p{2cm}|l|X|}
+		\cline{1-2}\cline{4-5}
+		& TF weights & & & IDF weights\\
+		\cline{1-2}\cline{4-5}
+		Binary & $ 0 / 1$& & Unary & 1\\
+		\cline{1-2}\cline{4-5}
+		Counts & $c(t,d)$ & & IDF & $\log\left(\frac{N(C)}{n(t,C)}\right)$\\
+		\cline{1-2}\cline{4-5}
+		Frequency & $\frac{c(t,d)}{\sum_{\tau\in d} c(\tau,d)}$ & & IDF.
+		* & $ 1 + \log\left(\frac{N(C)}{n(t,C)}\right) $ \\
+		\cline{1-2}\cline{4-5}
+		Log Counts & $ 1 + \log\left( c(t,d) \right) $ & & IDF Smoothed & $\log\left(\frac{N(C)}{1 + n(t,C)}\right)$\\
+		\cline{1-2}\cline{4-5}
+		\vdots & \vdots & & \vdots & \vdots\\
+		\cline{1-2}\cline{4-5}
+	\end{tabularx}
+\end{minipage}
+
+\subsection{Document Length Normalisation}
+Penalise long documents with a document length normaliser, as long documents have a better chance to match any query and are thus less specific. But avoid over-penalisation as documents can be long since they use more words, which should result in more penalisation, or as they have more content, which should be less penalised.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/pivot_length_normaliser}
+	\caption{Average document length is used as a pivot point}
+	\label{fig:pivotlengthnormaliser}
+\end{figure}
+
+\subsubsection{State of The Art Okapi BM25+}
+Given a Query $Q$ containing keywords $q_1,\dots,q_n$, document $D$'s score is
+\begin{equation*}
+	\text{score}(D,Q) = \sum_{i=1}^{n}\text{IDF}(q_i) \cdot \left[ \frac{f(q_i,D)\cdot (k_1 + 1)}{f(q_i, D) + k_1\cdot\left( 1 - b + b\cdot\frac{\abs{D}}{\text{avgdl}} \right)} + \delta \right]
+\end{equation*}
+\begin{equation*}
+	\text{IDF}(q_i) = \log \frac{N - n(q_i) + 0.5}{n(q_i) + 0.5}
+\end{equation*}
+\begin{itemize}[leftmargin=*, labelindent=2cm, labelsep=1cm, noitemsep,nosep]
+	\item[$f(q_i,D)$] Term frequency of $q_i$ in document $D$
+	\item[$\abs{D}$] length of document $D$
+	\item[avgdl] average document length over corpus
+	\item[$\delta$] free parameter, default $\delta = 1.0$
+	\item[$k_1$] free parameter, $k_1 \in [1.2, 2.0]$
+	\item[$b$] free parameter, default $b = 0.75$
+	\item[$N$] number of documents in corpus
+	\item[$n(q_i)$] number of documents containing $q_i$
+\end{itemize}
+
+\subsection{Vector Space Model}
+Used to correlate words, sentences and documents by semantic similarity.
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{img/vector_space_model}
+\end{center}
+For scoring the cosine similarity between documents and a query vector is preferred over the euclidean distance
+\begin{itemize}[leftmargin=*, labelindent=3cm, labelsep=1cm, noitemsep]
+	\item[similar scores] score vectors are in the same direction, angle between them is almost zero making the cosine lying near one or 100\%
+	\item[unrelated scores] score vectors are nearly orthogonal and the cosine is thus near zero
+	\item[opposite scores] score vectors in opposite directions, cosine is near minus one or -100\%
+\end{itemize}         
+The cosine similarity is calculated by
+\begin{equation*}
+	\cos(d_j,q) = \frac{\bm{d_j}\cdot \bm{q}}{\norm{\bm{d_j}}\norm{\bm{q}}} = \frac{\sum_{i=1}^{N} w_{i,j} w_{i,q} }{\sqrt{\sum_{i=1}^{N}w_{i,j}^2}\sqrt{\sum_{i=1}^{N}w_{i,q}^2}}
+\end{equation*}
+$\text{L}^2$ norm (Euclidean norm) is the square root of the dot product of the vector $\bm{p}$ with itself, and scales a vector to its unit-length
+\begin{equation*}
+	\norm{\bm{p}} = \sqrt{p_1^2 + p_2^2 + \dots + p_n^2} = \sqrt{\bm{p}\cdot\bm{p}}
+\end{equation*}
+Normalising all vectors to unit vectors this way allows for the dot-product to measure similarity, and do it in a more efficient way than cosine similarity. The dot product between two vectors $\bm{d_j}$ and $\bm{q}$ is high if $w_{ij}$ and $w_{iq}$ have similar characteristics, and is equivalent to the cosine similarity if the vectors are normalised.
+
+
+
+
 
 
 
