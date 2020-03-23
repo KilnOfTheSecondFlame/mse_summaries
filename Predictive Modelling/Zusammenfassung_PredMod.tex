@@ -52,6 +52,8 @@
 \newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
 \newcommand*\R{\mathbb{R}}
 \newcommand*\Z{\mathbb{Z}}
+\newcommand*\N[1]{\mathcal{N}\left(#1\right)}
+\newcommand*\Likelihood{\mathcal{L}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
 \newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
@@ -121,7 +123,7 @@ The set of all possible outcomes of a random experiment is called sample space $
 \begin{definition}
 	The \textbf{sample total} is defined as 
 	\begin{equation*}
-		S_n = (X_1 + X_2 + \dots + X_n) \sim \mathcal{N}(n\mu, n\sigma_X^2)
+		S_n = (X_1 + X_2 + \dots + X_n) \sim \N{n\mu, n\sigma_X^2}
 	\end{equation*}
 	\textbf{Sample mean} is defined by
 	\begin{equation*}
@@ -133,15 +135,105 @@ The set of all possible outcomes of a random experiment is called sample space $
 	\end{equation*}
 \end{definition}
 
-% TODO Uniform Distribution
+\subsection{Uniform Distribution}
+The uniform distribution represents a probabilistic formulation of complete lack of bias or knowledge
+\begin{definition}
+	A random variable $X$ with range $W_X = [a,b]$ is uniformly distributed if
+	\begin{equation*}
+		f(x) = \left\{
+			\begin{matrix}
+				\frac{1}{b-a} & \text{if } a\leq x \leq b\\
+				0 & \text{otherwise}
+			\end{matrix}
+		\right.
+	\end{equation*}
+\end{definition}
+The density function is therefore constant on the interval $[a,b]$, hence the name \emph{uniform}. The corresponding cumulative distribution function is given by
+\begin{equation*}
+	F(x) = \left\{
+		\begin{matrix}
+			0 & \text{if } x < a\\
+			\frac{x-a}{b-a} & \text{if } a\leq x \leq b\\
+			1 & \text{if } x > b
+		\end{matrix}
+		\right.
+\end{equation*}
 
-% TODO Exponential Distribution
+\subsection{Exponential Distribution}
+The exponential distribution is used to model the lifespan or time until failure
+\begin{definition}
+	A random variable $X$ with range $W_X = \R^+ = [0,\infty)$ is exponentially distributed with parameter $\lambda \in \R^+$ if
+	\begin{equation*}
+		f(x) = \left\{
+			\begin{matrix}
+			\lambda\cdot e^{-\lambda x} & \text{if } x\geq 0\\
+			0 & \text{otherwise}
+			\end{matrix}
+		\right.
+	\end{equation*}
+\end{definition}
+The corresponding cumulative distribution function is given by
+\begin{equation*}
+		F(x) = \left\{
+		\begin{matrix}
+			1 - e^{-\lambda x} & \text{if } x\geq 0\\
+			0 & \text{if } x < 0
+		\end{matrix}
+	\right.
+\end{equation*}
 
-% TODO Normal Distribution
+\subsection{Normal Distribution}
+The normal distribution or Gaussian distribution is the most frequent distribution occurring with measurement values.
+\begin{definition}
+	A random variable $X$ with range $W_X = \R$ is normally distributed with parameter $\mu \in \R$ and $\sigma^2\in\R^+$ if
+	\begin{equation*}
+	f(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{\left( -\frac{(x-\mu)^2}{2\sigma^2} \right)}
+	\end{equation*}
+	The distribution for the random variable $X$ is denoted as follows
+	\begin{equation*}
+		X \sim \N{\mu,\sigma^2}
+	\end{equation*}
+\end{definition}
 
-% TODO Law Of Large Numbers
+\subsubsection{Standardisation of A Normally Distributed Random Variable}
+\begin{definition}
+	For a random variable $ X\sim\N{\mu,\sigma^2} $, standardising $X$ results in a transformed random variable that is normally distributed as well. The expected value of this transformed variable becomes zero and the variance one. We thus obtain the standard normal distribution
+	\begin{equation*}
+		Z = \frac{X - \mu}{\sigma} \sim \N{0,1}
+	\end{equation*}
+\end{definition}
 
-% TODO Central Limit Theorem
+\subsection{Law Of Large Numbers}
+Assume there are random variables $X_1,X_2,\dots,X_n$ i.i.d., then
+\begin{align*}
+	\ev{S_n} &= \ev{X_1 + X_2 + \dots + X_n} = \sum_{i=1}^{n} \ev{X_i} = n\mu\\
+	\Var{S_n} &= \sum_{i=1}^{n}\Var{X_i} = n\Var{X_i} = n\sigma_X^2\\
+	\sigma(S_n) &= \sqrt{n}\sigma_X
+\end{align*}
+The summary statistics of $\samplemean{X}_n$ thus are
+\begin{align*}
+	\ev{\samplemean{X}_n} &= \ev{\frac{X_1 + X_2 + \dots + X_n}{n}} = \frac{1}{n} \sum_{i=1}^{n} \ev{X_i} = \mu\\
+	\Var{\samplemean{X}_n} &= \Var{\frac{X_1 + X_2 + \dots + X_n}{n}} = \frac{1}{n^2} \sum_{i=1}^{n}\Var{X_i}  = \frac{1}{n^2}n\sigma_X^2 = \frac{\sigma_X^2}{n}\\
+	\sigma_{\samplemean{X}_n} &= \frac{\sigma_X}{\sqrt{n}} = \frac{1}{\sqrt{n}} \sigma_X
+\end{align*}
+The standard deviation of $\samplemean{X}_n$ is called \textbf{standard error} of the sample mean.
+\begin{definition}
+	For $n\rightarrow\infty$ the dispersion of the random variables approaches zero. If $X_1,X_2,\dots,X_n$ are i.i.d. then the \textbf{law of large numbers} applies
+	\begin{equation*}
+		\samplemean{X}_n \longrightarrow \mu \qquad\text{for} (n\rightarrow\infty)
+	\end{equation*}
+\end{definition}
+The standard error is not proportional to $\frac{1}{n}$ but decreases with factor $\frac{1}{\sqrt{n}}$. Thus, to half the standard error, four times as many observations are needed, this is called the $\bm{\sqrt{n}}$-\textbf{law}.
+
+\subsection{Central Limit Theorem}
+\begin{definition}
+	Let $X_1,X_2,\dots,X_n$ be i.i.d. with expected value $\mu$ and variance $\sigma^2$, then
+	\begin{align*}
+		S_n &\approx \N{n_\mu, n\sigma_X^2}\\
+		\samplemean{X}_n &\approx \N{\mu,\frac{\sigma_X^2}{n}}
+	\end{align*}
+	This approximation becomes more precise the larger $n$ is. Moreover, the approximation is better, the more the distribution of the random variable $X_i$ is similar to a normal distribution $\N{\mu,\sigma_X^2}$.
+\end{definition}
 
 \section{QQ-Plots, Parameter Estimation and t-Tests}
 
@@ -170,9 +262,9 @@ A QQ-plot is the empirical quantiles calculated from the data plotted against th
 		P[X_1 = x_1] \cdot P[X_2 = x_2] \cdot \dots \cdot P[X_n = x_n] \equiv \prod_{i=1}^{n} P[X_i = x_i]
 	\end{equation*}
 	The probability that the $n$ independent random variables $x_1,x_2,\dots,x_n$ are observed, depends on the \textbf{parameter $\theta$} which needs to be \textbf{estimated}.
-	The Likelihood function $\mathcal{L}(\theta)$ is therefore given by
+	The Likelihood function $\Likelihood(\theta)$ is therefore given by
 	\begin{equation*}
-		\mathcal{L}(\theta) = \prod_{i=1}^{n} P[X_i = x_i | \theta ]
+		\Likelihood(\theta) = \prod_{i=1}^{n} P[X_i = x_i | \theta ]
 	\end{equation*}
 	where $P[X_i = x_i | \theta ]$ denotes the probability mass function that value $x_i$ has been observed given $\theta$.
 \end{minipage}
@@ -192,20 +284,20 @@ Given a continuous probability distribution  with probability density function $
 Infinitesimal intervals $\text{d}x_i$ do not depend on parameter value $\theta$, they can thus be omitted in the \textbf{likelihood function}
 
 \begin{equation*}
-	\mathcal{L} = \prod_{i=1}^{n} f(x_i;\theta)
+	\Likelihood = \prod_{i=1}^{n} f(x_i;\theta)
 \end{equation*}
 
-If assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\mathcal{L}(\theta)$.
+If assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\Likelihood(\theta)$.
 
 \subsection{Maximum Likelihood for Exponential Distribution}
 Given observation $X_1, X_2, \dots, X_n\text{ i.i.d. }\sim \Exp{\lambda}$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
 \begin{equation*}
-	\mathcal{L} = \prod_{i=1}^{n} \lambda e^{-\lambda x_i}
+	\Likelihood = \prod_{i=1}^{n} \lambda e^{-\lambda x_i}
 \end{equation*}
 
 The \textbf{Log likelihood} is
 \begin{equation*}
-	\log(\mathcal{L}(\lambda)) = n\log(\lambda) - \lambda\sum_{i=1}^n x_i
+	\log(\Likelihood(\lambda)) = n\log(\lambda) - \lambda\sum_{i=1}^n x_i
 \end{equation*}
 
 \subsection{z-Test}
@@ -213,14 +305,14 @@ In the z-Test the value of $\sigma_X$ is known.
 \begin{enumerate}
 	\item \textbf{Model} $X_i$ is a continuous measurement variable
 	\begin{equation*}
-		X_i, \dots, X_n \text{i.i.d.} \mathcal{N}(\mu, \sigma_X^2)\quad \sigma_X\text{ known}
+		X_i, \dots, X_n \text{i.i.d.} \N(\mu, \sigma_X^2)\quad \sigma_X\text{ known}
 	\end{equation*}
 	\item \textbf{Null Hypothesis} $H_0: \mu = \mu_0$\\ \textbf{Alternative Hypothesis} $H_A: \mu \neq \mu_0 \text{ or } \mu < \mu_0 \text{ or } \mu > \mu_0$
 	\item \textbf{Test statistic}
 	\begin{equation*}
 		Z = \frac{\samplemean{X}_n - \mu_0}{\sigma_{\samplemean{X}_n}} = \frac{\samplemean{X}_n - \mu_0}{\sigma_X / \sqrt{n}} = \frac{\text{observed} - \text{expected}}{\text{standard error}}
 	\end{equation*}
-	\textbf{Null distribution} $Z \sim \mathcal{N}(0,1)$
+	\textbf{Null distribution} $Z \sim \N(0,1)$
 	\item \textbf{Significance Level} $\alpha$
 	\item \textbf{Rejection region for test statistic}
 	\begin{alignat*}{2}
@@ -397,7 +489,7 @@ However, the converse is generally not true, that is independence does not follo
 \noindent
 These relations follow immediately from the definition of the covariance
 \begin{enumerate}
-	\item $\Var{X} = \Cov{X,Y}$
+	\item $\Var{X} = \Cov{X,X}$
 	\item $\Cov{X,Y} = \ev{XY} - \ev{X}\ev{Y}$
 	\item $\ev{XY} = \ev{X}\ev{Y}\qquad (X,Y \text{ independent})$
 	\item
@@ -418,8 +510,96 @@ These relations follow immediately from the definition of the covariance
 
 % TODO Principal Component Analysis
 
+\section{Simple Linear Regression}
+\subsection{Regression Analysis}
+Regression analysis represents a statistical method to study and model the relationship between a response variable and predictor variables. Principal goal of regression analysis is to
+\begin{itemize}[noitemsep]
+	\item predict data points based for some new values of the predictor variables (prediction)
+	\item understand how the response variable is affected by a change of the predictor variables (inference)
+\end{itemize}
 
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/sales_advertising}
+\end{center}
 
+The basic assumption behind this is, that there is a relationship between $Y$ and $X_1, X_2, X_3$ and deviations are random
+\begin{equation*}
+	Y = f(X_1, X_2,\dots, X_p) + \epsilon
+\end{equation*}
+\begin{itemize}
+	\item $f$ is some \emph{fixed} but unknown function of $X_1, X_2,\dots, X_p$
+	\item $\epsilon$ is a random error term which is independent of $X_1, X_2,\dots, X_p$ and is $\sim\N(0,r^2)$
+\end{itemize}
+The simple assumption is that $f$ is linear. But Linear Regression also allows to fit non-linear curves.
+
+\subsection{Simple Linear Regression Model}
+The assumption is that there is an approximately linear relationship between $X$ and $Y$
+\begin{equation*}
+	Y \approx \beta_0 + \beta_1 X
+\end{equation*}
+\begin{itemize}[noitemsep]
+	\item $\beta_0$ represents the \textbf{intercept} of the regression line
+	\item $\beta_1$ measures the \textbf{slope} of the regression line
+	\item $\approx$ reads as "is approximately modelled as"
+\end{itemize}
+The coefficient estimates are denoted as $\hat{\beta}_0, \hat{\beta}_1$.
+
+\subsection{Least Squares Method}
+Let $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$ be the predictor for $Y$ based on the $i$th value of $X$. The $i$th residual is thus $r_i = y_i - \hat{y}_i$ and stands for the difference between the $i$th observed response value and the $i$th predicted response value of the model. The Least Squares approach chooses $\hat{\beta}_0$ and $\hat{\beta}_1$ to minimise the residual sum of squares
+\begin{equation*}
+	\text{RSS} = r_1^2 + r_2^2 + r_3^2 + \dots + r_n^2
+\end{equation*}
+
+\begin{definition}
+	Least Squares Coefficient Estimates
+	\begin{equation*}
+		\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \samplemean{x})(y_i - \samplemean{y})}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2}
+	\end{equation*}
+	\begin{equation*}
+		\hat{\beta}_0 = \samplemean{y} - \hat{\beta}_1 \samplemean{x}
+	\end{equation*}
+	where
+	\begin{equation*}
+		\samplemean{x} = \frac{1}{n}\sum_{i=1}^{n} x_i\quad\text{ and }\quad\samplemean{y} = \frac{1}{n}\sum_{i=1}^{n} y_i	
+	\end{equation*}
+\end{definition}
+
+\begin{definition}
+	Standard Error
+	\begin{equation*}
+		\text{se}(\hat{\beta}_0)^2 = \sigma^2 \left( \frac{1}{n} + \frac{\samplemean{x}^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2} \right) \quad\text{ and }\quad \text{se}(\hat{\beta}_1)^2 = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\samplemean{x})^2}
+	\end{equation*}
+	where $\sigma^2 = \Var{\epsilon}$
+\end{definition}
+In general $\sigma^2$ (the variance of the error term) is not known, but can be estimated on the basis of the data.
+\begin{equation*}
+	\hat{\sigma} = \text{RSE} = \sqrt{\frac{\text{RSS}}{n-2}} = \sqrt{\frac{r_1^2 + r_2^2 + \dots + r_n^2}{n-2}}
+\end{equation*}
+The factor $\frac{1}{n-1}$ is chosen so that the estimate of $\sigma$ turns out \textbf{unbiased}.
+
+\subsection{Hypothesis Test}
+\begin{itemize}[noitemsep]
+	\item $H_0$ There is \textbf{no} relationship between $X$ and $Y$, \quad $\beta_1 = 0$
+	\item $H_A$ There is \textbf{some} relationship between $X$ and $Y$, \quad $\beta_1 \neq 0$
+\end{itemize}
+To test this hypothesis, it must be determined whether $\beta_1$ is sufficiently far from zero that there is confidence that $\beta_1$ is non-zero.
+
+\subsection{The Test Statistic T}
+\begin{definition}
+	A 95\% confidence interval is defined as a range of values such that with a 95\% probability, the range will contain the true unknown parameter. The range is defined in terms of lower and upper limits computed from the sample of data.
+\end{definition}
+The 95\% confidence can be calculated by
+\begin{equation*}
+	\left[ \hat{\beta}_1 - t_{0.975, n-2} \cdot \text{se}(\hat{\beta}_1), \hat{\beta}_1 + t_{0.975, n-2} \cdot \text{se}(\hat{\beta}_1) \right]
+\end{equation*}
+
+\subsection{Prediction Interval}
+An important task in statistics consists of predicting future observations $Y$ for a given value of $X$. Usually the variability of the fitted value $\widehat{Y}$ is not interesting, but the variability of the future observation is. This variability is called prediction interval.
+
+There might be the temptation to use the confidence interval to indicate the interval twidehat contains a future observation for a given $x_0$. However, this interval contains the expected value of $\widehat{y}_0 = \widehat{\beta}_0 + \widehat{\beta}_1 x_0$ only with a given probability. The scatter around the regression line expressed by the error term $\epsilon$ has to be accounted for as well. Thus the prediction interval can be calculated as follows
+\begin{equation*}
+\text{se}(y_0)^2 = \widehat{\sigma}^2(1 + \frac{1}{n} + \frac{(x_0 - \samplemean{x})^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2})
+\end{equation*}
 
 
 
