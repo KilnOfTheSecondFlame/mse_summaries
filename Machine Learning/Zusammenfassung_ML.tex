@@ -48,19 +48,21 @@
 \newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}
-
 \newcommand*\samplemean[1]{\overline{#1}}
 \newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
 \newcommand*\R{\mathbb{R}}
 \newcommand*\Z{\mathbb{Z}}
+\newcommand*\N[1]{\mathcal{N}\left(#1\right)}
+\newcommand*\Likelihood{\mathcal{L}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
 \newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
 \newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
 
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
@@ -427,6 +429,281 @@ for |$ t:=1..T $|
 	|$ w_i $| := |$ w_i\cdot e^{\alpha_t\cdot I(y_i \neq h_t(x))} $| # increase weight by exp(Influence) in case of error
 return |$ \hat{h} $| := |$ \text{sign}\left(\sum_{t=1}^T \alpha_t\cdot h_t(x)\right) $| # majority vote
 \end{minted}
+
+\section{Bias, Variance and Learning Curves}
+
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/bias_variance_tradeoff}
+\end{center}
+
+\subsection{Polynomial Regression using sklearn.pipeline}
+\begin{minted}[linenos]{python}
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+model = make_pipeline(PolynomialFeatures(degree),
+LinearRegression())
+model.fit(x[:, np.newaxis], y)
+ax.plot(x_test, model.predict(x_test[:, np.newaxis]), '-b')
+\end{minted}
+
+\subsection{Bias-Variance-Decomposition}
+When the relationship between the predictor variable $X$ and the response variable $Y$ is written as
+\begin{equation*}
+	Y=f(X) + \epsilon \qquad \epsilon\sim\N{0,\sigma_{\epsilon}}
+\end{equation*}
+Then the expected value of the quadratic error can be written as
+\begin{equation*}
+	\text{SE}(x) = \ev{(Y - \hat{f}(x))^2}
+\end{equation*}
+Transformed
+\begin{equation*}
+	\text{SE}(x) = \underbrace{\left(\ev{\hat{f}(x)} - f(x)\right)^2}_{\text{Bias}^2} + \underbrace{\ev{\left(\hat{f}(x) - \ev{\hat{f}(x)}\right)^2}}_{\text{Variance}} + \underbrace{\sigma_{\epsilon}^2}_{\text{irreducible error}}
+\end{equation*}
+
+\subsection{The No-Free-Lunch Theorem (Probably Approximately Correct Theory)}
+\begin{theorem}
+	For every learner, there exists a task on which it fails, even though that task can be successfully learned by another learner.
+\end{theorem}
+Intuitively, as in the real world a learner is never trained on the whole data that exists, but only a subset of that data.
+
+\subsection{Cross-Validation}
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/cross_validation_hyperparameter_tuning}
+\end{center}
+\subsubsection{Stratified k-Fold Cross Validation for Unequal Classes}
+In cases where classes are unevenly distributed, {\color{DodgerBlue3} stratified k-fold cross-validation} reduces bias and variance of the estimation. The implementation takes care to ensure that the classes are distributed approximately equally in the subsets. This ensures that the individual subsets are representative of the class distribution in the training data set.
+
+\begin{minted}[linenos,fontsize=\small]{python}
+from sklearn.model_selection import validation_curve
+
+degrees = np.arange(1, 14)
+model = make_pipeline(PolynomialFeatures(), LinearRegression())
+# The parameter to vary is the "degrees" on the pipeline step "polynomialfeatures"
+
+train_scores, validation_scores = validation_curve(
+	model, x[:, np.newaxis],
+	y,
+	param_name='polynomialfeatures__degree',
+	param_range=degrees)
+\end{minted}
+
+\subsubsection{Cross-Validated Grid Search in Python}
+A grid search consists of
+\begin{itemize}[nosep,noitemsep]
+	\item an \textbf{estimator}
+	\item a \textbf{parameter space}
+	\item a method for searching or \textbf{sampling} candidates;
+	\item a \textbf{cross-validation scheme}
+	\item a \textbf{score function}
+\end{itemize}
+\begin{minted}[linenos,fontsize=\small]{python}
+from sklearn import svm, datasets
+from sklearn.model_selection import GridSearchCV
+
+iris = datasets.load_iris()
+
+parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+svc = svm.SVC(gamma="scale")
+
+clf = GridSearchCV(svc, parameters, cv=5)
+clf.fit(iris.data, iris.target)
+
+sorted(clf.cv_results_.keys())
+\end{minted}
+
+\subsection{Learning Curves}
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{img/learning_curve_bias_variance}
+\end{center}
+A \textbf{high bias} points to a systemic error or underfit, choose another model to approximate the real function. A \textbf{high variance} points to instability or overfit, getting more data or use more regularisation.
+\subsection{Regularisation}
+Ridge-Regression ($L_2$-Regression) \textbf{distributes weight} across related features and has an analytic solution
+\begin{equation*}
+	R_{\text{Ridge}}(\theta) = \sum_{i=1}^{d} \theta_i^2
+\end{equation*}
+LASSO Regression ($L_1$-Regression) encourages sparsity by setting some weights to zero and is used to select \textbf{informative features}
+\begin{equation*}
+	R_{\text{LASSO}}(\theta) = \sum_{i=1}^d\abs{\theta_i}
+\end{equation*}
+
+\subsection{Reduction of the Model Complexity}
+Increasing the complexity of a model usually increases its variance and lowers its bias. Conversely, a lower complexity of the model increases its bias and lowers its variance. Therefore, this is called equilibrium. Regularising the model, by restricting it in some manner, is one way to avoid overfitting: The less freedom the model has, the more difficult it becomes to overfit the data. For example, a polynomial model can easily be regularised by reducing the degree of the polynomial.
+
+\subsubsection{Minimisation of the Loss Function with Regularisation}
+\begin{align*}
+	L(\theta) &= \sum_{i=1}^{N} \left( y_i - \hat{y}_i(\theta) \right)^2 + \lambda \norm{\theta}_R\\
+	\norm{\theta}_R:\qquad \norm{\theta}_2^2 &= \sum_{i=1}^{n} (\theta_k)^2\qquad \text{Ridge-Regression}\\
+	\norm{\theta}_1 &= \sum_{i=1}^{n} \abs{\theta_k}\qquad \text{LASSO-Regression}\\
+\end{align*}
+with $\lambda$ being the Regularisation hyperparameter. By assigning larger values to the hyper parameter $\lambda$, we increase the regularisation strength and reduce the weights of our model. LASSO is an approach that can lead to sparse models. Depending on the regularisation strength, certain weights can become zero, which means that LASSO can also function as a \textbf{monitored feature selection procedure}.
+
+\section{System Design}
+Machine Learning systems as a whole are pipelines composed of individual components, that can be developed collaboratively as a team.
+
+\subsection{Ceiling Analysis}
+\begin{enumerate}[noitemsep,nosep]
+	\item {\color{Tomato2} Baseline}: Measure the performance of the complete pipeline
+	\item Replace {\color{Goldenrod1} first component} with the ground truth (perfect result for this stage) and measure performance of the system
+	\item Replace {\color{OliveDrab3} next component} with the ground truth and measure performance of the system
+	\item \qquad $\vdots$
+\end{enumerate}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{img/ceiling_analysis.png}
+	\caption{Based on this analysis to improve Text Detection and Character Recognition makes sense, Character Segmentation only improves the overall performance by 1\% and is thus not worth the investment}
+\end{figure}
+
+\section{Feature Engineering}
+A feature is an individual measurable property of a phenomenon being observed.
+
+\subsubsection{Exploratory Data Analysis}
+Whether collected by your workgroup or obtained from someone else, raw data is seldom ready for immediate analysis. Exploratory data analysis can help in discovering important anomalies, identifying limitations in the collection process, and to better inform subsequent goal oriented analysis.
+
+Before generating features for the model, identify key properties of the data including structure, granularity, faithfulness, temporality and scope. This can be done by preparing, analysing and visualising the data using Histograms, QQ-Plots, Scatter-matrices and Heatmaps.
+
+\subsubsection{Data Cleansing}
+\begin{minted}{python}
+# drop duplicates, drop not available
+df.drop_duplicates()
+df.dropna()
+
+# replace the cells without any data in the column with the value 'None'
+df = df.astype(object).where(pd.notnull(df),None)
+weekday_counts = df.groupby('weekday').aggregate(sum)
+
+# replace * in Name with empty string:
+df['Name']=df['Name'].apply(lambda x:str(x).replace('*',''))
+
+# convert dates to datetime, keeping only the month
+df['MonthYear'] = pd.to_datetime(df['MonthYear'])
+df['MonthYear'] = df['MonthYear'].apply(lambda x: x.date())
+\end{minted}
+
+\subsection{Feature Preparation}
+\begin{itemize}
+	\item \textbf{Data Cleaning}\\
+	Homogenise missing values and different types of in the same feature, fix input errors, types, etc.
+	\item \textbf{Aggregating / Pivoting}\\
+	necessary when the entity to model is an aggregation from the provided data.
+	\item \textbf{Imputation of missing values}\\
+	Strategies: mean, median, mode, using a model
+	\item \textbf{Binarisation}\\
+	transform discrete or continuous numeric features into binary features
+	\item  \textbf{Binning}\\
+	Fixed width, adaptive quantile binning
+	\item \textbf{Transformation}\\
+	Compress the range of large numbers or expand the range of small numbers.
+	\item \textbf{Scaling and normalisation}
+	\item \textbf{Generate Interaction features}
+\end{itemize}
+
+\subsubsection{Box-Cox-Transformation}
+\begin{minipage}{0.5\linewidth}
+	The Box-Cox Transformation can be used to symmetrize positive numerical features
+	\begin{equation*}
+		\tilde{x}_i = \left\{ \begin{matrix}
+		\frac{x_i^\lambda - 1}{\lambda} & \text{if }\lambda\neq 0\\
+		\log(x_i) & \text{otherwise}
+		\end{matrix} \right.
+	\end{equation*}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\begin{center}
+		\includegraphics[width=0.9\linewidth]{img/boxcox_lambdas}
+	\end{center}
+\end{minipage}
+\begin{minted}{python}
+from sklearn.preprocessing import PowerTransformer
+
+# select numeric features
+weather_num = weather.select_dtypes(include =["float"]) #
+# 'yeo-johnson' (default), works with positive and negative values
+# 'box-cox', only works with strictly positive values
+PowTrans = PowerTransformer(method='yeo-johnson')
+# fit and transform data
+weather_num_t = PowTrans.fit_transform(weather_num)
+\end{minted}
+
+\subsection{Feature Preparation}
+\subsubsection{One-Hot Encoding}
+\begin{minted}{python}
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder(handle_unknown='ignore')
+X = [['Male', 1], ['Female', 3], ['Female', 2]]
+enc.fit(X)
+\end{minted}
+
+\subsubsection{Bin Counting}
+\begin{minted}{python}
+rnd = np.random.RandomState(42); X = rnd.uniform(-3, 3, size=100)
+y = np.sin(X) + rnd.normal(size=len(X)) / 3
+X = X.reshape(-1, 1)
+enc = KBinsDiscretizer(n_bins=10, encode='onehot')
+X_binned = enc.fit_transform(X)
+\end{minted}
+
+\subsubsection{Label Encoding}
+\begin{minted}{python}
+le = preprocessing.LabelEncoder()
+le.fit(["paris", "paris", "tokyo", "amsterdam"])
+list(le.classes_)
+> ['amsterdam', 'paris', 'tokyo']
+le.transform(["tokyo", "tokyo", "paris"])
+> array([2, 2, 1])
+\end{minted}
+
+\subsubsection{Note on NLP}
+This section is covered in 'Analysis of Text Data' in much more detail, and has thus been omitted.
+
+\subsection{Feature Selection}
+The reason to use feature selection is reducing the number of features, to reduce overfitting and improve the generalization of models, and to gain  a better understanding of the features and their relationship to the response variables.
+
+\subsection{Feature Selection using Linear Models and Regularisation}
+Utilise machine learning models for feature ranking as many have some inherent internal ranking feature. Even simple linear regression
+models can work when the data is not very noisy and the features are independent.
+
+To avoid a multicollinearity problem either L1 (Lasso) or L2 (Ridge) regularisation should be used.
+
+\begin{minted}{python}
+from sklearn.linear_model import Lasso
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_boston
+
+boston = load_boston()
+scaler = StandardScaler()
+X = scaler.fit_transform(boston['data'])
+Y = boston['target']
+names = boston['feature_names']
+
+lasso = Lasso(alpha=.3)
+lasso.fit(X,Y)
+\end{minted}
+\texttt{Lasso model: -3.707 * LSTAT + 2.992 * RM + -1.757 * PTRATIO + -1.081 * DIS\\
+	+ -0.7 * NOX + 0.631 * B + 0.54 * CHAS + -0.236 * CRIM + 0.081 * ZN\\
+	+ {\color{red} -0.0 * INDUS} + {\color{red} -0.0 * AGE} + {\color{red}0.0 * RAD} + {\color{red}-0.0 * TAX}}
+L2 or Ridge regularisation squares the coefficients in the penalty expression. This forces the coefficient values to be spread out more equally.
+
+\subsection{Tree-based Methods for Feature Selection}
+Random forest are popular methods due to their good accuracy, robustness and ease of use. Additionally, they provide a mean decrease purity and mean decrease accuracy.
+
+\subsubsection{Information Gain}
+\begin{equation*}
+	\text{Entropy }H(T) = -\sum_{i=1}^{K} p_i\cdot\log_2(p_i)
+\end{equation*}
+Where $p_i$ represent the percentage of each class present in the child node that results from a split in the tree.
+\begin{equation*}
+	\text{Information Gain } \text{IG}(T,a) = H(T) - H(T|a)
+\end{equation*}
+\begin{equation*}
+	\text{IG}(T,a) = -\sum_{i=1}^{K} p_i\cdot\log_2(p_i) - \sum_a p(a)\cdot\sum_{i=1}^{K} p(i|a)\cdot\log_2[p(i|a)]
+\end{equation*}
+
+\subsection{Recursive Feature Elimination (RFE)}
+Given an external estimator that weighs features, RFE selects features by recursively considering smaller sets of features.
+
+
 
 
 
