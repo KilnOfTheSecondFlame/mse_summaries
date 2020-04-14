@@ -1401,7 +1401,7 @@ model.summary()
 sgd = tf.keras.optimizers.SGD(learning_rate=0.5)
 
 # Prepare the model for training with MSE cost function and SGD Optimiser, train on accuracy of the model
-model.compile(optimizer=sgd, loss='mse', metrics=[‘accuracy'])
+model.compile(optimizer=sgd, loss='mse', metrics=['accuracy'])
 
 # Train the model
 history1 = model.fit(x_train, y_train, batch_size=N, epochs=40)
