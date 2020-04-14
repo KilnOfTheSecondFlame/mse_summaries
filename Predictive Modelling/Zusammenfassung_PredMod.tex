@@ -53,6 +53,7 @@
 \newcommand*\R{\mathbb{R}}
 \newcommand*\Z{\mathbb{Z}}
 \newcommand*\N[1]{\mathcal{N}\left(#1\right)}
+\newcommand*\F[1]{\mathcal{F}_{#1}}
 \newcommand*\Likelihood{\mathcal{L}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
@@ -60,6 +61,7 @@
 \newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
+\newcommand*\predvar[1]{{\color{SeaGreen4} \texttt{#1}}}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -598,10 +600,225 @@ An important task in statistics consists of predicting future observations $Y$ f
 
 There might be the temptation to use the confidence interval to indicate the interval twidehat contains a future observation for a given $x_0$. However, this interval contains the expected value of $\widehat{y}_0 = \widehat{\beta}_0 + \widehat{\beta}_1 x_0$ only with a given probability. The scatter around the regression line expressed by the error term $\epsilon$ has to be accounted for as well. Thus the prediction interval can be calculated as follows
 \begin{equation*}
-\text{se}(y_0)^2 = \widehat{\sigma}^2(1 + \frac{1}{n} + \frac{(x_0 - \samplemean{x})^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2})
+\text{se}(y_0)^2 = \widehat{\sigma}^2\left(1 + \frac{1}{n} + \frac{(x_0 - \samplemean{x})^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2}\right)
 \end{equation*}
 
+\subsection{Model Assumptions for the Error Terms $\epsilon_i$}
+All test and estimation methods rely on model assumptions that the error terms $\epsilon_i$ are independent and normally distributed random variables with a constant variance
+\begin{equation*}
+	\epsilon_i \quad \text{i.i.d.} \quad \N{0,\sigma^2}
+\end{equation*}
+The error term $\epsilon_i = y_i - \left( \beta_0 + \beta_1 x_i \right)$ since $\beta_0$ and $\beta_1$ are unknown. However, the residuals $r_i = y_i - \left( \hat{\beta}_0 + \hat{\beta}_1 x_i \right)$ can be determined and are relevant to estimate the standard deviation of the error terms.
 
+\subsubsection{Residual Standard Error}
+The RSE is an estimate of the standard deviation of $\epsilon$. Roughly speaking, it is the average amount that the response will deviate from the true regression line.
+\begin{equation*}
+	\text{RSE} = \sqrt{\frac{r_1^2 + \dots + r_n^2}{n-2}} = \sqrt{\frac{(y_1 - \hat{y}_1)^2 + \dots + (y_n - \hat{y}_n)^2}{n-2}}
+\end{equation*}
+\begin{equation*}
+	r = \Cor{X,Y} = \frac{\sum_{i=1}^{n}(x_i - \samplemean{x})(y_i - \samplemean{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \samplemean{x})}\sqrt{\sum_{i=1}^{n} (y_i - \samplemean{y})}}
+\end{equation*}
+
+\subsection{Diagnostic Tool for Testing Model Assumptions}
+To identify a non-linearity of regression function $f$, that is to falsify the model assumption $\ev{\epsilon_i} = 0$, the Tukey-Anscombe-Plot can be used.\\
+\paragraph{Tukey-Anscombe-Plot}
+\begin{itemize}
+	\item Plot the residuals $r_i = y_i - \hat{y}_i$ on the vertival axis
+	\item Plot the fitted or predicted values $\hat{y}_i$ on the horizontal axis
+\end{itemize}
+The expectation is that the LOESS smoother is linear around 0.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/LOESS_smoother}
+\end{center}
+To identify a non-constant variance in the error terms $\epsilon_i$ the standardised residuals are used
+\begin{equation*}
+	\tilde{r}_i = \frac{r_i}{\hat{\sigma}\sqrt{1 - \left( \frac{1}{n} + \frac{(x_i - \samplemean{x})^2}{\sum_{j=1}^{n}(x_j - \samplemean{x})^2} \right)}}
+\end{equation*}
+With $\hat{\sigma}$ being the estimate of the standard deviation of the error terms, and estimated by the residual standard error. If the error terms are normally distributed then $\tilde{r}_i \sim \N{0,1}$.
+
+The resulting standardised residuals are then plotted in a so-called QQ-plot
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{img/QQ_plot}
+\end{center}
+\begin{theorem}
+	The consequences for case of correlated error terms is that the  the estimated standard errors will tend to underestimate the true standard errors. As a result, confidence and prediction intervals will be narrower than they should be.
+\end{theorem}
+
+\subsection{Outliers}
+An outlier is point for which $y_i$ is far from value $\hat{y}_i$ predicted by model. A leverage point is a point with an unusual value for $x_i$ and can be identified by the \textbf{leverage statistic}
+\begin{equation*}
+	h_i = \frac{1}{n} + \frac{(x_i + \samplemean{x})^2}{\sum_{i' = 1}^{n}(x_{i'}-\samplemean{x})^2}
+\end{equation*}
+While the Cook's distance measures the influence of an observation
+\begin{equation*}
+	d_i = \frac{1}{\hat{\sigma}^2}\cdot\left(\underline{\hat{y}}_{(-i)} - \underline{\hat{y}}\right)^T \left(\underline{\hat{y}}_{(-i)} - \underline{\hat{y}}\right) = \tilde{r}_i^2 \frac{h_i}{2(1-h_i)}
+\end{equation*}
+The larger the value of Cook’s distance $d_i$ is, the higher is the influence of the corresponding observation on the estimation of the predicted value $\hat{y}_i$. An observation with a value of Cook’s distance larger than 1 is considered as dangerously influential.
+
+\section{Multiple Linear Regression, Qualitative Predictors and Interaction Effects}
+\subsection{Multiple Linear Regression}
+\begin{definition}
+	\begin{equation*}
+		Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \epsilon
+	\end{equation*}
+	\begin{itemize}[label=]
+		\item $X_j$ \quad $j$th predictor variable
+		\item $\beta_j$ \quad association between $X_j$ and response variable $Y$
+	\end{itemize}
+\end{definition}
+
+\subsection{Hypothesis Testing Using the F-Statistic}
+Compute the F-Statistic as follows
+\begin{equation*}
+	F = \frac{\frac{\text{TSS} - \text{RSS}}{p}}{\frac{\text{RSS}}{n-p-1}} \qquad \text{TSS} = \sum_{i=1}^{n} (y_i - \samplemean{y})^2 \qquad \text{RSS} = \sum_{i=1}^{n} (y_i - \hat{y})^2
+\end{equation*}
+If the linear model assumptions are \textbf{correct}, it can be shown that
+\begin{equation*}
+	\ev{\frac{\text{RSS}}{n-p-1}} = \sigma^2
+\end{equation*}
+Provided the Null-Hypothesis is \textbf{true}, it can be shown that
+\begin{equation*}
+	\ev{\frac{\text{TSS}-\text{RSS}}{p}} = \sigma^2
+\end{equation*}
+That means that if there is \textbf{no} relationship between the response and the predictors, then the value of the F-Statistic is approximately 1.
+
+When $H_0$ is true and the errors $\epsilon_i$ follow a normal distribution, the F-Statistic follows an F-distribution with $p$ and $n-p-1$ degrees of freedom.
+
+If $H_A$ is \textbf{true}, then 
+\begin{equation*}
+	\ev{\frac{\text{TSS}-\text{RSS}}{p}} > \sigma^2
+\end{equation*}
+and the value of the F-Statistic is expected to be greater than 1.
+
+\subsubsection{F-Test}
+\begin{itemize}[label=]
+	\item Null Hypothesis
+	\begin{equation*}
+		H_0:\quad \beta_1 = \beta_2 = \dots = \beta_p = 0
+	\end{equation*}
+	\item Alternative Hypothesis
+	\begin{equation*}
+		H_A:\quad \text{at least one $\beta_i$ is non-zero}
+	\end{equation*}
+	\item Assuming $H_0$ is true
+	\begin{equation*}
+	F = \frac{\frac{\text{TSS} - \text{RSS}}{p}}{\frac{\text{RSS}}{n-p-1}} \sim \F{p,n-p-1}
+	\end{equation*}
+\end{itemize}
+
+\subsection{Factor Variable}
+If a predictor variable has multiple levels, the variable gets split in multiple dummy variables. For example given a variable \predvar{ethnicity} with three levels, two dummy variables get introduced
+\begin{align*}
+	x_{i1} &= \left\{ \begin{matrix}1 & \text{if $i$th person is Asian}\\ 0 & \text{if $i$th person is not Asian}\end{matrix} \right.\\
+	x_{i2} &= \left\{ \begin{matrix}1 & \text{if $i$th person is Caucasian}\\ 0 & \text{if $i$th person is not Caucasian}\end{matrix} \right.
+	\intertext{\textbf{Regression Model}}
+	y_{i} = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \epsilon_i &= \left\{ \begin{matrix}
+	\beta_0 + \beta_1 + \epsilon_i & \text{if $i$th person is Asian}\\
+	\beta_0 + \beta_2 + \epsilon_i & \text{if $i$th person is Caucasian}\\
+	\beta_0 + \epsilon_i & \text{if $i$th person is Afro-American}
+	\end{matrix} \right.\\
+\end{align*}
+The level without a dummy variable is known as the baseline. There are many different ways of coding qualitative variables, no effect on regression fit, but does alter interpretation of coefficients and p-values
+
+\subsection{Interaction Effects}
+Having an Additivity in the model means that the effect of changes in a predictor $X_j$ on the response $Y$ is independent of the values of the other predictors. If the changes on one predictor have an effect on another predictor, then there is an \textbf{interaction effect}.
+\begin{equation*}
+	\predvar{sales} = \beta_0 + \beta_1 \cdot \predvar{TV} + \beta_2\cdot\predvar{radio} + \beta_3\cdot(\predvar{TV}\cdot\predvar{radio}) + \epsilon
+\end{equation*}
+\begin{minted}{R}
+Advertising <- read.csv('Advertising.csv', header=True)
+summary(lm(sales ~ TV + radio + TV * radio, data = Advertising))
+# equivalent
+summary(lm(sales ~ TV * radio, data = Advertising))
+\end{minted}
+
+\section{Polynomial Regression, Residual Analysis and Model Selection}
+
+\subsection{Polynomial Regression Model}
+
+\begin{equation*}
+	Y = \beta_0 + \beta_1\cdot X + \beta_2\cdot X^2 + \epsilon
+\end{equation*}
+
+\begin{minted}{R}
+lm(Y ~ X + I(X^2), data = Data)
+\end{minted}
+
+\subsection{Identification of Collinearity}
+Collinearity refers to the situation in which two or more predictor variables are closely related to one another. Collinearity can be detected by using the \textbf{correlation matrix} \mintinline{R}{cor(Data)} and the \textbf{variance inflation factor}
+\begin{equation*}
+	\text{VIF}(\hat{\beta}_j) = \frac{1}{1- R_{(X_j|X_{-j})}^2}
+\end{equation*}
+\begin{itemize}
+	\item VIF $5\leq x\leq 10$: indicates a problematic amount of collinearity
+	\item VIF is 1: indicates complete absence of collinearity
+\end{itemize}
+
+\subsection{Model Selection}
+\subsubsection{Forward Stepwise Selection}
+\begin{enumerate}
+	\item Let $\mathcal{M}_0$ denote the \texttt{null} model which contains no predictors.
+	\item For $k = 0,\dots,p-1$
+	\begin{enumerate}
+		\item Consider all $p - k$ models that augment the predictors in $\mathcal{M}_k$ with one additional predictor.
+		\item Choose the \emph{best}, that is having the smallest RSS or highest $\text{R}^2$, among these $p-k$ models and call it $\mathcal{M}_{k+1}$.
+	\end{enumerate}
+	\item Select a single best model among $\mathcal{M}_0,\dots, \mathcal{M}_p$ using Mallow's $C_p$, Akaike's Information Criterion, Bayesian Information Criterion, or the adjusted $\text{R}^2$.
+\end{enumerate}
+
+\subsubsection{Backward Stepwise Selection}
+\begin{enumerate}
+	\item Let $\mathcal{M}_p$ denote the \textbf{full} model which contains all $p$ predictors.
+	\item For $k = p, p-1, \dots, 1$
+	\begin{enumerate}
+		\item Consider all $k$ models that contains all but one of the predictors in $\mathcal{M}_k$ for a total of $k-1$ predictors.
+		\item Choose the \emph{best}, that is having the smallest RSS or highest $\text{R}^2$, among these $k$ models and call it $\mathcal{M}_{k11}$.
+	\end{enumerate}
+	\item Select a single best model among $\mathcal{M}_0,\dots, \mathcal{M}_p$ using Mallow's $C_p$, Akaike's Information Criterion, Bayesian Information Criterion, or the adjusted $\text{R}^2$.
+\end{enumerate}
+
+\subsubsection{Selection Criterion Adjusted $\text{R}^2$}
+The problem is that RSS always decreases, while $\text{R}^2$ always increases as more predictors are added to the model. The solution is to add a penalty to RSS which penalises adding more predictor variables.
+\begin{equation*}
+	\text{adjusted R}^2 = 1 - \frac{\frac{\text{RSS}}{(n-p-1)}}{\frac{\text{TSS}}{(n-1)}}
+\end{equation*}
+With $p$ being the number of predictor variables of the least squares model, and $n$ the number of data points.
+
+To maximise the adjusted $\text{R}^2$, minimise
+\begin{equation*}
+	\frac{\text{RSS}}{n-p-1}
+\end{equation*}
+
+\subsubsection{Akaike's Information Criterion}
+AIC considers goodness-of-fit to the data and penalises the complexity of the model
+\begin{equation*}
+	\text{AIC} = -2\log(L) + 2q
+\end{equation*}
+where $L$ denotes the value of the likelihood function for a particular model and $q$ is the number of variables of this model.
+
+If the errors $\epsilon$ in a linear regression model follow a normal distribution with expected value $0$ and constant variance, then the AIC is
+\begin{equation*}
+	\text{AIC} = \frac{1}{n\cdot \hat{\sigma}^2} \left(\text{RSS} + 2p\hat{\sigma}^2\right)
+\end{equation*}
+\begin{itemize}[leftmargin=*, labelindent=1cm, labelsep=1cm]
+	\item[$\hat{\sigma}$] estimated standard deviation
+	\item[$2p\hat{\sigma}^2$] penalty term, increases if more predictors are added to the model
+\end{itemize}
+For the least squares model the AIC is proportional to Mallow's $C_p$-statistic
+\begin{equation*}
+	C_p = \frac{1}{n} (\text{RSS} + 2p\hat{\sigma}^2)
+\end{equation*}
+
+\subsubsection{Bayesian Information Criterion}
+\begin{equation*}
+	\text{BIC} = -2\log(L) + 2\log(n)q
+\end{equation*}
+where $L$ denotes the likelihood function for a particular model and $q$ is the number of estimated parameters of the model.
+
+For the least squares model with $p$ predictors, the BIC is, apart from irrelevant constants, given by
+\begin{equation*}
+	\text{BIC} = \frac{1}{n}\left( \text{RSS} + log(n)p\hat{\sigma}^2 \right)
+\end{equation*}
 
 
 \end{document}

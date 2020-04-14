@@ -177,7 +177,7 @@ E(\alpha X_1 + \beta X_2) = \alpha E(X_1) + \beta E(X_2)
 
 
 \begin{tabularx}{\linewidth}{lX}
-	Variance of continuous $X$: & $ E((X-\mu)^2) = \int_{\infty}^infty (x-\mu)^2 dx $\\
+	Variance of continuous $X$: & $ E((X-\mu)^2) = \int_{\infty}^\infty (x-\mu)^2 dx $\\
 	Variance of discrete $X$: & $ E((X-\mu)^2) = \sum (x-\mu)^2 P(X=x_i)  $\\
 	Estimator for $V(X)$: & $\sigma^2(X) = \frac{1}{n-1} \sum_{i=1}^{n}(x_i - \bar{x})^2$\\
 	Estimator for k'th moment of $X$: & $M_k = \frac{1}{n}\sum_{i=1}^{n}(x_i)^k$
@@ -281,6 +281,20 @@ Such a random variable $Y$ is said to have the \emph{standard normal distributio
 \begin{equation*}
 	\Phi(x) := \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x} e^{-\frac{y^2}{2}} dy
 \end{equation*}
+
+\subsection{Moment Generating Functions}
+The expected values of a random variable $\ev{X}, \ev{X^2}, \ev{X^3},\dots,\ev{X^n}$ are called \textbf{moments}.
+
+For some random processes the mean (1st moment) and the variance (2nd moment) are sometimes hard to find. Special functions called \textbf{moment-generating functions} can make finding mean and variance easier.
+\begin{definition}
+	Let $X$ be a random variable with probability mass function $f(x)$ and support S. Then
+	\begin{flalign*}
+		\qquad && M(t) &= \ev{e^{tX}} = \sum_{x\in S} e^{tx} f(x) && \text{(discrete)}\\
+		\qquad && M(t) &= \ev{e^{tx}} = \int_{x\in S} e^{tx} f(x) \diff x && \text{(continuous)}
+	\end{flalign*}
+	
+	is the moment generating function of $X$ as long as the summation is finite for some interval of $t$ around $0$.
+\end{definition}
 
 \section{Introduction to Stochastic Processes}
 \subsection{Covariance}
