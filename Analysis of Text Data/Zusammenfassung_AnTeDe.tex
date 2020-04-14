@@ -29,6 +29,18 @@
 \usepackage{mathtools}
 \usepackage{pdfpages}
 
+% Bibliography & citing
+\usepackage[
+	backend=biber,
+	style=apa,
+	bibstyle=apa,
+	citestyle=apa,
+	sortlocale=en_UK
+]{biblatex}
+\addbibresource{Bibliography.bib}
+% print the whole bibliography
+\nocite{*}
+
 % Code highlighting
 \usepackage{minted}
 \surroundwithmdframed{minted}
@@ -310,11 +322,14 @@ This prevents probabilities of zero to occur.
 	\item[False Negative] Sample $c$ classified incorrectly as non-$c$
 \end{itemize}
 
-\begin{tabularx}{\linewidth}{rX}
-	Accuracy & $ \frac{\sum TP}{\sum \text{all elements}} $ \\
-	Precision & $\frac{TP}{TP + FP}$\\
-	Recall & $ \frac{TP}{TP + FN} $\\
-\end{tabularx}
+\begingroup
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabularx}{\linewidth}{rX}
+		Accuracy & $ \frac{\sum TP}{\sum \text{all elements}} $ \\
+		Precision & $\frac{TP}{TP + FP}$\\
+		Recall & $ \frac{TP}{TP + FN} $\\
+	\end{tabularx}
+\endgroup
 
 \section{Sentiment Analysis}
 Sentiment analysis tries to understand the emotional state of the author of a text, and is also called opinion mining but can be extremely hard. In principle text classification and sentiment analysis are very different, but there are some striking similarities as the text can reflect a positive or a negative emotional state which can be utilised.
@@ -584,10 +599,402 @@ $\text{L}^2$ norm (Euclidean norm) is the square root of the dot product of the 
 \end{equation*}
 Normalising all vectors to unit vectors this way allows for the dot-product to measure similarity, and do it in a more efficient way than cosine similarity. The dot product between two vectors $\bm{d_j}$ and $\bm{q}$ is high if $w_{ij}$ and $w_{iq}$ have similar characteristics, and is equivalent to the cosine similarity if the vectors are normalised.
 
+\section{Word Embeddings}
+An embedding is a \textbf{representation of words as dense vectors} such that the properties of the words and the relationships between the words are preserved. \textbf{Count-based methods} compute statistics of word co-occurrence in large text corpora, and then map these count-statistics down to a small, dense vector for each word. Predictive models use a (shallow) neural network to predict
+words from its neighbours. The learned weights act as word vector representations.
+
+Word embeddings are automatically learned and allow for vector-oriented reasoning based on the offsets between words.
+
+\subsection{Context-Counting Word Vectors}
+Represent mutual information of a word with other words by global co-occurrence counts using a pre-defined window size.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/context_counting}
+\end{center}
+The problem is that this matrix increases with vocabulary and windows size, which results in a very high dimensional, but sparse feature matrix. Use single value decomposition (SVD) to project the co-occurrence matrix to smaller dimension and take the sub-matrix as the word embedding matrix.
+
+\subsection{Word2Vec}
+Word2Vec is a simple and computationally efficient way to learn embeddings. It is a prediction based method and comes in two flavours, the Continuous Bag of Words (CBOW) and the Skip-gram model.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/word2vec_model}
+\end{center}
+
+\subsubsection{CBOW}
+\begin{minipage}{0.5\linewidth}
+	Given a set of context words, predict the centre word that potentially occurs with the context words. The input are $m$ one-hot vectors of context window words.
+	\vspace{5em}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\begin{center}
+		\includegraphics[width=0.9\linewidth]{img/word2vec_cbow}
+	\end{center}
+\end{minipage}
+
+\subsubsection{Skip-Gram}
+\begin{minipage}{0.6\linewidth}
+	Given a center word, predict context words that potentially occur with 	the centre word. Input is the one-hot vector for word $w$.
+	\vspace{10em}
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/word2vec_skip-gram}
+	\caption{Source: \href{https://inspirehep.net/literature/1630982}{An Information Retrieval and Recommendation System for Astronomical Observatories}}
+	\label{fig:word2vecskip-gram}
+\end{figure}
+\end{minipage}
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{img/word2vec_example}
+\end{center}
+
+\subsubsection{Softmax}
+\begin{equation*}
+	\hat{y} = p({\color{SteelBlue4}o}|{\color{red}c}) = \frac{e^{{\color{red}v_c^T}{\color{SteelBlue4} u_0}}}{{\color{SpringGreen4}\sum_{w\in V}} e^{{\color{red}v_c^T}{\color{SteelBlue4} u}_{\color{SpringGreen4} w}}}
+\end{equation*}
+Inner product ${\color{red}v_c^T}{\color{SteelBlue4} u_0}$
+\begin{itemize}[label=-]
+	\item ${\color{red}v_c^T}$ := embedding of word $w$ if word is {\color{red} center} word
+	\item ${\color{SteelBlue4} u_0}$ := embedding of word $w$ if word is {\color{SteelBlue4} contex} word
+	\item Measures the similarity of the two embedding representations of ${\color{red}v_c^T}$ and ${\color{SteelBlue4} u_0}$
+\end{itemize}
+The exponentiation makes all values positive and large values even larger, while the division by the {\color{SpringGreen4} sum over all words in the vocabulary} makes $\hat{y}$ a probability.
+
+\subsection{GloVe}
+Combines count based co-occurrence statistics with predictive context window method. GloVe is faster to train than Word2Vec and scales to huge corpora.
+
+\subsubsection{Out of Vocabulary Words}
+While using Word2Vec or GloVe out-of-vocabulary words will be encountered, as the possible vocabulary is infinitely large. Subword methods are based on the assumption that the semantic representation can be reconstructed from known parts of an unknown word.
+
+FastText is an open-source, free, lightweight library that allows users to learn text representations and text classifiers. Each word is represented with a bag of $n$-grams in addition to the
+word itself. It has proven to be more accurate than Word2Vec, but models are quite big and require a lot of computation for training.
+
+\subsection{Practical Advice}
+Use pre-trained word embeddings, unless there is a corpus of billions of words in the training set, where it is appropriate to start randomised. If your training set is small do not fine-tune the word embeddings. If the training set is large (more than one million words or with domain specific content), it probably will work better when fine-tuned to the task. It is generally advisable to compare results for both methods.
+
+\section{Word Sense Disambiguation}
+
+\subsection{Homonyms}
+\begin{itemize}[leftmargin=*, labelindent=2cm, labelsep=1cm]
+	\item[Homographs] words written the same way
+	\item[Homophones] words that sound the same
+\end{itemize}
+In general Homographs cause problems with machine translation, while Homophones cause problems with text-to-speech. Words exhibiting these characteristics are called polysemous; words with multiple related senses.
+
+\subsubsection{Zeugma Test}
+Apply a word to two others in different senses and test if it makes sense.
+
+"Routers are used to cut channels in wood and to connect different networks."
+
+\subsection{Synonyms and Antonyms}
+Synonyms are lexical items that have the same meaning in some or all contexts. Perfect synonymy seldom occurs, one or a few lexemes are typically preferable to other synonyms, and may convey the intended meaning better. This could be notions of politeness, register, acceptability, convention or nuance.
+
+For example \textit{automobile} is more formal than \textit{car}.
+
+\vspace{1em}
+\noindent
+Antonyms are words with opposite senses
+\begin{itemize}[leftmargin=*, labelindent=4cm, labelsep=1cm]
+	\item[Reversives] rise/fall, in/out, up/down
+	\item[Opposite ends of a scale] long/short, hot/cold
+\end{itemize}
+
+\subsection{Hyponymy and Hypernymy}
+One sense is a hyponym of another if it denotes a subclass. Sense A is a hyponym of sense B if being an A entails being a B.
+\begin{itemize}[label=-]
+	\item A:B = hyponym:hypernym = subtype:supertype
+	\item Also known as the IS-A relationship
+\end{itemize}
+Hypernymy is the opposite relationship.
+
+\subsection{Meronymy and Holonymy}
+Part-whole and whole-part relationship. A meronym is a part of its holonym, for example a \textit{wheel} is a meronym of \textit{car}. There is a HAS-A relationship between a holonym and its meronym.
+
+\subsection{Word Similarity Based on WordNet}
+Look at the shortest path between sense nodes.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/WordNet_similarity}
+\end{center}
+
+\subsection{Word Vectors and Word Meaning}
+\begin{itemize}
+	\item One-hot vectors: No notion of word meaning
+	\item Co-occurence matrices: words are represented by the weighted occurrence of other words in their context
+	\item Pointwise mutual information (PMI) matrices: each element $(i,j)$ signifies whether words $i$ and $j$ are more likely to occur jointly than to be independent
+	\begin{itemize}
+		\item Negative PMI tends to be unreliable, as words co-occur less than expected with a corpus too small
+		\item In practice positive PMI (PPMI) is used
+	\end{itemize}
+\end{itemize}
+\begin{equation*}
+	\text{PPMI}(w_1,w_2) = \max{\left(\log_2{\left(\frac{P(w_1,w_2)}{P(w_1)P(w_2)}\right)}\right)}
+\end{equation*}
+
+\subsection{Word Sense Disambiguation}
+\textbf{Extrinsic} evaluation
+\begin{itemize}
+	\item Embed WSD in another task
+	\item Measure the task performance without and with WSD and see whether it improves
+\end{itemize}
+\textbf{Intrinsic} evaluation
+\begin{itemize}
+	\item Use a labeled corpus
+	\item Measure the accuracy, evaluated based on held-out data from the labeled corpus
+\end{itemize}
+As a baseline choose the most frequent sense or use the Lesk Algorithm.
+
+\subsubsection{Simplified Lesk Algorithm}
+The principle is to choose sense with most word overlap between gloss and context. Disambiguate the word bank in the sentence:
+
+"The bank can guarantee that deposits will eventually cover future tuition costs because it invests in adjustable-rate mortgage securities."
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/simplified_lesk_algorithm}
+\end{center}
+
+\subsubsection{Word Sense Disambiguation Based on Word Embeddings}
+Embedding vectors like Word2Vec or GloVe can be used for word sense disambiguation.
+\begin{itemize}
+	\item Capture context of each word sense
+	\begin{itemize}
+		\item Find the gloss of the word sense in WordNet
+		\item Get the embedding vectors of the words in the gloss
+		\item Average out the embedding vectors and obtain an embedding vector for the context of each target word sense
+	\end{itemize}
+	\item Do the same for the sentence containing the target word
+	\item Compare the embedding vector  for the target sentence to the embedding vectors for the target word senses
+	\item Pick the word sense whose embedding vector is the most similar to the one of the target sentence
+\end{itemize}
+
+\begin{minted}[linenos]{python}
+for sense in range (1, len(word_vectors)):
+	print ('context '+ str(sense) + ': ' + get_gloss(target_word, sense)) 
+\end{minted}
+\begin{minted}[breaklines]{text}
+context 1: sloping land (especially the slope beside a body of water) 
+context 2: a financial institution that accepts deposits and channels the money into lending activities 
+context 3: a long ridge or pile 
+context 4: an arrangement of similar objects in a row or in tiers 
+context 5: a supply or stock held in reserve for future use (especially i n emergencies) 
+context 6: the funds held by a gambling house or the dealer in some gambl ing games 
+context 7: a slope in the turn of a road or track; the outside is higher than the inside in order to reduce the effects of centrifugal force 
+context 8: a container (usually with a slot in the top) for keeping money at home 
+context 9: a building in which the business of banking transacted 
+context 10: a flight maneuver; aircraft tips laterally about its longitud inal axis (especially in turning) 
+\end{minted}
+
+\section{Part-of-Speech Tagging}
+PoS tagging means identifying the grammatical category of each word token.
+
+\vspace{1em}
+\noindent
+\begin{minipage}{0.5\linewidth}
+	\begin{itemize}
+		\item nouns
+		\item verbs
+		\item adjectives
+		\item adverbs
+		\item preposition
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\begin{itemize}
+		\item particles
+		\item conjunctions
+		\item pronouns
+		\item numerals
+		\item interjections
+	\end{itemize}
+\end{minipage}
+
+\subsection{Corpora}
+There are corpora with manually tagged PoS, which are both in part in NLTK
+\begin{itemize}
+	\item Brown corpus
+	\item Penn Treebank
+\end{itemize}
+The Penn Treebank tags are widely used for English language PoS tagging.
+
+\noindent
+\begin{minipage}[t][][t]{0.5\linewidth}
+	\begin{tabularx}{\linewidth}{c|c|X}
+		\textbf{Number} & \textbf{Tag} & \textbf{Description} \\
+		\hline
+		1 & CC & Coordinating conjunction \\
+		2 & CD & Cardinal number \\
+		3 & DT & Determiner \\
+		4 & EX & Existential there \\
+		5 & FW & Foreign word \\
+		6 & IN & Preposition or subordinating conjunction \\
+		7 & JJ & Adjective \\
+		8 & JJR & Adjective, comparative \\
+		9 & JJS & Adjective, superlative \\
+		10 & LS & List item marker \\
+		11 & MD & Modal \\
+		12 & NN & Noun, singular or mass \\
+		13 & NNS & Noun, plural \\
+		14 & NNP & Proper noun, singular \\
+		15 & NNPS & Proper noun, plural \\
+		16 & PDT & Predeterminer \\
+		17 & POS & Possessive ending \\
+		18 & PRP & Personal pronoun \\
+		19 & PRP\$ & Possessive pronoun
+	\end{tabularx}
+\end{minipage}
+\begin{minipage}[t][][t]{0.5\linewidth}
+	\begin{tabularx}{\linewidth}{c|c|X}
+		\textbf{Number} & \textbf{Tag} & \textbf{Description} \\
+		\hline
+		20 & RB & Adverb \\
+		21 & RBR & Adverb, comparative \\
+		22 & RBS & Adverb, superlative \\
+		23 & RP & Particle \\
+		24 & SYM & Symbol \\
+		25 & TO & to \\
+		26 & UH & Interjection \\
+		27 & VB & Verb, base form \\
+		28 & VBD & Verb, past tense \\
+		29 & VBG & Verb, gerund or present participle \\
+		30 & VBN & Verb, past participle \\
+		31 & VBP & Verb, non-3rd person singular present \\
+		32 & VBZ & Verb, 3rd person singular present \\
+		33 & WDT & Wh-determiner \\
+		34 & WP & Wh-pronoun \\
+		35 & WP\$ & Possessive wh-pronoun \\
+		36 & WRB & Wh-adverb
+	\end{tabularx}
+\end{minipage}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/open_close_classes}
+	\caption{Open and closed classes}
+	\label{fig:opencloseclasses}
+\end{figure}
+
+\subsection{English Nouns}
+\begin{itemize}
+	\item Count nouns allow for grammatical enumeration
+	\item Mass nouns are used for a homogeneous group of concepts which are not countable
+	\item Proper nouns are used to mane people, places or things, and are generally capitalised
+\end{itemize}
+
+\subsection{English Verbs}
+\begin{itemize}
+	\item Main verbs refer to actions and processes
+	\item Auxiliary or Modal verbs change the meaning of main verbs
+	\item There are four inflections
+	\begin{itemize}
+		\item Non-third person singular (VBP)
+		\item Third person singular (VBZ)
+		\item Progressive (VBG)
+		\item Past participle (VBN)
+	\end{itemize}
+\end{itemize}
+
+\subsection{Other English Part of Speech Components}
+\begin{itemize}
+	\item Adjectives characterise nouns
+	\item Adverbs characterize verbs, adjectives, other adverbs, or word groups, they are separated into directional, degree, manner or temporal adverbs
+	\item Prepositions specify relationships, be that spatial, temporal or agency\\
+	\emph{arrive at the theater on time}
+	\item Particles look like prepositions or adverbs but serve to modify the meaning of the verb that precedes them\\
+	\emph{to find out}
+	\item Determiners appear directly before a noun
+	\begin{itemize}
+		\item definite article: the
+		\item indefinite article: a,an
+		\item demonstratives: this, that, these, those
+	\end{itemize}
+	\item Conjunctions join clauses
+	\begin{itemize}
+		\item coordinating conjunctions link clauses of equal importance\\
+		\emph{I respect his opinion but in this case he's factually wrong.}
+		\item subordinating conjuctions a less important clause to complement a more important clause
+	\end{itemize}
+\end{itemize}
+
+\subsection{Pronouns}
+\begin{itemize}
+	\item Relative pronouns introduce subordinate clauses that modify their antecedent
+	\item Interrogative pronouns introduce questions
+	\item Demonstrative pronouns identify or point at nouns
+	\item Indefinite pronouns refer to nonspecific persons or things
+\end{itemize}
+
+\subsection{Handling Ambiguity}
+For each ambiguous word token, choose the tag that is most frequent for that word token in the training corpus.
+\begin{itemize}
+	\item PRP+VBD is very common, while PRP+VBN is exceedingly uncommon
+	\item RB+RB is very common, also at the end of a sentence
+	\item RB+JJ is also very common, but not at the end of a sentence
+	\item IN+JJ and IN+RB are both fine, but there would have to be more word tokens afterwards
+\end{itemize}
+
+\subsection{PoS Tagging as Sequence Classification}
+A sentence is a sequence of observations, thus tagging can use probabilistic methods to choose the most likely tag sequence. In practice, each token is classified independently while using information about the surrounding tokens as input features. For ambiguous tags the forward and backward sequence of the already identified tags can be used.
+
+\subsection{Markov Chains}
+\textbf{Markov chains} are models that identify the underlying probabilities of a sequence of random variables.
+\begin{itemize}
+	\item a set of $N$ state variables
+	\item a transition probability matrix $A$, where $a_{i,j}$ is the probability of going from state $i$ to state $j$
+	\item an initial probability distribution over the $N$ states
+	\begin{itemize}
+		\item this is what is known \emph{a priori} before observing the system
+		\item $\pi_i$ is the probability that the chain will start in state $i$
+	\end{itemize}
+\end{itemize}
+A key assumption is that the next state only depends on the current state. For word sequences, this means that the assumption is that the next word only depends on the current word.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/two_state_markov_model.png}
+	\caption{Two-state Markov Chain Model \parencite{markov}}
+\end{figure}
+
+Notice that the probabilities sum to one for each state ($ \alpha + (1-\alpha) = 1$). The transition matrix $A$ for this system is given by
+\begin{equation*}
+	\begin{pmatrix}
+	1-\alpha & \alpha\\
+	\beta & 1-\beta
+	\end{pmatrix}
+\end{equation*}
+$n$ steps of a Discrete State Markov Chain (DSMC) can be simulated simply b y repeated multiplication of the transition matrix with itself.
+
+Unfortunately Markov Chains only work if the interest lies in the probability of observed events. In PoS tagging, interest lies in the probability of things that can't be observed directly. Namely these are the tags, which are hidden. Fortunately \textbf{Hidden Markov Chains} enable the modelling of sequences with both observed events and related hidden events. In PoS tagging these correspond to words and tags.
+\begin{itemize}
+	\item a set of $N$ states
+	\item a $N\times N$ \textbf{transition matrix} $A$ where $a_{i,j}$ is the probability of transitioning from state $i$ to state $j$
+	\item a sequence $O$ of $T$ observations (drawn from a set of $V$ possible observations): $O = o_1, o_2, \dots, o_T$
+	\item a $N\times V$ \textbf{emission matrix} $B$ where $b_{i,t} = P\left(o_t\middle| i\right)$ is the probability of state $i$ generating observation $o_t$
+	\item an initial probability distribution over the $N$ states
+\end{itemize}
+Let $W$ be an observed word sequence and $T$ be a hidden tag sequence. The interest lies in $\hat{T}$ over all possible tag sequences.
+\begin{equation*}
+	\hat{T} = \arg\max P(T|W) =\arg\max P(W|T)P(T) = \arg\max \prod_{i} P\left( w_i \middle| t_i \right) \prod_{i} P\left( t_i \middle| t_{i-1} \right)
+\end{equation*}
+The process used to discover the tag sequence that maximizes $P(W|T)P(T)$ is called decoding and can be carried out using the Viterbi algorithm.
+
+\subsection{Viterbi Algorithm for Hidden Markov Models}
+The Hidden Markov Model may be represented as a graph called a trellis with a row for each tag and a column for each word
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{img/vitrelli_trellis}
+\end{center}
+The $i$th column corresponds to the $i$th observation, the $k$th row corresponds to the $k$th hidden stage. The goal is to find the most probable path through the trellis, which refers to the path with the highest end-to-end probability computed as the products of the weights along the path.
+
+The weight of the arrow from node $(k,i)$ to node $(j,i+1)$ is the product of two probabilities
+\begin{itemize}[noitemsep,nosep]
+	\item the probability of going from state $k$ to $j$\qquad $a_{k,j} = P(j|k)$
+	\item the probability of state $j$ generating word $i+1$ \qquad $b_{j,i+} = P(i+1|j)$
+\end{itemize}
+The path through the trellis with the highest end-to-end probability is the most likely tag sequence associated to the word sequence.
+
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/vitrelli_trellis_example}
+\end{center}
 
 
 
 
-
+\printbibliography
 
 \end{document}
