@@ -401,6 +401,26 @@ And the notation is $\textbf{X}\sim \mathcal{N}(\bm{\mu}, \textbf{C})$
 	\end{equation*}
 \end{definition}
 
+\begin{definition}
+	 The mean of the stochastic process is the function which associates to each $t \in T$ the expectation $\ev{X_t}$.\\
+	 The \textbf{autocorrelation function} of the stochastic process at times $(t_1,t_2)$ is
+	 \begin{equation*}
+	 	R_X(t_1,t_2) = \ev{X_{t_1}X_{t_2}}
+	 \end{equation*}
+	 The \textbf{auto-covariance function} of the stochastic process at times $(t_1,t_2)$ is
+	 \begin{equation*}
+	 	C_X(t_1,t_2) = R_X(t_1,t_2) - \ev{X_{t_1}}\ev{X_{t_2}}
+	 \end{equation*}
+	 The \textbf{correlation coefficient} of the stochastic process at times $(t_1,t_2)$ is
+	 \begin{equation*}
+		\rho_X(t_1,t_2) = \frac{C_X(t_1,t_2)}{\sqrt{C_X(t_1,t_1) C_X(t_2,t_2)}}
+	 \end{equation*}
+	 The \textbf{average power} of the stochastic process at time $t$ is
+	 \begin{equation*}
+	 	R_X(t,t) = \ev{X_t^2}
+	 \end{equation*}
+\end{definition}
+
 \section{Markov Chain}
 The stochastic process $X$ has the Markov property if a step $X(t_n)$ is only dependent on the preceding step $X(t_{n-1})$
 \begin{equation*}
