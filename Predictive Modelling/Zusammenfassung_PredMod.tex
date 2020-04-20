@@ -820,5 +820,65 @@ For the least squares model with $p$ predictors, the BIC is, apart from irreleva
 	\text{BIC} = \frac{1}{n}\left( \text{RSS} + log(n)p\hat{\sigma}^2 \right)
 \end{equation*}
 
+\section{Classification and Logistic Regression}
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/classification}
+\end{center}
+
+Given a problem where the prediction should be whether a person defaults on their debt, based on the annual income and the monthly credit card bill, with a dataset consisting of
+\begin{itemize}
+	\item \predvar{default}\qquad Binary response variable, whether this person defaults or not
+	\item \predvar{income}\qquad First numeric predictor, annual income of the person
+	\item \predvar{balance}\qquad Second numeric predictor, monthly credit card balance
+\end{itemize}
+
+\subsection{Logistic Regression}
+A model for this problem should predict the conditional probability $P(\predvar{default=Yes}|\predvar{balance})$, which is abbreviated as $p(\predvar{balance})$. Thus the aim is to model the conditional probability $p(X) = P(Y=1|X)$, where only binary response variables $Y$ are considered.
+
+The idea underlying \emph{logistic regression} is to modify a linear function by composing it with another function which shrinks all of $\R$ to $[0,1]$. In logistic regression, the \emph{logistic} function is typically chosen
+\begin{equation*}
+	p(t) = \frac{e^t}{1+e^t}
+\end{equation*}
+\begin{center}
+	\includegraphics[width=0.4\linewidth]{img/logistic_function}
+\end{center}
+
+\begin{definition}
+	\textbf{Simple logistic regression}\qquad Given a binary response variable $Y$ and a quantitative predictor $X$, the simple logistic regression model is defined as
+	\begin{equation*}
+		P(Y=1|X) = \frac{e^{\beta_0+\beta_1 X}}{1+e^{\beta_0+\beta_1 X}}
+	\end{equation*}
+	The parameters $\beta_0$ and $\beta_1$ are called regression coefficients and are estimated from the training set.
+\end{definition}
+Rearranging gives
+\begin{equation*}
+	\frac{p(X)}{1-p(X)} = e^{\beta_0+\beta_1X}
+\end{equation*}
+which is called \textbf{odds}. Odds is an equivalent way of expressing the probability of an event and is used for instance in betting agencies. Odds values close to 0 and $\infty$ indicate small and large probabilities, respectively.
+
+Taking the natural logarithm of the odds gives
+\begin{equation*}
+	\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0+\beta_1 X
+\end{equation*}
+The left side of this equation is called \emph{log-odds} or \textbf{logit}. The interpretation of the coefficients $\beta_0$ and $\beta_1$ in terms of the logit: a change of the predictor $X$ by one unit amounts to an average change by $\beta_1$ of the logit of the response being true.
+
+\subsection{Multiple Logistic Regression}
+\begin{definition}
+	Given a binary response variable $Y$ and predictors $X_1,\dots,X_p$, the logistic regression model is defined by
+	\begin{equation*}
+		P(Y|X_1,\dots,X_p) = \frac{e^{\beta_0+\beta_1 X_1 + \dots + \beta_p X_p}}{1+e^{\beta_0+\beta_1 X_1 + \dots + \beta_p X_p}}
+	\end{equation*}
+	The parameters $\beta_0,\beta_1,\dots,\beta_p$ are called regression coefficients and are estimated from the training set.
+\end{definition}
+The coefficients are estimated using the maximum likelihood function.
+
+\subsection{Model Assessment}
+\begin{definition}
+	Let $(x_1, y_1),\dots,(x n_,y_n)$ be observations of $(X,Y)$ and $\hat{y}_i = \hat{f}(x_i)$ the corresponding predictions. The \emph{classification error} is given by
+	\begin{equation*}
+		\text{Err} = \frac{1}{n}\sum_{i=1}^{n} l(y_i \neq \hat{y}_i)
+	\end{equation*}
+	Where $l$ denotes the \emph{indicator function} which takes on value 1 it its argument is true and 0 otherwise. In other words, the classification error is the proportion of cases with a wrong prediction.
+\end{definition}
 
 \end{document}
