@@ -992,8 +992,92 @@ The path through the trellis with the highest end-to-end probability is the most
 	\includegraphics[width=0.6\linewidth]{img/vitrelli_trellis_example}
 \end{center}
 
+\section{Language Models}
+Language modelling is the task of predicting what word follows a sequence of words. The formal definition is: given a sequence of words $w^{(1)}, w^{(2)},\dots, w^{(t-1)}$ a language model computes the probability distribution of the next word $w^{(t)}$
+\begin{equation*}
+	P\left(w^{(t)} \middle| w^{(t-1)}, \dots, w^{(1)} \right)
+\end{equation*}
+where $w^{(t)}$ can be any word in a fixed vocabulary $V = (w_1,\dots,w_{\abs{V}})$.
 
+We can also see a Language Model as a system that assigns a probability to any sequence of words. According to the chain rule the probability of a text $w^{(1)},\dots, w^{(T)}$ is given by
+\begin{align*}
+	P\left(w^{(1)},\dots, w^{(T)}\right) &= P\left(w^{(1)}\right) \cdot P\left(w^{(2)} \middle| w^{(1)}\right) \cdot ... \cdot P\left(w^{(T)} \middle| w^{(T-1)},\dots, w^{(1)}\right)\\
+	&= \prod_{t=1}^{T} P\left( w^{(t)} \middle| w^{(t-1)}, \dots, w^{(1)} \right)
+\end{align*}
+The exact order of the words matters.
 
+\subsection{n-Gram Language Model}
+Some simplifications are needed for this idea to be practicable. Thus, the probability of a word $w^{(t)} \cdot P\left(w^{(t)}\right)$ only depends on the $n-1$ preceding words. This simplification is called a $n$-gram model where $n$-grams are chunks of $n$ consecutive words. Each component is approximated with the following product
+\begin{align*}
+	P\left( w^{(1)}, \dots, w^{(T)} \right) &\approx \prod_{t=1}^{T} P\left( w^{(t)} \middle| w^{(t-1)},\dots, w^{(i-(n-1))} \right)\\
+	P\left( w^{(t)} \middle| w^{(t-1)},\dots, w^{(1)} \right) &\approx P\left( w^{(t)} \middle| w^{(t-1)},\dots, w^{(i-(n-1))} \right)
+\end{align*}
+The $n$-gram probabilities are based on the Maximum likelihood estimate
+\begin{equation*}
+	P\left( w^{(t)} \middle| w^{(t-1)},\dots, w^{(1)} \right) \approx \frac{\text{count}\left(w^{(t)}, w^{(t-1)},\dots, w^{(t-(n-1))}\right)}{\text{count}\left(w^{(t-1)},\dots, w^{(t-(n-1))}\right)}
+\end{equation*}
+
+\subsubsection{Problems}
+\begin{itemize}
+	\item The context for a word is bigger than the $n$ grams in the model
+	\item Increasing $n$ increases the sparsity of the model (typically $n$ can't be bigger than five)
+	\begin{equation*}
+		P\left( w^{(t)} \middle| w^{(t-1)},\dots, w^{(1)} \right) \approx \frac{\text{count}\left(w^{(t)}, w^{(t-1)},\dots, w^{(t-(n-1))}\right)}{\text{count}\left(w^{(t-1)},\dots, w^{(t-(n-1))}\right)}
+	\end{equation*}
+	\item Numerator $w^{(1)},\dots, w^{(t-1)},w^{(t)}$ might never occur in the training set\\
+	Solution: Smoothing
+	\item Denominator $w^{(1)},\dots, w^{(t-1)}$ might never occur in the training set\\
+	Solution: Backoff
+\end{itemize}
+
+\subsubsection{Smoothing n-Gram Language Models}
+It can always happen that n-grams not seen in the training set appear in the data, Smoothing takes care of this by reassigning some probability to unseen $n$-grams. The simplest method for this is \textbf{Laplace smoothing}
+\begin{equation*}
+	P\left( \bm{w^{(t)}} \middle| w^{(t-1)} \right) \approx \frac{\text{count}\left(w^{(t-1)},w^{(t)}\right) + 1}{\text{count}\left(w^{(t-1)}\right) + \abs{V}}
+\end{equation*}
+Smoothing this way generally shifts the probability too much towards unseen $n$-grams. Compensate this by adding a fraction $k$ (0.01, 0.03, 0.1, 0.3) instead of one. This method is called \textbf{add-$\bm{k}$ smoothing}
+\begin{equation*}
+	P\left( \bm{w^{(t)}} \middle| w^{(t-1)} \right) \approx \frac{\text{count}\left(w^{(t-1)},w^{(t)}\right) + k}{\text{count}\left(w^{(t-1)}\right) + k\cdot\abs{V}}
+\end{equation*}
+Unfortunately, neither add-one nor add-$k$ work well in practice.
+
+\subsubsection{Backoff in n-Gram Language Models}
+Use the count of the next lower-order $n$-gram, which means to use less context. Even better is to take backoff into account when n-grams are sparse, so use a linear combination of $n$-grams
+\begin{equation*}
+	P\left( w^{(t)} \middle| w^{(t-1)},w^{(t-2)} \right) = \lambda_1 P\left( w^{(t)} \middle| w^{(t-1)},w^{(t-2)} \right) + \lambda_2 P\left( w^{(t)} \middle| w^{(t-1)} \right) + \lambda_3 P\left( w^{(t)} \right)\qquad \sum_{i} \lambda_i = 1
+\end{equation*}
+
+\subsection{Evaluation of a Language Model}
+\begin{itemize}
+	\item Extrinsic Evaluation
+	\begin{itemize}
+		\item Put model A and model B through the same task
+		\item Run the task and get the accuracy for both models
+		\item Compare accuracies
+	\end{itemize}
+	Cons: Time Consuming
+	\item Intrinsic Evaluation
+	\begin{itemize}
+		\item Easier and faster to use
+		\item Evaluation metric: Perplexity
+		\begin{itemize}
+			\item Algorithm that scores better on the test set is considered better
+		\end{itemize}
+	\end{itemize}
+	Cons: Bad approximation for real language (but it helps to get an idea on how
+	good the model works)
+\end{itemize}
+
+\subsubsection{Perplexity}
+Perplexity is the probability of the test set, normalized by the number of words
+\begin{flalign*}
+	PP(W) = P(w^{(1)},w^{(2)},\dots,w^{(N)})^{-\frac{1}{N}} &= \sqrt[\leftroot{-2}\uproot{2} N]{\frac{1}{P\left(w^{(1)},w^{(2)},\dots,w^{(N)}\right)}} &\\
+	&= \sqrt[\leftroot{-2}\uproot{2} N]{\prod_{t=1}^{N}\frac{1}{P\left(w^{(t)}\middle| w^{(t-1)},\dots,w^{(1)}\right)}} & (\text{chain rule})\\
+	&= \sqrt[\leftroot{-2}\uproot{2} N]{\prod_{t=1}^{N} \frac{1}{P\left(w^{(t)}\middle| w^{(t-1)}\right)} } & (\text{for bigrams})
+\end{flalign*}
+Minimizing perplexity is the same as maximizing probability.
+
+Another evaluation metric is the word error rate (the number of insertions, deletions and substitutions normalised by sentence length needed to re-construct a reference sentence). The word error rate can be measured with the Levenshtein Edit Distance (which allows to weight insertions, deletions and substitutions differently) and is efficiently implemented using dynamic programming.
 
 \printbibliography
 
