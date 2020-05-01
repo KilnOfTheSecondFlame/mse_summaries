@@ -16,7 +16,6 @@
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
-\usepackage{csquotes}
 \usepackage{lscape}
 \usepackage{geometry}
 \usepackage{multicol}
@@ -28,6 +27,7 @@
 \usepackage{stackengine}
 \usepackage{mathtools}
 \usepackage{pdfpages}
+\usepackage{csquotes}
 
 % Bibliography & citing
 \usepackage[
@@ -343,7 +343,7 @@ Sentiment analysis is commonly framed as \textbf{attitude detection}
 		\item opinion holder
 		\item target entity
 		\item aspect: specific feature of the target that the opinion is about
-		\item type: most commonly {\color{green} positive}, {\color{red} negative}, {\color{gray} neutral} and with an indication of strength
+		\item type: most commonly {\color{Green3} positive}, {\color{Firebrick3} negative}, {\color{gray} neutral} and with an indication of strength
 		\item time when this opinion was expressed
 	\end{enumerate}
 	\item knowing the opinion without knowing the opinion target is of limited use
@@ -379,12 +379,12 @@ In principle, all quintuplets in a document should be discovered, which would al
 Though simplified, these forms of sentiment analysis are still hard to do with subtlety and sarcasm complicating the task.
 
 \subsubsection{Document-level Sentiment Classification}
-Does the document reflect an overall {\color{green} positive} or {\color{red} negative} view? The approach is the same as for text classification
+Does the document reflect an overall {\color{Green3} positive} or {\color{Firebrick3} negative} view? The approach is the same as for text classification
 \begin{enumerate}
 	\item tokenisation
 	\item feature extraction
 	\item classification (Naïve Bayes, MaxEnt, SVM)
-	\item Two or Three classes \{ {\color{green} positive} $\vert$ {\color{red} negative} $\vert$ ({\color{gray} neutral}) \}
+	\item Two or Three classes \{ {\color{Green3} positive} $\vert$ {\color{Firebrick3} negative} $\vert$ ({\color{gray} neutral}) \}
 \end{enumerate}
 
 \subsection{Generative versus Discriminative Models}
@@ -469,7 +469,7 @@ The actual steps taken in the preprocessing depends heavily on the use case.
 The idea to count the words that are shared between documents to account for similarity stays the same. But the Jaccard Similarity is defined as the size of intersection divided by the size of the union of two sets.
 
 \noindent
-\begin{minipage}{0.6\linewidth}
+\begin{minipage}{0.55\linewidth}
 	\begin{equation*}
 	J(\text{document}_1,\text{document}_2) = \frac{\text{document}_1\cap\text{document}_2}{\text{document}_1\cup\text{document}_2}
 	\end{equation*}
@@ -619,7 +619,7 @@ Word2Vec is a simple and computationally efficient way to learn embeddings. It i
 \end{center}
 
 \subsubsection{CBOW}
-\begin{minipage}{0.5\linewidth}
+\begin{minipage}{0.45\linewidth}
 	Given a set of context words, predict the centre word that potentially occurs with the context words. The input are $m$ one-hot vectors of context window words.
 	\vspace{5em}
 \end{minipage}
@@ -630,7 +630,7 @@ Word2Vec is a simple and computationally efficient way to learn embeddings. It i
 \end{minipage}
 
 \subsubsection{Skip-Gram}
-\begin{minipage}{0.6\linewidth}
+\begin{minipage}{0.55\linewidth}
 	Given a center word, predict context words that potentially occur with 	the centre word. Input is the one-hot vector for word $w$.
 	\vspace{10em}
 \end{minipage}
@@ -786,7 +786,7 @@ PoS tagging means identifying the grammatical category of each word token.
 
 \vspace{1em}
 \noindent
-\begin{minipage}{0.5\linewidth}
+\begin{minipage}{0.45\linewidth}
 	\begin{itemize}
 		\item nouns
 		\item verbs
@@ -795,7 +795,7 @@ PoS tagging means identifying the grammatical category of each word token.
 		\item preposition
 	\end{itemize}
 \end{minipage}
-\begin{minipage}{0.5\linewidth}
+\begin{minipage}{0.45\linewidth}
 	\begin{itemize}
 		\item particles
 		\item conjunctions
@@ -814,7 +814,7 @@ There are corpora with manually tagged PoS, which are both in part in NLTK
 The Penn Treebank tags are widely used for English language PoS tagging.
 
 \noindent
-\begin{minipage}[t][][t]{0.5\linewidth}
+\begin{minipage}[t][][t]{0.45\linewidth}
 	\begin{tabularx}{\linewidth}{c|c|X}
 		\textbf{Number} & \textbf{Tag} & \textbf{Description} \\
 		\hline
@@ -839,7 +839,7 @@ The Penn Treebank tags are widely used for English language PoS tagging.
 		19 & PRP\$ & Possessive pronoun
 	\end{tabularx}
 \end{minipage}
-\begin{minipage}[t][][t]{0.5\linewidth}
+\begin{minipage}[t][][t]{0.45\linewidth}
 	\begin{tabularx}{\linewidth}{c|c|X}
 		\textbf{Number} & \textbf{Tag} & \textbf{Description} \\
 		\hline
@@ -1078,6 +1078,261 @@ Perplexity is the probability of the test set, normalized by the number of words
 Minimizing perplexity is the same as maximizing probability.
 
 Another evaluation metric is the word error rate (the number of insertions, deletions and substitutions normalised by sentence length needed to re-construct a reference sentence). The word error rate can be measured with the Levenshtein Edit Distance (which allows to weight insertions, deletions and substitutions differently) and is efficiently implemented using dynamic programming.
+
+\section{Recurrent Neural Networks and Language Models}
+The task of a Language Model is at its core to take as an input a sequence of word $x^{(1)}, x^{(2)}, \dots, x^{(t-1)}$ and output a probabilty distribution of the next word $P\left( x^{(t)} \middle| x^{(1)}, x^{(2)}, \dots, x^{(t-1)} \right)$.
+
+A fixed-window neural language model uses a fixed input size of preceding words to predict the next word
+\begin{center}
+
+	\includegraphics[width=0.6\linewidth]{img/fixed_window_nlm}
+\end{center}
+This model will provide an output distribution to any word combination (it might not be a good one) and while making the context window size n larger does not lead to larger sparse matrices. The size of the hidden layer is an independent hyper-parameter.
+
+\subsection{Recurrent Neural Network}
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/recurrent_neural_network}
+\end{center}
+The hidden state vector $h^{(t)}$ has two inputs, the input word $x^{(t)}$ and the previous hidden state $h^{(t-1)}$. The core idea of RNNs is to apply the same weights repeatedly, thus the weight matrix $W_h$ for weighing the previous hidden state vector $h^{(t-1)}$ and weight matrix $W_e$ for weighing the one-hot encoded input word vector $x^{(t)}$ are shared.
+
+\begin{tabularx}{\linewidth}{p{0.45\linewidth} p{0.45\linewidth}}
+	{\color{Green3} \textbf{Advantages}} & {\color{Firebrick3} \textbf{Disadvantages}} \\
+	\hline
+	\begin{itemize}[label={\color{Green3}\small+}, leftmargin=*]
+		\item can process input sequences of any length
+		\item computation for timestep $t$ can use information from any preceding timestep
+		\item model size does not increase for longer input
+		\item symmetry in how input is processed, as the same weights are applied for every timestep
+	\end{itemize}
+	&
+	\begin{itemize}[label={\color{Firebrick3}-}, leftmargin=*]
+		\item recurrent computation is slow as no parallelisation is possible because inputs have to be handled sequentially by design
+		\item difficult to access information from many timesteps back in practice
+	\end{itemize}
+\end{tabularx}
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/rnn_models}
+\end{center}
+Training a RNN amounts to feeding a big corpus of text into the RNN and computing the output distribution $\hat{y}^{(t)}$ at every step $t$. The loss function on step $t$ is the cross-entropy between predicted probability distribution and the true word
+\begin{equation*}
+	J^{(t)}(\theta) = CE(y^{(t)}, \hat{y}^{(t)}) = -\sum_{w\in V} y_w^{(t)} \log\left(\hat{y}_w^{(t)}\right) = -\log\left(\hat{y}_{x_{t+1}}^{(t)}\right)
+\end{equation*}
+The average of the loss is the overall loss for the training set
+\begin{equation*}
+	J(\theta) = \frac{1}{T}\sum_{t=1}^{T}J^{(t)} (\theta) = \frac{1}{T} \sum_{t=1}^{T}\left(-\log\left(\hat{y}_{x_{t+1}}^{(t)}\right)\right)
+\end{equation*}
+Errors are backpropagated at each individual timestep and then across all timesteps, in a process that is called backpropagation through time. Computing gradients with regard to $h_0$ involves many factors of $W_h$ and repeated gradient computations, which can lead to the exploding and vanishing gradient problem.
+
+Measures against the problem
+\begin{itemize}
+	\item \textbf{Exploding Gradients}
+	\begin{itemize}
+		\item Gradient clipping to scale big gradients
+	\end{itemize}
+	\item \textbf{Vanishing Gradients}
+	\begin{itemize}
+		\item Activation Function
+		\item Weight initialisation
+		\item Network architecture
+	\end{itemize}
+	see \cite{pascanu2013difficulty} for an in-depth explanation
+\end{itemize}
+
+\section{Seq2Seq and Attention for Machine Translation}
+
+Machine Translation is the task of translating a sentence $x$ written in a \textbf{source language} to a sentence $y$ written in the \textbf{target language}.
+\begin{itemize}[label=-]
+	\item Source sentence represented by input sequence $(x^{(1)},x^{(2)},\dots,x^{(T)})$ of variable length $T$
+	\item Target sentence represented by output sequence $(y^{(1)},y^{(2)},\dots,y^{(T')})$ of variable length $T'$
+	\item Elements of $x$ and $y$ come from the vocabulary of the respective language
+\end{itemize}
+
+\subsection{Statistical Machine Translation}
+Learn a probabilistic model from data ${\color{red} P(y|x)}$ by using the Bayes' rule. Break the problem into two probability functions and use statistical models to model each probability function separately
+\begin{equation*}
+	{\color{DarkOrchid4}\text{argmax}_y} {\color{red} P(y|x)} = {\color{DarkOrchid4}\text{argmax}_y} {\color{blue} P(x|y)}{\color{Green3} P(y)}
+\end{equation*}
+\begin{itemize}[label=-]
+	\item {\color{blue} Translation Model}: Models how words and phrases should be translated ({\color{blue} fidelity}) and is learnt from \textbf{parallel data}
+	\item {\color{Green3} Language Model}: Models how to write good language ({\color{Green3} fluency}) and is learnt from \textbf{monolingual data}
+	\item {\color{DarkOrchid4} Decoding Algorithm}: Finds the translation that maximises the probabilities of the two models, this is usually done by beam search (a heuristic search algorithm)
+\end{itemize}
+
+Learn the translation model ${\color{blue} P(x|y)}$ by starting with a \textbf{large parallel corpus} like the Rosetta Stone. The language model can be broken down further into ${\color{blue} P(x,a|y)}$ where $a$ is the \textbf{alignment}, which is the \textbf{correspondence between particular words} in the translated sentence pair.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{img/alignment_complex}
+	\caption{Examples showing the complexity of alignment}
+	\label{fig:alignmentcomplex}
+\end{figure}
+
+Statistical Machine Translation was a huge research field. But the best systems were extremely complex with hundreds of important detail and separately designed sub-components. A lot of human effort was needed to build and maintain the systems for each language pair.
+
+\clearpage
+\subsection{Neural Machine Translation}
+Neural Machine Translation is a way to do Machine Translation with a single neural network. The neural network architecture is called sequence-to-sequence and involves two RNNs. An {\color{red} \textbf{Encoder}} network which processes the input sequence and produces a fixed size {\color{Goldenrod2} context vector}, and a {\color{Green3} \textbf{Decoder}} network which takes the context vector as input to produce the translated output word sequence.
+
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/encoder_decoder_machine_translation}
+\end{center}
+
+The idea is to use an end-to-end neural network to directly implement ${\color{red}\text{argmax}_y P(y|x)}$
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/encoder_decoder_machine_translation2}
+\end{center}
+
+This sequence to sequence (Seq2Seq) system is trained as single whole and the backpropagation operates from end to end. Using Teacher forcing: Supply expected translation (from corpus) instead of predicted output from previous timestep.
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/Seq2Seq_Teacher_Forcing}
+\end{center}
+
+\subsection{Scoring a Target Sequence}
+The output of the Decoder for the next word is a multinational probability distribution over the vocabulary. The idea behind the scoring is to maximise the probability for the complete translation of length $T$
+\begin{align*}
+	P(y|x) &= P(y^{(1)}|x) \cdot P(y^{(2)}|y^{(1)},x) \cdot\ldots\cdot \underbrace{P(y^{(T)}|y^{(1)},y^{(2)},\dots,y^{(T-1)},x)}_{\text{probability of next target word given words so far and source sentence $x$}}\\
+	P(y|x) &= \prod_{t=1}^{T} P(y^{(t)}|y^{(1)},y^{(2)},\dots,y^{(t-1)},x)
+\end{align*}
+
+For numerical stability the logarithm is used to score a candidate solution
+\begin{align*}
+	\text{score}\left(y^{(1)},\dots,y^{(t)})\right) &= \log\left( \prod_{t=1}^{T} P(y^{(t)}|y^{(1)},y^{(2)},\dots,y^{(t-1)},x) \right)\\
+	&= \sum_{t=1}^{T} \log\left(P(y^{(t)}|y^{(1)},y^{(2)},\dots,y^{(t-1)},x)\right)
+\end{align*}
+
+\clearpage
+
+\subsection{Beam Search}
+On each step of the decoder, keep track of the $k$ \textbf{most probable partial translations}, which are called hypotheses. Beam search is a heuristic search strategy, where $k$ is called the beam size (in practice around 5 to 10).
+
+In order to choose the best $k$ hypotheses for the next word in timestep $t$ we score the alternatives.
+\begin{equation*}
+	\text{score}\left(y^{(1)},\dots,y^{(t)}\right) = \sum_{t=1}^{T} \log\left( y^{(t)} \middle| y^{(1)},\dots,y^{t-1}, x \right)
+\end{equation*}
+Scores are all negative, a higher score is better. Search for a high-scoring hypothesis while tracking the top $k$ on each step.
+
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search01}
+		\caption{Step 1}
+	\end{subfigure}
+	\hspace{1em}
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search02}
+		\caption{Step 2}
+	\end{subfigure}
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search03}
+		\caption{Step 3}
+	\end{subfigure}
+	\hspace{1em}
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search04}
+		\caption{Step 4}
+	\end{subfigure}
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search05}
+		\caption{Step 5}
+	\end{subfigure}
+	\hspace{1em}
+	\begin{subfigure}[h]{0.45\linewidth}
+		\includegraphics[width=0.8\linewidth]{img/beam_search06}
+		\caption{Step 6}
+	\end{subfigure}
+	\caption{Beam Search full example}
+\end{figure}
+
+\clearpage
+
+\textbf{\begin{figure}[htb]
+		\centering
+		\includegraphics[width=0.7\linewidth]{img/beam_search07}
+		\caption{Full hypothesis of Beam Search}
+		\label{fig:beamsearch07}
+	\end{figure}
+}
+
+\subsection{Hypotheses Selection}
+\begin{itemize}
+	\item In \textbf{greedy decoding}, the input gets decoded until the model produces the \textbf{\texttt{<END>} token}
+	\item In \textbf{beam search decoding} different Hypotheses may produce the \texttt{<END>} token in different timesteps, if that happens the hypothesis is saved and other hypotheses are continued to be explored until a predefined cut-off at timestep $T$ is reached or until at least $n$ complete hypotheses are acquired.
+	
+	Then the hypothesis with the best score is selected, but longer hypotheses have lower scores (normalised by length)
+	\begin{equation*}
+		{\color{red}\frac{1}{T}} \sum_{t=1}^{T} \log\left(P(y^{(t)} | y^{(1)},\dots, y^{(t-1)}, x)\right)
+	\end{equation*}
+\end{itemize}
+
+\subsection{Evaluating Machine Translation Systems using BLEU}
+The \textbf{B}i\textbf{l}ingual \textbf{E}valuation \textbf{U}nderstudy compares the \textbf{machine written translation} to one or several \textbf{human written translations} and computes a \textbf{similarity score}
+\begin{itemize}[label=-]
+	\item Measures the ratio of matched n-grams (overlap) to the total number of n-grams in the translated text (range $[0..1]$ but often scaled to $[0..100]$)
+	\item Typically 1,2,3 and 4-gram precision which are equally weighted
+	\item Penalty for translations that are too short using a brevity penalty (BP) factor
+	\begin{align*}
+		\text{BLEU} &= \text{BP}\cdot e^{\sum_{n=1}^{N} w_n\log(p_n)}\\
+		p_n &= \frac{\sum_{\text{n-gram}\in \hat{y}} \overbrace{\text{count}_{\text{clip}}(\text{n-gram})}^{\text{\# matched n-grams}}}{\sum_{\text{n-gram}\in \hat{y}} \underbrace{\text{count}(\text{n-gram})}_{\text{\# n-grams in translation}}}\\
+		\text{BP} &= e^{\min\left( 0, 1-\frac{\text{len}_{\text{reference}}}{\text{len}_{\text{translation}}} \right)}
+	\end{align*}
+	\begin{itemize}
+		\item[N] n-grams considered up to length N
+		\item[$w_n$] n-grams specific weight (default $\dfrac{1}{N}$)
+	\end{itemize}
+\end{itemize}
+BLEU should be used on corpus level, not on individual sentences, and while it is useful, it is imperfect. There are many valid ways to translate a sentence, and a good translation can get a poor BLEU score because it has a low n-gram overlap with the provided human translations.
+
+\subsection{Notes on Machine Translation}
+\begin{itemize}
+	\item \textbf{Reliability}: NMT translations can be unreliable, offensively wrong, or utterly unintelligible. NMT systems have no guarantees about accuracy and can miss negations, whole words, or entire phrases.
+	\item \textbf{Memory}: NMT systems are often built to translate one sentence at a time. As a result, they forget information gained from prior sentences.
+	\item \textbf{Common sense}: NMT systems have very little common sense, that is information of the external context and knowledge about the world. Understanding what contexts are appropriate for certain translations is important to our understanding of situations, but these contexts are often difficult to capture in their entirety.
+\end{itemize}
+
+\subsection{Attention}
+\begin{minipage}{0.65\linewidth}
+	The source word encodings $x_1,x_2, \dots, x_T$ are individually weighted depending on the target word $y_{t-1}$. Therefore, there are as many context vectors $c_t$ as there are target words $y_t$ and every context vector $c_t$ for target word $y_t$ is a weighted average of the source words encodings. Depending on the previous target word $y_{t-1}$ the source word encoding will be weighted differently. This method is called global attention.
+\end{minipage}
+\begin{minipage}{0.3\linewidth}
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{img/seq2seq_attention}
+	\caption{Schematic comparison between a plain seq2seq model (top) and a seq2seq model with attention (bottom)}
+	\label{fig:seq2seqattention}
+\end{figure}
+\end{minipage}
+
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/seq2seq_attention2}
+\end{center}
+
+\begin{tabularx}{\linewidth}{m{0.1\linewidth} m{0.3\linewidth} m{0.2\linewidth} m{0.2\linewidth}}
+	\textbf{Name} & \textbf{Description} & \textbf{Score} & \textbf{Schema}\\
+	\hline
+	& & & \\[-1em]
+	\textbf{Content-based} & \parencite{graves2014neural} & $\text{score}(s_t,h_i) = \text{cosine}\left[s_t,h_i\right] $ & \includegraphics[width=\linewidth]{img/attention_cosine}\\
+	& & & \\[-0.5em]
+	\textbf{Additive, Concat} & $\text{W}_a$ is a weight matrix and $v_a $ a weight vector, which both are being trained \parencite{bahdanau2014neural} & $\text{score}(s_t,h_i) = v_a^T\tanh\left(\text{W}_a[s_t;h_i]\right) $ & \includegraphics[width=\linewidth]{img/attention_additive.png}\\
+	\textbf{Location-based} & Simplifies the SoftMax alignment to only depend on the target position \parencite{luong2015effective} & $ a_{t,i} = \text{softmax}\left(W_a s_t\right) $ & \includegraphics[width=\linewidth]{img/attention_location.png}\\
+	\textbf{Dot-Product} & \parencite{luong2015effective} & $\text{score}(s_t,h_i) = s_t^T h_i $ & \includegraphics[width=\linewidth]{img/attention_dotp.png}\\
+	\textbf{Multi\-plicative} & $W_a$ is a trainable weight matrix in the attention layer \parencite{luong2015effective} & $ \text{score}(s_t,h_i) = s_t^T W_a h_i $ & \includegraphics[width=\linewidth]{img/attention_multiplicative.png}\\
+	& & & \\[-0.5em]
+	\textbf{Scaled Dot-Product} & $N$ is the dimension of the source hidden state. Motivation for scaling is to improve learning when input is large, as the SoftMax may have extremely small gradients \parencite{vaswani2017attention} & $\text{score}(s_t,h_i) = \frac{s_t^T h_i}{\sqrt{n}} $ & \includegraphics[width=\linewidth]{img/attention_scaled_dotp.png}\\
+\end{tabularx}
+
+\noindent
+Attention ...
+\begin{itemize}
+	\item significantly improves NMT performance, the intuition is that it is effective as it allows the decoder to focus on certain parts of the source.
+	\item solves the bottleneck problem, as it allows the decoder to bypass the bottleneck and look directly at the source
+	\item helps with the vanishing gradient problem, as it provides shortcuts to faraway states
+	\item provides some interpretability, by revealing what the decoder is focussing on and by the network learning alignment
+\end{itemize}
+
+Attention is a technique to compute a weighted sum of the values, dependent on the query and the keys, which is a selective summary of the information contained in the values, where the query and the keys determine how much to focus on the individual values. Thus, Attention is a way to obtain a fixed-size representation of an arbitrary set of representations (the values), depending on some other representations (the query and the keys).
+
+% ------------ APPENDIX ------------ %
 
 \printbibliography
 
