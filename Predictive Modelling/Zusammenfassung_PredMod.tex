@@ -881,4 +881,163 @@ The coefficients are estimated using the maximum likelihood function.
 	Where $l$ denotes the \emph{indicator function} which takes on value 1 it its argument is true and 0 otherwise. In other words, the classification error is the proportion of cases with a wrong prediction.
 \end{definition}
 
+\section{Decision Trees}
+Tree-based methods can be applied for classification and regression. A classification tree aims at segmenting or stratifying the predictor space into a number of simple regions, where each region is associated with a unique class of the response. Since the set of splitting rules used to segment the predictor space can be summarized in a tree, these types of approaches are called decision-tree methods.
+
+Tree-based methods are simple and useful for interpretation, however they are typically not competitive with supervised learning methods in terms of prediction accuracy and they overfit the training data very fast. Combining a large number of trees can often result in dramatic improvements in prediction accuracy, at the loss of some interpretation.
+
+The idea behind a decision tree is to recursively partition the predictor variable space into disjoint regions, where each region is as pure as possible with respect to the labels of the response variable.
+
+\begin{definition}
+	Given the training set $(\vec{x}_1,y_1),\dots,(\vec{x}_n,y_n)$ where $\vec{x}_i = x_{i1}, x_{i2}, \dots, x_{ip}$ are the predictor values and $y_i$ is a qualitative response
+	\begin{enumerate}
+		\item Initialise the set of regions $\mathcal{R} = {R}$ by the predictor domain $R$ ($\R^p$)
+		\item Choose the optimal region $R$ in $\mathcal{R}$ and the optimal predictor $X_i$ such that a \emph{binary split} of $R$ with respect to $X_i$
+		\begin{equation*}
+			R_1 = \left\{ \vec{x} \in \R \middle| x_i > t \right\} \quad\text{and}\quad R_1 = \left\{ \vec{x} \in \R \middle| x_i \leq t \right\}
+		\end{equation*}
+		gives the highest gain in purity (for some threshold $t$)
+		\item Replace $R$ in $\mathcal{R}$ with $R_1$ and $R_2$ and iterate
+	\end{enumerate}
+	The iteration is stopped if the current splitting fulfils a pre-defined stopping criterion.
+\end{definition}
+
+\subsection{Node Purity}
+Assume that the response $Y$ has $K$ levels and a tree $T$ with $M$ terminal nodes.
+
+\vspace{1em}
+\textbf{Classification error rate}: fraction of training samples in a region that do not belong to the most common class
+\begin{equation*}
+	E_m(T) = 1 - \max_k \hat{p}_{mk}
+\end{equation*}
+$\hat{p}_{mk}$ is the proportion of the training data in region $m$ that is from level $k$. However, this classification is not sufficiently sensitive for tree growing.
+
+\vspace{1em}
+\textbf{Gini Index}: measure of total variance across the $K$ classes 
+\begin{equation*}
+	G_m(T) = \sum_{k=1}^{K} \hat{p}_{mk} (1 - \hat{p}_{mk})
+\end{equation*}
+Gini index takes on a small value if all the $p_{mk}$ are close to zero or one. The Gini index is referred to as node purity measure. A small value indicates that a node contains predominantly observations from the same class.
+
+\vspace{1em}
+\textbf{Cross Entropy}: an alternative to the Gini Index
+\begin{equation*}
+	D_m(T) = -\sum_{k=1}^{K} \log(\hat{p}_{mk})
+\end{equation*}
+
+\subsection{Making Predictions}
+Once a tree has been grown from the training set, predictions for new data $\vec{x} = (x_1, \dots, x_p)$ can be made by passing $\vec{x}$ through the tree. This means applying the decision rules invoking the individual predictor values in the tree.
+
+Assume that the decision rules lead this particular vector $\vec{x}$ to the $m$-th terminal node, that is the predictor values are within the $m$-th region $R_m$. Then the estimator $\hat{y}$ is the most commonly occurring class in the training data in region $R_m$.
+
+\subsection{Pruning a Tree}
+Growing a complex tree, that is a tree with many, small terminal nodes, will produce good predictions on the training data, but is likely to overfit the data. A smaller tree with fewer splits might lead to lower variance and better interpretation at the cost of a little bias.
+
+One way to overcome this problem is to grow the tree only so long as the decrease in the purity measure due to each split exceeds some threshold. This will result in smaller trees, but fails to account for seemingly worthless splits early on with good splits later down in the tree.
+
+Tree pruning amounts to first grow a very large tree and successively prune it back until a good subtree is found. Cost Complexity Pruning, also known as weakest link pruning, is used to do this.
+
+\subsubsection{Cost Complexity Pruning}
+\begin{itemize}
+	\item Compute large tree $T_0$
+	\item Consider a sequence of subtrees $T_\alpha$ indexed by a non-negative tuning parameter $\alpha$. For each value of $\alpha$ there is a corresponding subtree $T\subset T_0$ which minimises the cost-complexity function
+	\begin{equation*}
+		R_{\alpha}(T) = \sum_{m=1}^{\abs{T}} N_m Q_m (T) + \alpha\abs{T}\qquad \alpha\geq 0
+	\end{equation*}
+	where $\abs{T}$ denotes the number of terminal nodes in the subtree $T$, $m$ ranges over all terminal nodes, $N_m$ denotes the number of element in the terminal node $m$, and $Q_m(T)$ is an arbitrary node purity measure
+	\item For each given value of $\alpha$ compute a $T_\alpha$ such that $R_{\alpha}(T)$ is minimised. $\alpha$ is a tuning parameter that controls the trade-off between complexity and fit to the training data. A large value penalises the number of terminal nodes, hence resulting in a tree with few terminal nodes, but a potentially poor fit to the training data. A small value puts all emphasis on data fit and will result in a complex tree with many terminal nodes.
+\end{itemize}
+\begin{enumerate}
+	\item Use recursive binary splitting to grow a very large tree $T_0$ and set $\alpha = 0$
+	\item Increase $\alpha$ and compute the subtree $T_\alpha$ that minimises the cost-complexity function $R_\alpha(T)$ for each value
+	\item Stop if $T_\alpha$ is the root node
+\end{enumerate}
+To compute $T_\alpha$ weakest link cutting is used, which amounts to successively collapse the internal node that leads to the smallest increase in $R(T)$ until the tree with a single node is reached. The sequence of trees generated by this procedure can be shown to contain $T_\alpha$.
+
+\subsubsection{Optimal Pruning by Cross-Validation}
+Divide the data set into $K$ folds. For $k = 1,\dots,K$
+\begin{enumerate}
+	\item Grow a large tree $T_0$ based on all but the $k$-th fold of the data set.
+	\item Perform cost-complexity pruning and obtain a sequence of optimal subtrees $T_\alpha$ as a function of $\alpha$. Compute the classification error rate on the $k$-th fold as a function of $\alpha$.
+\end{enumerate}
+For each value of $\alpha$ average the classification error rate over the $K$ folds. Choose $\alpha$ such that the error rate is minimal.
+
+\section{Bagging and Random Forests}
+\subsection{Review Decision Trees}
+\textbf{Advantages}
+\begin{itemize}
+	\item Comprehensible and versatile with respect to the predictors
+	\item Can be visualised nicely and in a comprehensive manner
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\textbf{Disadvantages}
+\begin{itemize}
+	\item Poor predictive accuracy, especially when generalising
+	\item High variance\\
+	Splitting the training data into two parts at random and fitting a tree on both results in quite different trees
+\end{itemize}
+
+\subsection{Bagging}
+Bagging is a statistical tool that allows reducing the variance of a statistical estimator. It is based on the aggregation of a multitude of estimators with high variance by means of averaging and thus reducing the variance. These estimators are created by bootstrapping the training data (\textbf{b}ootstrap \textbf{agg}regat\textbf{ing}). Random Forests are a further advancement of bagging being a relevant classification method for real world problems.
+
+\subsection{Bootstrapping}
+Each of these bootstrap data sets is created by sampling with replacement and is the same size as the original data set. As a result, some observations may appear more than once in a given bootstrap data set and some not at all. Thus, rather than repeatedly obtaining independent data sets from the population, distinct data sets are obtained by sampling the observations from the original data set.
+
+\newpage
+\begin{definition}
+	Let $x_1,\dots, x_n$ be, possibly multivariate, realisations of the independent and identically distributed random variables $X_1, \dots, X_n$. Assume further that
+	\begin{equation*}
+		\hat{\gamma} = \hat{\gamma}(x_1, \dots, x_n)
+	\end{equation*}
+	is an estimator of some quantity $\gamma$.
+	\begin{enumerate}
+		\item Choose a large number $B\in \mathbb{N}$
+		\item For $b = 1,\dots,B$
+		\begin{itemize}
+			\item Draw $n$ samples $\left\{ x_1^{*}, \dots, x_n^{*} \right\}$ from $\left\{ x_1, \dots, x_n \right\}$ with replacement
+			\item Compute the estimator $\hat{\gamma}^{*} = \hat{\gamma}(x_1^{*}, \dots, x_n^{*})$
+		\end{itemize}
+	\end{enumerate}
+	\item The empirical distribution function $\hat{F}^*$ of $ \left( \hat{\gamma}_1^{*},\dots,\hat{\gamma}_n^{*} \right)$ approximates the distribution of $\hat{\gamma}$. In particular, the standard error of $\hat{\gamma}$ can be estimated by the bootstrap estimate
+	\begin{equation*}
+		\text{se}_B(\hat{\gamma}) = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}(\hat{\gamma}_n^{*} - \samplemean{\gamma}^{*})^2},\qquad\text{with } \samplemean{\gamma}^{*} = \frac{1}{B}\sum_{b=1}^{B}\hat{\gamma}_b^*
+	\end{equation*}
+\end{definition}
+
+Bagging is a general-purpose procedure for reducing the variance of a statistical learning method. It is particularly useful and frequent in the context of decision trees. By averaging the variance is reduced. A more natural way to decrease the variance of a statistical learning method and hence to increase the predictive accuracy would be to take many training sets from the population, build a separate prediction model using each training set, and average the resulting predictions. This is not practical, as only one training set can be accessed most of the time.
+
+For a regression setting (each of the $\hat{f}_b^*$ is a linear regression model) the bagged model is simply the average
+\begin{equation*}
+	\hat{f}_{\text{bag}}(x) = \frac{1}{B} \sum_{i=1}^{B} \hat{f}_i^*(x)
+\end{equation*}
+
+For classification, the predicted classes of all $B$ models are recorded, and the most commonly occurring class among the $B$ predictions is used. This method is called the \textbf{majority vote}.
+
+There is a very straightforward way to estimate the test error of a bagged model, without the need to perform cross-validation or the validation set approach. It can be shown, that on average each bagged tree makes use of around \textbf{two-thirds} of the observation. The remaining \textbf{one-third} of the observations not used to fit a given bagged tree is referred to as the \textbf{out-of-bag (OOB)} observations. The response for the $i$th observation can be predicted using each of the trees in which that observation was OOB.
+
+\newpage
+\subsubsection{Out-of-bag Error Estimate}
+\begin{definition}
+	Let $(\vec{x}_1,y_1),\dots,(\vec{x}_n,y_n)$ be the training set and $\hat{f}_1^*,\dots,\hat{f}_b^*$ be $B$ bootstrapped classification methods, that is decision trees
+	\begin{enumerate}
+		\item For $i=1,\dots,n$ find all bootstrapped models $\hat{f}_b^*$ that do \textbf{not} use the $i$th observation for training. Use these models to make a prediction $\hat{y}_i^*$ by means of a majority vote.
+		\item The out-of-bag error estimate is the classification error
+		\begin{equation*}
+			\text{Err}^* = \frac{1}{n}\sum_{i=1}^{n}l(y_i\neq \hat{y}_i^*)
+		\end{equation*}
+	\end{enumerate}
+\end{definition}
+The resulting OOB error is a valid estimate of the test error for the bagged model, since the response for each observation is predicted using only the trees that were not fit using that observation. It can be shown that with $B$ sufficiently large (usually $B=1000$ samples are sufficient), OOB error is virtually equivalent to leave-one-out cross-validation error.
+
+\subsection{Random Forests}
+Random forests provide an improvement over bagged trees by way of a small tweak that \textbf{decorrelates} the trees. As with bagging, a number of decision trees are fitted on bootstrapped training samples. But when building these decision trees, each time a split in the tree is considered, a \textbf{random sample of $\bm{m}$ predictors} is chosen as split candidates from the full set of $p$ predictors. A split in the decision tree is allowed to use \textbf{only one of those $\bm{m}$ predictors}.
+
+A fresh sample of $m$ predictors is taken at each split, and $m\approx \sqrt{p}$ is chosen. Thus, the number of predictors considered at each split is approximately equal to the square root of the total number of predictors. The rationale behind this is: Suppose that there is one very strong predictor in the data set, along with a number of other moderately strong predictors. Most or all of the trees in the collection of bagged trees will use this strong predictor in the top split. 
+
+Consequently, all of the bagged trees will look quite similar to each other and the predictions from the bagged trees will be highly correlated. Unfortunately, \textbf{averaging many highly correlated quantities} does \textbf{not} lead to as large of a reduction in variance as averaging many uncorrelated quantities.
+
+Bagging typically results in improved accuracy over prediction using a single tree. Unfortunately, it can be difficult to interpret the resulting model. Thus, bagging improves the accuracy \textbf{at the expense of interpretability}. One can obtain an overall summary of the importance of each predictor using the Gini index, by adding up the total amount that the Gini index is decreased by splits over a given predictor, averaged over all $B$ trees.
+
 \end{document}
