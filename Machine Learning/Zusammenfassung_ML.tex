@@ -61,6 +61,9 @@
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
 
+\newcommand{\incond}{\rotatebox[origin=c]{90}{$\vDash$}}
+\newcommand{\dcond}{\rotatebox[origin=c]{90}{$\nvDash$}}
+
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
 
@@ -103,7 +106,7 @@ Approximate the mapping function from example $x$ to label $y$ with a hypothesis
 
 \subsection{Learning as Search}
 \begin{center}
-	\includegraphics[width=0.7\linewidth]{"../Machine Learning in Computer Visualisation/img/hypothesis_space"}
+	\includegraphics[width=0.7\linewidth]{img/hypothesis_space}
 \end{center}
 
 The hypothesis space $\mathcal{H}$ contains all possible hypotheses that can be built with the chosen representation, learning can thus be understood as a search for the global minima in this space $\mathcal{H}$.
@@ -702,6 +705,73 @@ Where $p_i$ represent the percentage of each class present in the child node tha
 
 \subsection{Recursive Feature Elimination (RFE)}
 Given an external estimator that weighs features, RFE selects features by recursively considering smaller sets of features.
+
+\section{Bayes' Theorem}
+\subsection{Multivariate Gaussian Distribution}
+Gaussian defined over a vector x of continuous variables in a D-dimensional space with mean vector $\mu$ and covariance matrix $\bm{\Sigma}$, where $ \abs{\bm{\Sigma}} $ is the determinant of $\bm{\Sigma}$.
+\begin{equation*}
+	p(\bm{x}) = \N{\bm{x}|\mu, \bm{\Sigma}} = \frac{1}{(2\pi)^{\frac{D}{2}} \norm{\bm{\Sigma}}^{\frac{1}{2}}} \exp\left\{ -\frac{1}{2} (\bm{x} - \mu)^T \bm{\Sigma}^{-1} (\bm{x} - \mu) \right\}
+\end{equation*}
+The quadratic form in the argument of the exponential is called \emph{Mahalanobis distance}
+\begin{equation*}
+	\bm{\Delta} = (\bm{x} - \mu)^T \bm{\Sigma}^{-1} (\bm{x} - \mu)
+\end{equation*}
+Without loss of generality, we can assume that $\bm{\Sigma}$ is symmetric with real eigenvalues and an orthonormal set of eigenvectors $\mu_i$.
+
+% TODO Finish MGD
+
+% TODO Conditional Gaussian Distributions
+
+\subsection{Belief Networks or Bayesian Networks}
+A belief network is a directed acyclic graph (DAG) in which each node has associated the conditional probability of the node given its parents. The joint distribution is obtained by taking the product of the conditional probabilities
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/belief_network}
+\end{center}
+$ \bm{X} \incond \bm{Y} | \bm{Z}$ denotes that two sets of variables $\bm{X}$ and $\bm{Y}$ are independent of each other given the state of the set of variables $\bm{Z}$. This means that
+\begin{align*}
+	p(\bm{X},\bm{Y}|\bm{Z}) &= p(\bm{X}|\bm{Z})\cdotp(,\bm{Y}|\bm{Z})\\
+	p(\bm{X}|\bm{Y},\bm{Z}) &= p(\bm{X}|\bm{Z})
+\end{align*}
+for all states of $\bm{X},\bm{Y},\bm{Z}$. In case the conditioning set is empty we may also write
+\begin{equation*}
+	\bm{X} \incond \bm{Y}
+\end{equation*}
+in which case $\bm{X}$ is unconditionally independent of $\bm{Y}$.
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/conditional_independence}
+\end{center}
+In (d) the variables $A,B$ are conditionally dependent given $C$
+\begin{equation*}
+	P(A,B|C) \propto p(C|A,B)p(A)p(B)
+\end{equation*}
+
+\subsubsection{Collider}
+A collider contains two or more incoming arrows along a chosen path.
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/conditional_independence_collider}
+\end{center}
+
+\subsection{Bayes' Theorem}
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/bayes_theorem}
+\end{center}
+
+\section{Gaussian Processes}
+Is referred to as the \textbf{infinite-dimensional extension of the multivariate normal distribution}. When we are working with Gaussian Processes the intuition is that we observe some finite-dimensional subset of infinite-dimensional data, and this finite subset follows a multivariate normal distribution, as would every finite subset.
+
+Gaussian random variables are useful in machine learning and statistics for two main reasons.
+\begin{enumerate}
+	\item They are extremely common when modelling 'noise' in statistical algorithms
+	\item Gaussian random variables are convenient for many analytical manipulations, because many of the integrals involving Gaussian distributions that arise in practice have \textbf{simple closed form solutions}
+\end{enumerate}
+
+\subsection{Bayesian Regression}
+\begin{align*}
+	\intertext{Parameter Posterior}
+	p(\theta|\mathcal{D}) &= \frac{p(\mathcal{D}|\theta)\cdot p(\theta)}{\int_{\theta'} p(\mathcal{D}|\theta)\cdot p(\theta) \diff \theta'}
+	\intertext{Posterior Predictive Distribution}
+	p(y_{*}|x_{*}\mathcal{D}) &= \int_{\theta} p(x_{*}|y_{*},\theta)\cdot p(\theta|\mathcal{D})\diff\theta
+\end{align*}
 
 
 
