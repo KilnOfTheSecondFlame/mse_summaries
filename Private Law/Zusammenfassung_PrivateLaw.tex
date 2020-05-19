@@ -17,7 +17,7 @@
 \usepackage{wrapfig}
 \usepackage{subcaption}
 \usepackage{csquotes}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{geometry}
 \usepackage{multicol}
 \usepackage{bm}
@@ -1282,6 +1282,81 @@ Prerequisites are
 	\item Prepare an emergency plan for a "house search"
 \end{itemize}
 
+\section{Law Against Unfair Competition}
+The German name is \textquotedblleft Bundesgesetz gegen den unlauteren Wettbewerb\textquotedblright (UWG). The purpose of this law is to ensure fair and undistorted competition in the interest of all market participants.
+
+\begin{definition}
+	General rule (Art 2 UWG)
+	
+	\textquotedblleft Unfair and unlawful conduct or business practices which are deceptive or otherwise contrary to the principle of good faith and which affect the relationship between competitors or between suppliers and purchasers.\textquotedblright
+\end{definition}
+
+Everyone whose behaviour or business conduct can have an effect on economic competition is addressed.
+
+\subsection{Special Matter of Facts - Spezialtatbestände Art 3-8 UWG}
+\begin{itemize}
+	\item Degrading or imitating the competitor
+	\item Misleading
+	\item Influencing the will of a third party to conclude a contract
+	\item Leading someone to a breach of contract to conclude a contract
+	\item Utilisation of external work results
+	\item Violation of manufacturing and trade secrets
+	\item Use of abusive terms and conditions
+	\item Spam (Art 3 para 1 lit o)
+	\item Formal requirement for entries in registers (Art 3 para 1 lit p)
+	\item Prohibition of snowball, avalanche or pyramid systems (Art 3 para 1 lit r)
+	\item Imprint or Impressum obligation in electrical business transactions (Art 3 para 1 lit s)
+	\item Ban on overpriced value-added service numbers in competitions (Art 3 para 1 lit t)
+	\item Prohibition of disclosure addresses (Art 3 para 1 lit u)
+\end{itemize}
+
+\subsection{Illegal Comparisons}
+\begin{itemize}
+	\item Comparisons that are based on untruths
+	\item Misleading comparative advertising - comparison of non-comparable facts
+	\item Unnecessarily degrading comparisons
+	\item Lean on advertising - \textquotedblleft We are the Rolls Royce of mineral waters!\textquotedblright
+\end{itemize}
+
+\subsection{Use of Unfair Terms and Conditions (Art 8 UWG)}
+\begin{definition}
+	Anyone who uses general terms and conditions which, in breach of good faith, create a \textbf{significant} and \textbf{unjustified imbalance} between contractual rights and contractual obligations to the detriment of \textbf{consumers} is acting illegal.
+\end{definition}
+Legal protection for violations of the Law Against Unfair Competition
+\begin{itemize}
+	\item Civil law claims (Art 9 UWG)\\
+	declaratory action, action for injunction, action for elimination, action for indication of origin, damages, satisfaction, profit return, publication, precautionary measures
+	\item Criminal law claims (Art 23 UWG)\\
+	In the case of intent, prison and a fine of up to CHF 100'000 upon request. In the case of professional commission of a crime, prosecution is ex officio!
+\end{itemize}
+
+\section{AI and IoT}
+
+\subsection{Data Protection and AI}
+\begin{tabularx}{\linewidth}{X X}
+	\textbf{Data Protection Law applicable} & \textbf{Data Protection Law \emph{not} applicable}\\
+	\hline
+	&\\[-0.5em]
+	\textbf{Personal Data}: \emph{personal data means any information relating to an \textbf{identified or identifiable natural person} ('data subject');} (Art 4.1 GDPR) & \textbf{Factual Data}: geodata, control information, etc.\\
+	&\\[-0.5em]
+	\textbf{Pseudonymised Personal Data}: \emph{\textbf{pseudonymisation} means the processing of personal data in such a manner that the personal data can no longer be attributed to a specific data subject without the use of additional information, \textbf{provided that such additional information is kept separately} and is subject to technical and organisational measures to ensure that the personal data are not attributed to an identified or identifiable natural person;} (Art 4.5 GDPR) & \textbf{Anonymised Personal Data}: \emph{The principles of data protection should therefore \textbf{not apply to anonymous information}, namely information which does not relate to an identified or identifiable natural person or to personal data rendered anonymous in such a manner that \textbf{the data subject is not or no longer identifiable}}\\
+	& Anonymisaton of a data set is often only \textbf{irreversible if the information content is removed}\\
+	& Thus there are problems with \textbf{re-identification or de-anonymisation}
+\end{tabularx}
+
+\subsection{Transparency and Algorithmic Accountability}
+\begin{enumerate}
+	\item \textbf{Information obligation} of the controller for automated individual decisions and profiling according to Art 13-14 and E 60-62 GDPR
+	\item \textbf{Access: Right to information} of the data subject regarding automated individual decisions and profiling according to Art 15 and E 63 GDPR
+	\item \textbf{The right not to be subjected to individual decisions made solely on the basis of an automatic decision} according to Art 22 and E 71 GDPR
+\end{enumerate}
+\textbf{The right of access of the data subject pursuant to Art 15.1.h GPDR extends to}\\
+\emph{the \textbf{existence} of automated decision-making, including profiling, [...], \textbf{meaningful information about the logic involved}, as well as the \textbf{significance} and the \textbf{envisaged consequences} of such processing for the data subject.}
+
+This is limited to cases pursuant to Art 22.1 and 4 GDPR, which means that the data subject only has a right to information based on 15.1.h GDPR if the decision has a legal consequence for the data subjects or significantly affects them
+
+The Extension 63 GDPR further \textbf{limits the right to information}\\?
+\emph{That right should not adversely affect the \textbf{rights or freedoms of others}, including \textbf{trade secrets} or \textbf{intellectual property} and in particular the \textbf{copyright protecting the software}. However, the result of those considerations should not be a refusal to provide all information to the data subject.}
 
 
 \end{document}
