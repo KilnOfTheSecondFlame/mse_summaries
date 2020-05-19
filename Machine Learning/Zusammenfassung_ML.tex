@@ -17,7 +17,7 @@
 \usepackage{wrapfig}
 \usepackage{subcaption}
 \usepackage{csquotes}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{geometry}
 \usepackage{multicol}
 \usepackage{bm}
@@ -265,7 +265,7 @@ Use the \textbf{silhouette coefficient}, which is a measure for cluster validity
 
 \vspace{1em}
 \noindent
-\textbf{With ground truth available}
+\textbf{With ground truth available}:\\
 Check \textbf{purity}, \textbf{rand index} and \textbf{misclassification rate}.
 
 \subsection{Selection Among Competing Models}
@@ -772,9 +772,324 @@ Gaussian random variables are useful in machine learning and statistics for two 
 	\intertext{Posterior Predictive Distribution}
 	p(y_{*}|x_{*}\mathcal{D}) &= \int_{\theta} p(x_{*}|y_{*},\theta)\cdot p(\theta|\mathcal{D})\diff\theta
 \end{align*}
+\texttt{pymc3} is a comfortable package for Bayesian Inference in python.
+\begin{minted}{python}
+from pymc3 import *
+
+with Model() as model:
+	# model specifications in PyMC3 are wrapped in a with-statement
+	# Define priors (#tau = precision = 1/variance = 1/sigma^2)
+	sigma = HalfCauchy('sigma', beta=10, testval=1.)
+	intercept = Normal('Intercept', 0, tau=1/20**2)
+	x_coeff = Normal('x', 0, tau=1/20**2)
+	
+	# Define likelihood
+	likelihood = Normal('y', mu=intercept + x_coeff * x, tau=1/sigma**2, observed=y)
+	
+	# Inference!
+	trace = sample(3000, cores=2)
+	
+	# draw 3000 posterior samples using NUTS sampling
+	plt.figure(figsize=(7, 7))
+	traceplot(trace[100:]); plt.tight_layout();
+\end{minted}
+
+\subsection{Gaussian Processes}
+\begin{equation*}
+	h(\bm{x})\sim \N{\bm{m}(\bm{x}), \bm{k}(\bm{x},\bm{x}')}
+\end{equation*}
+\textbf{Gaussian Processes} are the extension of multivariate Gaussians to infinite-sized collections of real-valued variables. Gaussian processes can be thought of as distributions not just over random vectors but in fact distributions over random functions. A Gaussian process is a stochastic process such that any finite sub-collection of random variables has a multivariate Gaussian distribution.
+
+In particular, a collection of random variables $ \{h(x): x\in\mathcal{X}\} $ is said to be drawn from a Gaussian process with \textbf{mean function $\bm{m(\cdot)}$} and \textbf{covariance function} $\bm{k(\cdot,\cdot)}$ if for any finite set of elements $x_1,x_2,\dots,x_m\in\mathcal{X}$ and the associated finite set of random variables $h(x_1), h(x_2),\dots,h(x_m)$ have a distribution
+
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/gaussian_processes}
+\end{center}
+
+\subsection{Non-Parametric Gaussian Process Models}
+% TODO NP GPM
 
 
+\section{Dimensionality Reduction}
+The "Curse of Dimensionality" is the problem that inputs are high dimensional when working with data from speech, images, genomes and other sources. One of the characteristics of high-dimensional data is that the number of dimensions is comparable or larger than the number of samples. This has the consequence that the sample complexity of function approximation can grow exponentially.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/curse_dimensionality}
+	\caption{The curse of dimensionality is well illustrated by a subcubical neighborhood for uniform data in a unit cube. The figure on the right shows the side-length of the subcube needed to capture a fraction r of the volume of the data, for different dimensions p. In ten dimensions we need to cover 80\% of the range of each coordinate to capture 10\% of the data.}
+	\label{fig:cursedimensionality}
+\end{figure}
+
+High dimensional data is very sparse: most training instances are likely to be far away from each other making predictions much harder, greater risk of overfitting, joint probabilities are hard to fit.
+
+\subsection{Dimensionality Reduction}
+Dimensionality reduction is the process of reducing the number of random variables under consideration by obtaining a set of principal variables.
+\begin{itemize}
+	\item \textbf{Feature Reduction} approaches try to find a subset of the original variables (also called features or attributes).
+	\begin{itemize}
+		\item filter strategy, \emph{information gain}
+		\item wrapper strategy, \emph{search guided by accuracy}
+		\item embedded strategy, \emph{features are selected to add or be removed while building the model based on the prediction errors}
+	\end{itemize}
+	\item \textbf{Feature Extraction} transforms the data in the high-dimensional space to a space of fewer dimensions
+\end{itemize}
+
+\newpage
+\noindent
+\begin{tabularx}{\linewidth}{m{0.2\linewidth} m{0.6\linewidth}}
+	\multicolumn{2}{l}{\textbf{Linear Techniques}}\\
+	\hline
+	&\\[-0.5em]
+	\includegraphics[width=\linewidth]{img/input_data_variance} & Several methods (starting from PCA) attempt to identify the low- dimensional subspace that captures the largest fraction of the input data variance\\
+	\includegraphics[width=\linewidth]{img/kernel_method} & This is equivalent to finding the best L2-norm approximation of the Gram matrix, and generalises to \textbf{kernel methods}\\
+	& \\
+	\multicolumn{2}{l}{\textbf{Manifold Techniques}}\\
+	\hline
+	&\\[-0.5em]
+	\includegraphics[width=\linewidth]{img/multi-dimensional_scaling} & \textbf{Multi-dimensional scaling} and related approaches attempt to reproduce the similarity between high-dimensional data points in low dimension\\
+	\includegraphics[width=\linewidth]{img/embedding_methods} & \textbf{Embedding methods} explicitly try to preserve local relations between points, under the assumption that they lie on a (locally) low-dimensional manifold
+\end{tabularx}
+
+\subsection{Principal Component Analysis}
+The main linear technique for dimensionality reduction, principal component analysis PCA, performs a linear mapping of the data to a lower-dimensional space in such a way that the variance of the data in the low-dimensional representation is maximized.
+
+The eigenvectors that correspond to the largest eigenvalues (the principal components) can now be used to reconstruct a large fraction of the variance of the original data. PCA identifies the d-dimensional hyperplane that lies closest to the data and then projects the data on it (d is a hyperparameter).
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/input_covariance_matrix}
+\end{center}
+
+\begin{align*}
+	\textbf{C}_ij &= \left\langle (\textbf{X}_i - \left\langle \textbf{X}_i \right\rangle) (\textbf{X}_j - \left\langle \textbf{X}_j \right\rangle) \right\rangle\\
+	\left\langle \textbf{X}_i \right\rangle &= 0 \Rightarrow \textbf{C} = \textbf{X}^T \textbf{X}
+\end{align*}
+It turns out that the optimization corresponds to a diagonalization of the covariance matrix $  \textbf{C} = \textbf{U}\textbf{D}\textbf{U}^T$. PCA is a rotation or reflection so that the first principal component has the highest variance, the second is orthogonal to the first and has the second highest variance and so forth. $\textbf{X}$ is the $n\times p$-dimensional data matrix column centred.
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/PCA_X}
+\end{center}
+
+\subsubsection{Explained Variance Ratio $P_k$}
+\begin{minipage}{0.55\linewidth}
+	The percentage the first $k$ dimensions contribute to the variance.
+	\begin{equation*}
+	P_k = \frac{\sum_{i=1}^k \text{var}\left(\textbf{X}_i\right)}{\sum_{j=1}^p \text{var}\left(\textbf{X}_j\right)} = \frac{\sum_{i=1}^{k} \lambda_i}{\sum_{j=1}^{p} \lambda_j}
+	\end{equation*}
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+	\begin{center}
+		\includegraphics[width=\linewidth]{img/explained_variance_ratio}
+	\end{center}
+\end{minipage}
+
+
+% TODO PCA
+
+% TODO PCA Rotation
+
+\section{Clustering}
+Clustering is finding groups in data. Given $n$ data points, separate them into $K$ clusters ($n$: number of data points, $K$: number of clusters, $\Delta$: a partition $\Delta = \{C_1, C_2,\dots, C_K\}$, $\mathcal{L}(\Delta)$: loss of $\Delta$ to be minimised). There is a differentiation between hard clustering, where each data point is assigned to a unique cluster, and soft clustering, where each data point $i$ is assigned a probability that it is in cluster $k:=\{\gamma_{ki}\}_{k=1:K}$. Clustering is related to vector quantisation.
+
+\subsection{Taxonomy of Clustering}
+\begin{itemize}
+	\item \textbf{Parametric clustering}: $K$ known
+	\item \textbf{Non-parametric clustering}: $K$ determined by algorithm
+\end{itemize}
+\textbf{Hierarchical Clustering} (HCA) seeks to build a hierarchy of clusters. Strategies for hierarchical clustering generally fall into two types
+\begin{itemize}
+	\item \textbf{Agglomerative}, a bottom-up approach where each observation starts in its own cluster, and pairs of clusters are merged the longer the algorithm is run
+	\item \textbf{Divisive}, a top-down approach where all observations start in one cluster and splits are performed recursively as the algorithm moves down the hierarchy
+\end{itemize}
+In hierarchical clustering, clusters have a tree like structure or a \emph{parent child relationship}. Here, the two most similar clusters are combined together and continue to combine until all objects are in the same cluster.
+
+\subsubsection{Other Distinctions}
+\begin{itemize}
+	\item \textbf{Exclusive versus non-exclusive}, where in non-exclusive clusterings points may belong to multiple clusters
+	\item \textbf{Fuzzy versus non-fuzzy}, where in fuzzy clustering a point belongs to every cluster with some weight between 0 and 1, who must sum up to 1. Probabilistic clustering has similar characteristics
+	\item \textbf{Partial versus complete}, where in the partial case not the whole dataset is used
+	\item \textbf{Heterogeneous versus non-heterogeneous}, where clusters can have widely different sizes, shapes or densities
+\end{itemize}
+
+\subsection{Hierarchical Clustering}
+In order to decide which clusters should be combined or where a cluster should be split, a measure of dissimilarity between sets of observations is required. In most methods of hierarchical clustering, this is achieved by use of an appropriate \textbf{metric} (a measure of distance between pairs of observations), and a \textbf{linkage criterion} which specifies the dissimilarity of sets as a function of the pairwise distances of observations in the sets.
+
+In agglomerative clustering there are $N$ data points at the start that initially form $N$ clusters. The two clusters with the smallest linkage are fused together to form $N-1$ clusters. This is repeated until there is only one single cluster.
+\begin{equation*}
+	(i,j)_{\text{fused}} = \underset{i\neq j}{\text{argmin}} \left\{ D_{\text{link}})(C_i,C_j) \right\}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+A \textbf{metric} d(x,y) is a generalised distance measure that follows these axioms
+\begin{tabularx}{\linewidth}{l X}
+	1. Non-negativity & $d(x,y)\geq 0$\\
+	2. Coincidence & $d(x,y) = 0 \Leftrightarrow x=y$\\
+	3. Symmetry & $d(x,y) = d(y,x)$\\
+	4. Triangle inequality & $d(x,y) + d(y,z) \geq d(x,z)$
+\end{tabularx}
+\begin{itemize}
+	\item $L_p$ metric: \quad $d_p(x,y) = \norm{x-y}_p = \sqrt[p]{\sum_i \abs{x_i - y_i}^p}$
+	\item $L_\infty$ metric: \quad $\norm{x}_\infty = \max_i\left\{\abs{x_i}\right\}$
+	\item $L_1$ metric: \quad $d_1(x,y) = \norm{x-y}_1 = \sum_i\abs{x_i - y_i}$
+\end{itemize}
+\clearpage
+The linkage criterion determines together with a metric $d(x,y)$ when two clusters $A$ and $B$ should be merged together in hierarchical clustering (fusion criterium).
+\begin{tabularx}{\linewidth}{m{0.35\linewidth} m{0.35\linewidth} m{0.2\linewidth}}
+	\textbf{Names} & \textbf{Formula} & \textbf{Plot}\\
+	\hline
+	&&\\[-0.5em]
+	\textbf{Maximum} or complete-linkage clustering & $ \max\left\{ d(a,b):a\in A, b\in B \right\} $ & \includegraphics[width=\linewidth]{complete_linkage}\\
+	\textbf{Minimum} or single-linkage clustering & $ \min\left\{ d(a,b):a\in A, b\in B \right\} $ & \includegraphics[width=\linewidth]{single_linkage}\\
+	\textbf{Mean}, average-linkage clustering or UPGMA & $ \frac{1}{\abs{A}\cdot\abs{B}}\sum_{a\in A}\sum_{b\in B} d(a,b) $ & \includegraphics[width=\linewidth]{img/average_linkage}\\
+	\textbf{Ward} linkage & $D_{\text{Ward}}(A,B) := \frac{d(\bar{a},\bar{b})^2}{\dfrac{1}{\abs{A}} + \dfrac{1}{\abs{B}}}$; increase of variance when fusing $A$ and $B$ & \\
+	\textbf{Maximum} or complete-linkage clustering & $ \norm{c_s - c_t} $, where $c_s$ and $c_t$ are the centroids of clusters $s$ and $t$ & \includegraphics[width=\linewidth]{img/centroid_linkage}
+\end{tabularx}
+
+\subsubsection{Basic Form of an Agglomerative Linkage Algorithm}
+\textbf{Input}:
+\begin{itemize}[nosep]
+	\item Distance matrix $D$ between data points
+	\item function \texttt{dist} to compute a distance between clusters (which usually takes $D$ as an input)
+\end{itemize}
+\textbf{Initialisation}: Clustering $\mathcal{C}^{(0)} = \left\{ C_1^{(0)}, C_2^{(0)},\dots, C_n^{(0)} \right\} = \{i\}$
+\begin{itemize}
+	\item \textbf{While} the current number of clusters is $>1$:
+	\begin{itemize}[nosep]
+		\item find the two clusters which have the \textbf{smallest distance (linkage)} to each other
+		\item \textbf{merge} them to one cluster
+	\end{itemize}
+	\item \textbf{Output}: Resulting \textbf{dendogram}, which is a tree that represents the hierarchical division of the data set $O$ into ever smaller subsets.
+\end{itemize}
+
+\begin{minted}[linenos]{python}
+# Import dendrogram and ward clustering from SciPy
+from scipy.cluster.hierarchy import dendrogram, ward
+X, y = make_blobs(random_state=0, n_samples=12)
+#Perform ward clustering on the data in array X. The function ward in SciPy
+returns an array with the #distances bridged in agglomerative clustering
+linkage_array = ward(X)
+# draw a dendrogram
+dendrogram(linkage_array)
+\end{minted}
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/dendrogram}
+\end{center}
+
+\subsubsection{Divisive Clustering - Single Linkage Algorithm Based on Minimum Spanning Tree}
+\textbf{Input}: Data $D = \{ x_i \}_{i=1:N}$ and number of clusters $K$
+\begin{enumerate}
+	\item Construct the Minimum Spanning Tree (MST) of $D$
+	\item Delete the largest $(K-1)$ edges
+\end{enumerate}
+\textbf{Cost}:
+\begin{align}
+	\mathcal{L}(\Delta) &= \underset{k,k'}{\min}d(C_k, C_{k'})\\
+	d(A,B) = \underset{x\in A, y\in B}{\min}\norm{x-y}
+\end{align}
+This method is sensitive to outliers, but the cost can be evaluated in polynomial time $O(n^2)$.
+
+\subsection{K-Means}
+\begin{figure}[H]
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=3cm]{kmeans01}
+		\caption{$k$ initial "means" are randomly generated within the data domain}
+	\end{subfigure}
+	\hspace{\fill}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=3cm]{kmeans02}
+		\caption{$k$ clusters are created by associating every observation with the nearest mean. The partitions here represent the Voronoi diagram generated by the means.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=3cm]{kmeans03}
+		\caption{The centroid of each of the $k$ clusters becomes the new mean}
+	\end{subfigure}
+	\hspace{\fill}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=3cm]{kmeans04}
+		\caption{The preceding steps are repeated until convergence has been reached}
+	\end{subfigure}
+\end{figure}
+
+\subsubsection{Algorithm}
+\begin{itemize}
+	\item \textbf{Input}: Data $D = \{ x_i \}_{i=1:N}$ and number of clusters $K$
+	\item \textbf{Initialise}: centers $\mu_1,\mu_2,\dots,\mu_k \in \R^d$ at random
+	\item Iterate until convergence
+	\begin{enumerate}
+		\item \texttt{for} $i=1:n$\\
+		$k(i) = \text{argmin}_k\norm{x_i - \mu_k}$ (assign points to cluster to get a new clustering)
+		\item \texttt{for} $i=1:n$\\
+		\begin{equation*}
+			\mu_k = \frac{1}{\abs{C_k}}\sum_{i\in C_k} x_i
+		\end{equation*}
+		(recalculate centres)
+	\end{enumerate}
+	\item \textbf{Convergence}: if $\Delta$ does not change after iteration $m$, it will never change after that
+\end{itemize}
+
+\subsubsection{Cost Function}
+The least-squares cost function is also called \textbf{distortion} (within cluster inertia $W$)
+\begin{align*}
+	\mathcal{L}(\Delta) &= \sum_{i=1}^{n}\norm{x_i - \mu_{k(i)}}^2\\
+	&= \sum_{k=1}^{K}\sum_{i\in C_k} \norm{x_i - \mu_{k(i)}}^2
+\end{align*}
+The distortion can also be expressed as \textbf{sum of (squared) intra-cluster distances}
+\begin{equation*}
+	\mathcal{L}(\Delta) = \frac{1}{2} \sum_{k=1}^{K}\sum_{i\in C_k} \norm{x_i - x_j}^2 + \text{constant}
+\end{equation*}
+
+\subsubsection{Initialisation}
+\textbf{Random Initialisation}
+\begin{itemize}[nosep]
+	\item Most common: randomly choose some data points as starting centers.
+	\item Draw starting points randomly from $\R^d$
+	\item Initialize the centers using the solution of an even simpler clustering algorithm
+	\item Ideally have prior knowledge, for example that certain points are in different clusters
+\end{itemize}
+
+\subsubsection{More Variants}
+\begin{itemize}
+	\item \textbf{K-Medians}: The median is computed in each single dimension in the Manhattan-distance formulation of the k-medians algorithm
+	\item \textbf{Weighted K-Means}: introduce weights for the individual data points
+	\item \textbf{Kernel-K-Means}: the kernelized version of K-means
+	\item \textbf{Soft K-Means}: no hard assignments, but soft assignments
+\end{itemize}
+
+\subsubsection{K-Medoid and K-Maxoid Clustering}
+% TODO KMeans Methods
+
+\section{Gaussian Mixture Models And The Expectation Maximisation Algorithm}
+\subsection{The EM Algorithm: A General-Purpose, Unsupervised Learning Algorithm}
+Expectation Maximisation is an iterative method to learn in the presence of unobserved variables. A typical hidden variable is some sort of group or cluster membership. This algorithm has good convergence guarantees.
+
+\begin{enumerate}
+	\item Start with a random initial hypothesis
+	\item \textbf{E-Step}\\
+	Estimate expected values of unobserved variables, assuming the current hypothesis holds
+	\item \textbf{M-Step}\\
+	Calculate new Maximum Likelihood (ML) estimate of hypothesis, assuming the expected values from (2) hold
+	\item Iterate until convergence while always replacing old estimates with new ones
+\end{enumerate}
+
+\subsubsection{K-Means Revisited}
+Assume that K is known. The optimisation that leads to the clusters is the following
+\begin{flalign*}
+	\underset{\textbf{z},\bm{\mu}}{\min}\mathcal{L}(\textbf{z},\bm{\mu}) = \sum_{n=1}^{N}\sum_{k=1}^{K} z_{nk} \norm{\textbf{x}_n - \bm{\mu}_k}^2 &\qquad (\text{K-Means Loss Function})
+\end{flalign*}
+With $\bm{\mu}_k \in \R^D$, $z_{nk} \in \{0,1\}$, $\sum_{k=1}^{K} z_{nk} = 1$ and where
+\begin{alignat*}{2}
+\textbf{z}_n &= [z_{n1},z_{n2},\dots,z_{nk}]^T &\qquad& \text{(indicator variable)}\\
+\textbf{z} &= [\textbf{z}_1,\textbf{z}_2,\dots,\textbf{z}_N ]^T && \\
+\bm{\mu} &= [\bm{\mu}_1,\bm{\mu}_2,\dots,\bm{\mu}_N]^T &&
+\end{alignat*}
+The indicator variable is an assignment of datapoint $n$ to a certain cluster, also called membership or latent variable (point $n$ belongs to cluster 3, $\textbf{z}_n = [0,0,1,0,\dots,0]^T$).
+
+For fixed centres $\bm{\mu}_k$, the cost is minimized if we map each sample to its nearest centre, where we measure distance in terms of Euclidean distance.
+
+% TODO The rest <.<
 
 
 \end{document}
