@@ -17,7 +17,7 @@
 \usepackage{wrapfig}
 \usepackage{subcaption}
 \usepackage{csquotes}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{geometry}
 \usepackage{multicol}
 \usepackage{bm}
@@ -1039,5 +1039,243 @@ A fresh sample of $m$ predictors is taken at each split, and $m\approx \sqrt{p}$
 Consequently, all of the bagged trees will look quite similar to each other and the predictions from the bagged trees will be highly correlated. Unfortunately, \textbf{averaging many highly correlated quantities} does \textbf{not} lead to as large of a reduction in variance as averaging many uncorrelated quantities.
 
 Bagging typically results in improved accuracy over prediction using a single tree. Unfortunately, it can be difficult to interpret the resulting model. Thus, bagging improves the accuracy \textbf{at the expense of interpretability}. One can obtain an overall summary of the importance of each predictor using the Gini index, by adding up the total amount that the Gini index is decreased by splits over a given predictor, averaged over all $B$ trees.
+
+\section{Time Series Analysis}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/time_series_plot}
+	\caption{Number of airline passenger bookings (in thousands) per month of the airline PanAm from 1949 to 1960}
+	\label{fig:timeseriesplot}
+\end{figure}
+The following patterns become visible, the global increase of flight bookings over time (\textbf{trend}), there are more flight bookings during summer months (\textbf{seasonality}) and that the observations are \emph{not} independent (\textbf{serial correlation}).
+
+Many real life measuring and data recording processes result in data sets that are serially correlated. Examples are machine monitors (temperature, pressure, acoustic emissions, vibrations, any signals measured in, at or around an operating engine), stocks (stock prices and exchange rates are recorded at the end of each day), environmental observations (temperature, humidity, pollen concentration, pollution, precipitation and other signals recorded at a specific station), and federal statistics. This kind of data is called \emph{time series data}. 
+
+With time series analysis the following goals can be achieved
+\begin{enumerate}
+	\item \textbf{Descriptive Analysis}\\
+	Understand the basic properties of a time series by means of summary statistics and visualisations.
+	\item \textbf{Modelling and Interpretation}\\
+	Gain a deeper understanding by modelling the underlying process that governs the observed time series. In particular, tests and confidence intervalls/bands can be constructed from the model. The sequential dependency of the time series is also often quantified.
+	\item \textbf{Decomposition}
+	\begin{itemize}
+		\item \emph{Seasonality}, in particular a periodic pattern in the data
+		\item \emph{Trend}, gradually changing average of the series which is directly correlated with the time axis
+	\end{itemize}
+	\item \textbf{Prediction}\\
+	Predict future values of the time series by using the model. Prediction for time series is often alternatively termed \emph{forecasting}.
+	\item \textbf{Regression}\\
+	Try to explain a time series or \emph{response} by several other time series called \emph{predictors}. This idea is wide-spread in the industry, where the goal is to replace in a multi-sensor setup a particular sensor by a model that predicts its values from the other sensor values. This is called \emph{virtual sensoring} or \emph{soft sensoring}.
+\end{enumerate}
+
+\subsection{Basic Transformation, Visualisation and Decomposition of Time Series}
+Analysis of time series begins with the description, transformation and visualization of data. This does not give proper predictions or confidence intervals. Important insights and a profound understanding of the data can be achieved by these techniques. It is often desirable or even necessary to transform a time series before the application of models and predictions. In particular, many methods assume a
+\begin{itemize}[nosep]
+	\item \textbf{Gaussian} or at least \textbf{symmetric} distribution of the data
+	\item \textbf{Linear} trend relationship between time and data
+	\item \textbf{Constant variance} across time
+\end{itemize}
+For a highly skewed or heteroscedastic data it is often better to use a transformed series $\left\{g(x_1), g(x_2), \dots\right\}$ in stead of the original series $\left\{x_1,x_2,\dots\right\}$. A family of transformations, that is well suited for correcting skewness and variance are the Box-Cox-transformations.
+\begin{definition}
+	For a time series $\left\{x_1,x_2,\dots\right\}$ with positive values the \textbf{Box-Cox transformations} are defined as
+	\begin{equation*}
+		g(x) = \left\{\begin{matrix}
+		\frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0\\
+		\log(x) & \text{if } \lambda = 0
+		\end{matrix}\right.
+	\end{equation*}
+\end{definition}
+The Box-Cox family of transforms amounts to a modification of the values of the time series. Sometimes it is necessary to transform the time-axis as well. The most simple version of time transforms is \emph{shifting}
+\begin{definition}
+	Let $\left\{x_1,x_2,\dots\right\}$ be a time series
+	\begin{enumerate}
+		\item The time-shift ba a \emph{lag} of $k\in\Z$ is defined by
+		\begin{equation*}
+			g(x_i) = x_{i-k}
+		\end{equation*}
+		\item For the particular case where $k=1$ the time-shift is called \emph{backshift}
+		\begin{equation*}
+			B(x_i) = x_{i-1}
+		\end{equation*}
+	\end{enumerate}
+\end{definition}
+Applying a time-shift to a time series amounts to go back $k$ steps (if $k > 0$) or go ahead $-k$ steps (if $k < 0$) in the series
+
+\subsubsection{Log-Returns}
+Back-shift operator is applied when \emph{differences} of time series are computed, since
+\begin{equation*}
+	x_i - x_{i-1} = x_i - B(x_i)
+\end{equation*}
+Differencing is often combined with Box-Cox transformations. The \textbf{log-returns} of a (financial) time series are defined as
+\begin{equation*}
+	y_i = \log(x_i) - \log (x_{i-1}) = log\left(\frac{x_i}{x_{i-1}}\right) = \log\left(\frac{x_i - x_{i-1}}{x_{i-1}} + 1\right) \approx \frac{x_i - x_{i-1}}{x_{i-1}}
+\end{equation*}
+The log-returns of time series $y_i$ approximates the relative increase of the time series $x_i$ at each time instance. This quantity is often studied in financial applications, as the original series may exhibit \emph{seemingly significant patterns}, but the resulting series $y$ is often rather \emph{random}. The log-return looks quite random despite some large fluctuations from time to time. Analysts try to model the waiting time between these fluctuations.
+
+\subsubsection{Decomposition}
+Many time series are dominated by a trend or seasonal effects, or both. A simple \textbf{additive} decomposition model is given by
+\begin{equation*}
+	x_k = m_k + s_k + z_k
+\end{equation*}
+where $k$ time index, $x_k$ observed time series, $m_k$ trend, $s_k$ seasonal effect, and $z_k$ error term that is, in general, a sequence of correlated random variables with mean zero.
+
+In the air passengers data the seasonal effects may increase as the trend increases. Thus, a \textbf{multiplicative} model seems more appropriate
+\begin{equation*}
+	x_k = m_k \cdot s_k + z_k
+\end{equation*}
+If the noise is multiplicative as well ($x_k = m_k \cdot s_k \cdot z_k$) the logarithm of $x_k$ is a linear model again
+\begin{equation*}
+	\log(x_k) = \log(m_k) + \log(s_k) + \log(z_k)
+\end{equation*}
+
+\subsubsection{Moving Average}
+The moving average is a method for estimating the \textbf{trend} $m_k$ and the \textbf{seasonal effect} $s_k$ by means of a moving average filter.
+\begin{definition}
+	Assume that $\left\{x_1,x_2,\dots, x_n\right\}$ is a time series and that $p\in\mathbb{N}$. The \emph{moving average filter} of length $p$ is defined as follows
+	\begin{itemize}
+		\item If $p$ is odd, the $p = 2l + 1$ and the filtered sequence is defined by
+		\begin{equation*}
+			g(x_i) = \frac{1}{p} (x_{i-l} + \dots + x_i + \dots + x_{i+l})
+		\end{equation*}
+		\item If $p$ is even, then $p = 2l$ and the filtered sequence is defined by
+		\begin{equation*}
+			g(x_i) = \frac{1}{p} (\frac{1}{2}x_{i-l} + x_{i-l+1} + \dots + x_i + \dots + x_{i+l-1} + \frac{1}{2} x_{i+l})
+		\end{equation*}
+	\end{itemize}
+	The value $p$ is referred to as window width.
+\end{definition}
+The moving average filter amounts to replace the $i$-th value in the time series by the average of the $p$ nearest neighbours of $x_i$. If $p$ is odd, then the window stretches symmetrically around $x_i$. For an even $p$ the window length is $p+1$ but the end points are only counted half.
+
+If a time series has the frequency $p$ ($p = 12 $for monthly data), then the trend component of the time series can be estimated by applying the moving average filter with window width $p$. Since the average at each point is exactly over one period, the seasonal effects vanish and the trend component remains. This yields the trend estimator $\hat{m}_k$. To estimate the seasonal additive effects compute
+\begin{equation*}
+	\hat{s}_k = x_k - \hat{m}_k
+\end{equation*}
+With this the time series $\hat{s}_k$ is averaged for each time point in one cycle, and a single estimate can by obtained for each cycle point. The residuals can be obtained by subtracting the trend and seasonality estimates
+\begin{equation*}
+	\hat{r}_i = x_i - \hat{m}_i - \hat{s}_i
+\end{equation*}
+The remainder term should consists of possibly correlated random values without structure or periodicity.
+
+\subsection{Seasonal Decomposition by LOESS}
+Although the decomposition method gives promising results for the example data sets, it is rarely used in practice as it lacks robustness with respect to outliers in the data, and the seasonal component is assumed to be constant over time. The state of the art method for decomposing time series that does not suffer from the above drawbacks is \emph{seasonal decomposition of time series by LOESS} (STL). The STL procedure is iterative, outliers in the estimated remainder terms are detected and their effect mitigated by proper reweighing.
+
+The moving average smoothing is replaced by \emph{locally estimated scatterplot smoothing} (LOESS) regression which gives more flexibility and better results than the moving average. LOESS regression is a form of \emph{local} regression which means that the regression line through data $(x_1, y_1 ),\dots,(x_n, y_n)$ at a point $x$ is only computed using the observations in a neighbourhood of $x$.
+
+The seasonal  component is not assumed to be constant. The method instead considers \emph{cycle-subseries}, that is the subseries of values at each position of the seasonal cycle. For example, for a monthly series with frequency $12$, the first cycle-subseries consists of the January values, the second of the February values. These sub-cycles are also smoothed by LOESS and may change over time.
+
+\section{Mathematical Models for Time Series}
+For describing characteristics of data that seemingly fluctuate in a random fashion over time, a time series can be considered as the realization of random variables that are indexed over time.
+
+\begin{definition}
+	\textbf{Time Series and Discrete Stochastic Processes}: Let $T$ be a set of equidistant time points $T =\{t_1, t_2, \dots\}$.
+	\begin{enumerate}
+		\item A \emph{discrete stochastic process} is a set of random variables $\{X_1, X_2, \dots\}$. Each single random variable $X_i$ has a univariate distribution function $F_i$ and can be observed at time $t_i$.
+		\item A \emph{time series} $\{x_1, x_2, \dots\}$ is a realisation of a discrete stochastic process $\{X_1,X_2,\dots\}$. In other words, the value $x_i$ is a realisation of the random variable $X_i$ measured at time $t_i$
+	\end{enumerate}
+\end{definition}
+Important distinction between a time series, which are a concrete observation of values, and a discrete stochastic process which is a theoretical construct to model the underlying mechanism that generates the values.
+
+A time series $\{x_1, x_2, \dots, x_N\}$ can be understood as \emph{one} realisation of a multivariate random variable $\{X_1, X_2, \dots, X_N\}$. Modelling and prediction for time series hence amounts to analyse a data set with one observation, which is impossible without further assumptions on the series. A model that lacks all these assumptions and thus is unpredictable is \textbf{white noise}.
+
+\subsection{Moving Average from White Noise Process}
+\begin{itemize}
+	\item Apply a sliding window filter to obtain a \textbf{moving average} process
+	\begin{equation*}
+		\{ W_1, W_2, \dots\}
+	\end{equation*}
+	\item Choose a window length $w$
+	\begin{equation*}
+		V_i = \frac{1}{w} \left( W_{i-\frac{w}{2}} + \cdots + W_i + \cdots + W_{i+\frac{w}{2}} \right)
+	\end{equation*}
+	\item The resulting process is smoother through smoothing out the higher oscillations
+\end{itemize}
+
+\subsection{Autoregressive Time Series}
+Many examples of real world time series, for example acoustic time series in speech analysis, contain dominant oscillatory components, producing a sinusoidal type of behaviour. One possible model to generate such quasi-periodic data are \textbf{autoregressive series}.
+\begin{equation*}
+	X_i = \alpha_1 X_{i-1} + \alpha_2 X_{i-2} + W_i
+\end{equation*}
+In other words, the value of the process at time instance $i$ is modelled as a linear combination of the past two values plus some random component. Therefore this process is called autoregressive.
+
+Another interpretation of the autoregressive process above is via differential equations. The finite difference scheme for the second order equation
+\begin{align*}
+	\ddot{x} + 2\theta \dot{x} + \omega_0^2 x = W(t)
+	\intertext{is given by}
+	\frac{x_{i-2} - 2x_{i-1} + x_i}{\Delta t^2} + 2\theta\frac{x_{i-1}-x_i}{\Delta t} + \omega_0^2 = W_i
+\end{align*}
+Here $\theta$ is the damping term and $\omega_0$ the frequency of the homogeneous equation. Hence it can be seen as a \textbf{harmonic oscillator with random input}.
+
+\subsection{Measures of Dependence}
+Aside from the individual distributions $F_i$ of the random variables in the process, we define \textbf{first} and \textbf{second order} moments to analyse the whole process.
+\begin{definition}
+	The \textbf{mean sequence} $\{\mu(1),\mu(2), \dots\}$ of a discrete stochastic process\\
+	$\{X_1, X_2, \dots\}$ is defined as the sequence of the means
+	\begin{equation*}
+		\mu(i) = \ev{X_i}
+	\end{equation*}
+\end{definition}
+
+\noindent
+\textbf{Autocovariance} and \textbf{Autocorrelation}
+\begin{definition}
+	Let $\{X_1, X_2, \dots\}$ be a discrete stochastic process
+	\begin{enumerate}
+		\item The \emph{autocovariance} $\gamma_X$ is defined as
+		\begin{equation*}
+			\gamma_X(i,j) = \Cov{X_i,X_j} = \ev{(X_i - \mu(i))(X_j - \mu(j))}
+		\end{equation*}
+		\item The \emph{autocorrelation} $\rho_X$ is defined as
+		\begin{equation*}
+			\rho_X(i,j) = \frac{\gamma_X(i,j)}{\sqrt{\gamma_X(i,i)\gamma_X(j,j)}}
+		\end{equation*}
+	\end{enumerate}
+\end{definition}
+The autocovariance measures the linear dependence of two points on the same process observed at different times. If a series is very smooth, the autocovariance is large, even if $i$ and $j$ are far apart.
+
+\clearpage
+\subsection{Stationarity}
+\begin{definition}
+	A discrete stochastic process is called \emph{strictly stationary} if for each finite collection $\{X_{i_1}, \dots, X_{i_n}\}$ and each lag $h\in\Z$ the shifted collection
+	\begin{equation*}
+		\{X_{i_1+h}, \dots, X_{i_n+h}\}
+	\end{equation*}
+	has the same distribution. Put differently
+	\begin{equation*}
+		P(X_{i_1}\leq c_1, \dots, X_{i_n}\leq c_n) = P(X_{i_1+h}\leq c_1, \dots, X_{i_n+h}\leq c_n)
+	\end{equation*}
+	for any $c_1,\dots,c_n$
+\end{definition}
+In words, the probabilistic character of the process does not change over time. This amounts to say that the marginal distributions $F_i = F$ of the process coincide and in particular this implies that the \textbf{mean sequence is constant}.
+
+\begin{definition}
+	A discrete stochastic process $X_i$ is called \emph{weakly stationary} if
+	\begin{enumerate}
+		\item the mean sequence $\mu_X(i)$ is constant and does not depend on the time index $i$
+		\item the autocovariance sequence $\gamma_X(i,j)$ depends on $i$ and $j$ only through their difference $\abs{i-j}$
+	\end{enumerate}
+\end{definition}
+
+If a process is stationary the mean sequence is constant, thus a canonical estimator is
+\begin{equation*}
+	\hat{\mu} = \samplemean{x} = \frac{1}{n}\sum_{i=1}^n x_i
+\end{equation*}
+\begin{definition}
+	\begin{enumerate}
+		\item The \emph{sample autocovariance} is defined by
+		\begin{equation*}
+			\hat{\gamma}(h) = \frac{1}{n}\sum_{i=1}^{n-h}(x_{i+h}-\samplemean{x})(x_i - \samplemean{x})
+		\end{equation*}
+		with $\hat{\gamma}(-h) =\hat{\gamma}(h)$ for $h=0,1,\dots,n-1$
+		\item The \emph{sample autocorrelation} is defined by
+		\begin{equation*}
+			\hat{\rho}(h) = \frac{\hat{\gamma}(h)}{\hat{\gamma}(0)}
+		\end{equation*}
+	\end{enumerate}
+\end{definition}
+
+
+
+
 
 \end{document}
