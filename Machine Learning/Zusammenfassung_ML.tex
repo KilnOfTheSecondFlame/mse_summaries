@@ -49,7 +49,7 @@
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 
 \newcommand*\samplemean[1]{\overline{#1}}
-\newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
+\newcommand*\ev[1]{\mathrel{\mathbb{E}\left[#1\right]}}
 \newcommand*\R{\mathbb{R}}
 \newcommand*\Z{\mathbb{Z}}
 \newcommand*\N[1]{\mathcal{N}\left(#1\right)}
@@ -718,7 +718,46 @@ The quadratic form in the argument of the exponential is called \emph{Mahalanobi
 \end{equation*}
 Without loss of generality, we can assume that $\bm{\Sigma}$ is symmetric with real eigenvalues and an orthonormal set of eigenvectors $\mu_i$.
 
-% TODO Finish MGD
+\subsection{Probability Distribution}
+Since $\bm{\Sigma}$ is real and symmetric, the eigenvectors $\lambda_i$ are real and the eigenvectors can be chosen from an orthonormal set, so that
+\begin{align*}
+	\textbf{u}_i^T \textbf{u}_j &= \delta_{ij}\\
+	\bm{\Sigma} &= \sum_{i=1}^{D} \lambda_i \textbf{u}_i\textbf{u}_i^T\\
+	\bm{\Sigma}^{-1} &= \sum_{i=1}^{D} \frac{1}{\lambda_i} \textbf{u}_i\textbf{u}_i^T\\
+	\intertext{The quadratic form becomes}
+	\Delta^2 &= \sum_{i=1}^{D}\frac{y_i^2}{\lambda_i}\\
+	y_i &= \textbf{u}_j^T (\textbf{x} - \mu)
+\end{align*}
+This describes a D-dimensional ellipsoid with main axes $\sqrt{\lambda_i}$. The determinant is given by the product of the eigenvalues
+\begin{equation*}
+	\abs{\bm{\Sigma}}^{\tfrac{1}{2}} = \prod_{j=1}^{D} \lambda_j^{\tfrac{1}{2}}
+\end{equation*}
+
+\begin{definition}
+	\begin{align*}
+		\intertext{Expected Value}
+		\ev{\textbf{x}} &= \bm{\mu}\\
+		\intertext{Correlation}
+		\ev{\textbf{xx}^T} &= \bm{\mu\mu}^T + \bm{\Sigma}\\
+		\intertext{Covariance}
+		\text{Cov}[\textbf{x}] &= \ev{(\textbf{x}-\ev{\textbf{x}})(\textbf{x}-\ev{\textbf{x}})^T} = \bm{\Sigma}
+	\end{align*}
+\end{definition}
+
+Partition $\textbf{x}$ into two disjoint subsets $\textbf{x}_a$ and $\textbf{x}_b$. Without loss of generality, $\textbf{x}_a$ can be taken to form the first $M$ components of $\textbf{x}$ with $\textbf{x}_b$ comprising of the remaining $D-M$ components
+\begin{alignat*}{4}
+	\textbf{x}&=\begin{pmatrix}\textbf{x}_a\\\textbf{x}_b\end{pmatrix} &\qquad& \bm{\mu} &= \begin{pmatrix}\bm{\mu}_a\\\bm{\mu}_b\end{pmatrix} &\qquad& \bm{\Sigma} &= \begin{pmatrix}\bm{\Sigma}_a\\\bm{\Sigma}_b\end{pmatrix}
+\end{alignat*}
+In most situations it is more convenient to work with the \textbf{inverse of the covariance matrix}, which is called the \textbf{precision matrix}
+\begin{align*}
+	\bm{\Lambda} &\equiv \bm{\Sigma}^{-1}\\
+	\bm{\Lambda} &= \begin{pmatrix}
+		\bm{\Lambda}_{aa} & \bm{\Lambda}_{ab}\\
+		\bm{\Lambda}_{ba} & \bm{\Lambda}_bb
+	\end{pmatrix}
+\end{align*}
+
+% TODO Conditional probability distribution & Marginal probability distribution
 
 % TODO Conditional Gaussian Distributions
 
