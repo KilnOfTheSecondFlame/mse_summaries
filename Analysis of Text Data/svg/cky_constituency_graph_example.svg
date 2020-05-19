@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="121.49326mm"
+   height="123.13789mm"
+   viewBox="0 0 121.49326 123.13789"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="cky_constituency_graph_example.svg"
+   inkscape:export-filename="C:\Users\Pascal\TeXProjects\mse_summaries\Analysis of Text Data\img\cky_constituency_parsing_graph_example.png"
+   inkscape:export-xdpi="600.04761"
+   inkscape:export-ydpi="600.04761">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="161.35292"
+     inkscape:cy="179.1347"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-text-baseline="false"
+     inkscape:snap-center="true"
+     inkscape:window-width="3440"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="10"
+     fit-margin-left="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10">
+    <sodipodi:guide
+       position="38.961126,106.77702"
+       orientation="1,0"
+       id="guide859"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="62.80088,106.77702"
+       orientation="1,0"
+       id="guide861"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="86.64064,106.77702"
+       orientation="1,0"
+       id="guide863"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="110.48039,106.77702"
+       orientation="1,0"
+       id="guide897"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="15.121371,82.937261"
+       orientation="0,1"
+       id="guide903"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="38.961126,59.097502"
+       orientation="0,1"
+       id="guide905"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="62.800888,35.257753"
+       orientation="0,1"
+       id="guide907"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="86.64064,11.418004"
+       orientation="0,1"
+       id="guide909"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-17.890666,-48.737095)">
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect815"
+       width="23.839756"
+       height="23.839756"
+       x="33.012039"
+       y="65.097969" />
+    <rect
+       y="65.097969"
+       x="56.851795"
+       height="23.839756"
+       width="23.839756"
+       id="rect837"
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ff2a2a;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect839"
+       width="23.839756"
+       height="23.839756"
+       x="80.691551"
+       y="65.097969" />
+    <rect
+       y="65.097969"
+       x="104.53131"
+       height="23.839756"
+       width="23.839756"
+       id="rect841"
+       style="opacity:1;vector-effect:none;fill:#d40000;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect843"
+       width="23.839756"
+       height="23.839756"
+       x="56.851795"
+       y="88.937729" />
+    <rect
+       y="88.937729"
+       x="80.691559"
+       height="23.839756"
+       width="23.839756"
+       id="rect845"
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ff2a2a;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect847"
+       width="23.839756"
+       height="23.839756"
+       x="104.53131"
+       y="88.937729" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect849"
+       width="23.839756"
+       height="23.839756"
+       x="80.691559"
+       y="112.77748" />
+    <rect
+       y="112.77748"
+       x="104.53131"
+       height="23.839756"
+       width="23.839756"
+       id="rect851"
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ffaaaa;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect853"
+       width="23.839756"
+       height="23.839756"
+       x="104.53131"
+       y="136.61723" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot817"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,-2.3463307,-5.3135571)"><flowRegion
+         id="flowRegion819"><rect
+           id="rect821"
+           width="94.954338"
+           height="36.36549"
+           x="166.17009"
+           y="302.27582" /></flowRegion><flowPara
+         id="flowPara823">fish</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,14.913979,-5.7414414)"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot831"
+       xml:space="preserve"><flowRegion
+         id="flowRegion827"><rect
+           y="302.27582"
+           x="166.17009"
+           height="36.36549"
+           width="94.954338"
+           id="rect825" /></flowRegion><flowPara
+         id="flowPara829">fish people</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="55.661167"
+       y="62.087795"
+       id="text857"><tspan
+         sodipodi:role="line"
+         id="tspan855"
+         x="55.661167"
+         y="62.087795"
+         style="stroke-width:0.26458332;fill:#808080;">1</tspan></text>
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,-2.3463334,-21.670915)"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot871"
+       xml:space="preserve"><flowRegion
+         id="flowRegion867"><rect
+           y="302.27582"
+           x="166.17009"
+           height="36.36549"
+           width="94.954338"
+           id="rect865" /></flowRegion><flowPara
+         id="flowPara869">fish</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot879"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,18.694627,-22.103964)"><flowRegion
+         id="flowRegion875"><rect
+           id="rect873"
+           width="94.954338"
+           height="36.36549"
+           x="166.17009"
+           y="302.27582" /></flowRegion><flowPara
+         id="flowPara877">people</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="89.298973"
+       y="62.128101"
+       id="text883"><tspan
+         sodipodi:role="line"
+         id="tspan881"
+         x="89.298973"
+         y="62.128101"
+         style="stroke-width:0.26458332">fish</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="111.58224"
+       y="62.122936"
+       id="text887"><tspan
+         sodipodi:role="line"
+         id="tspan885"
+         x="111.58224"
+         y="62.122936"
+         style="stroke-width:0.26458332">tanks</tspan></text>
+    <text
+       id="text891"
+       y="62.087795"
+       x="79.500923"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332;fill:#808080;"
+         y="62.087795"
+         x="79.500923"
+         id="tspan889"
+         sodipodi:role="line">2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="103.34068"
+       y="62.071259"
+       id="text895"><tspan
+         sodipodi:role="line"
+         id="tspan893"
+         x="103.34068"
+         y="62.071259"
+         style="stroke-width:0.26458332;fill:#808080;">3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="127.19904"
+       y="62.078495"
+       id="text901"><tspan
+         sodipodi:role="line"
+         id="tspan899"
+         x="127.19904"
+         y="62.078495"
+         style="stroke-width:0.26458332;fill:#808080;">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="82.715393"
+       y="75.411743"
+       id="text913"><tspan
+         sodipodi:role="line"
+         id="tspan911"
+         x="82.715393"
+         y="75.411743"
+         style="stroke-width:0.26458332">fish</tspan><tspan
+         sodipodi:role="line"
+         x="82.715393"
+         y="80.703407"
+         style="stroke-width:0.26458332"
+         id="tspan915">people fish</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="106.55929"
+       y="75.839622"
+       id="text919"><tspan
+         sodipodi:role="line"
+         id="tspan917"
+         x="106.55929"
+         y="75.839622"
+         style="stroke-width:0.26458332">fish people</tspan><tspan
+         sodipodi:role="line"
+         x="106.55929"
+         y="81.131287"
+         style="stroke-width:0.26458332"
+         id="tspan921">fish tanks</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="62.660419"
+       y="101.89217"
+       id="text925"><tspan
+         sodipodi:role="line"
+         id="tspan923"
+         x="62.660419"
+         y="101.89217"
+         style="stroke-width:0.26458332">people</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="82.715401"
+       y="101.89734"
+       id="text929"><tspan
+         sodipodi:role="line"
+         id="tspan927"
+         x="82.715401"
+         y="101.89734"
+         style="stroke-width:0.26458332">people fish</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="106.59236"
+       y="99.679382"
+       id="text933"><tspan
+         sodipodi:role="line"
+         id="tspan931"
+         x="106.59236"
+         y="99.679382"
+         style="stroke-width:0.26458332">people fish</tspan><tspan
+         sodipodi:role="line"
+         x="106.59236"
+         y="104.97105"
+         style="stroke-width:0.26458332"
+         id="tspan935">tanks</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="89.298981"
+       y="126.16497"
+       id="text939"><tspan
+         sodipodi:role="line"
+         id="tspan937"
+         x="89.298981"
+         y="126.16497"
+         style="stroke-width:0.26458332">fish</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="107.76438"
+       y="126.16497"
+       id="text943"><tspan
+         sodipodi:role="line"
+         id="tspan941"
+         x="107.76438"
+         y="126.16497"
+         style="stroke-width:0.26458332">fish tanks</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="111.58224"
+       y="149.99956"
+       id="text947"><tspan
+         sodipodi:role="line"
+         id="tspan945"
+         x="111.58224"
+         y="149.99956"
+         style="stroke-width:0.26458332">tanks</tspan></text>
+    <text
+       id="text951"
+       y="90.365021"
+       x="27.712898"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332;fill:#808080;"
+         y="90.365021"
+         x="27.712898"
+         id="tspan949"
+         sodipodi:role="line">1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="27.768709"
+       y="114.20478"
+       id="text955"><tspan
+         sodipodi:role="line"
+         id="tspan953"
+         x="27.768709"
+         y="114.20478"
+         style="stroke-width:0.26458332;fill:#808080;">2</tspan></text>
+    <text
+       id="text959"
+       y="138.028"
+       x="27.752172"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332;fill:#808080;"
+         y="138.028"
+         x="27.752172"
+         id="tspan957"
+         sodipodi:role="line">3</tspan></text>
+    <text
+       id="text963"
+       y="161.87498"
+       x="27.731503"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.26458332;fill:#808080;"
+         y="161.87498"
+         x="27.731503"
+         id="tspan961"
+         sodipodi:role="line">4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+       x="27.731503"
+       y="62.071259"
+       id="text967"><tspan
+         sodipodi:role="line"
+         id="tspan965"
+         x="27.731503"
+         y="62.071259"
+         style="stroke-width:0.26458332;fill:#808080;">0</tspan></text>
+  </g>
+</svg>

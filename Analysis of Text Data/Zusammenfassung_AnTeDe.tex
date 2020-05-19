@@ -16,7 +16,7 @@
 \usepackage{array}
 \usepackage{wrapfig}
 \usepackage{subcaption}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{geometry}
 \usepackage{multicol}
 \usepackage{bm}
@@ -26,6 +26,7 @@
 \usepackage{scalerel}
 \usepackage{stackengine}
 \usepackage{mathtools}
+\usepackage[linguistics]{forest}
 \usepackage{pdfpages}
 \usepackage{csquotes}
 
@@ -55,6 +56,10 @@
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
 \newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
+
+\newcommand{\stack}{{\color{SlateGray4} stack}\ }
+\newcommand{\buffer}{{\color{Orange1} buffer}\ }
+\newcommand{\dependencygraph}{{\color{DodgerBlue3} dependency graph}\ }
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -1297,17 +1302,17 @@ BLEU should be used on corpus level, not on individual sentences, and while it i
 \end{minipage}
 \begin{minipage}{0.3\linewidth}
 \begin{figure}[H]
-	\includegraphics[width=\linewidth]{img/seq2seq_attention}
+	\includegraphics[width=\linewidth]{img/seq2seq_attention2}
 	\caption{Schematic comparison between a plain seq2seq model (top) and a seq2seq model with attention (bottom)}
 	\label{fig:seq2seqattention}
 \end{figure}
 \end{minipage}
 
 \begin{center}
-	\includegraphics[width=0.6\linewidth]{img/seq2seq_attention2}
+	\includegraphics[width=0.6\linewidth]{img/seq2seq_attention}
 \end{center}
 
-\begin{tabularx}{\linewidth}{m{0.1\linewidth} m{0.3\linewidth} m{0.2\linewidth} m{0.2\linewidth}}
+\begin{tabularx}{\linewidth}{m{0.1\linewidth} m{0.3\linewidth} m{0.3\linewidth} m{0.2\linewidth} }
 	\textbf{Name} & \textbf{Description} & \textbf{Score} & \textbf{Schema}\\
 	\hline
 	& & & \\[-1em]
@@ -1319,6 +1324,7 @@ BLEU should be used on corpus level, not on individual sentences, and while it i
 	\textbf{Multi\-plicative} & $W_a$ is a trainable weight matrix in the attention layer \parencite{luong2015effective} & $ \text{score}(s_t,h_i) = s_t^T W_a h_i $ & \includegraphics[width=\linewidth]{img/attention_multiplicative.png}\\
 	& & & \\[-0.5em]
 	\textbf{Scaled Dot-Product} & $N$ is the dimension of the source hidden state. Motivation for scaling is to improve learning when input is large, as the SoftMax may have extremely small gradients \parencite{vaswani2017attention} & $\text{score}(s_t,h_i) = \frac{s_t^T h_i}{\sqrt{n}} $ & \includegraphics[width=\linewidth]{img/attention_scaled_dotp.png}\\
+	\caption{Attention score mechanisms}
 \end{tabularx}
 
 \noindent
@@ -1332,8 +1338,297 @@ Attention ...
 
 Attention is a technique to compute a weighted sum of the values, dependent on the query and the keys, which is a selective summary of the information contained in the values, where the query and the keys determine how much to focus on the individual values. Thus, Attention is a way to obtain a fixed-size representation of an arbitrary set of representations (the values), depending on some other representations (the query and the keys).
 
+\section{Understanding Syntax}
+Syntactic parsing refers to mapping the syntactic structures of sentences. Formal grammar is a set of rules used to build syntactically valid sentences. Nearly all natural languages seem to follow the Context-Free Grammar model, with Swiss-German being a notable exception needing a mildly context-sensitive grammar\footcite{shieber1985evidence}.
+
+\subsection{Context-Free Grammar}
+A context-free grammar includes
+\begin{itemize}
+	\item a set of terminals $T$\\
+	words you see on the page
+	\item a set of non-terminals $N$\\
+	labels given to words and group of words
+	\item a designated start symbol $S\in N$
+	\item a set of rules, so-called \emph{productions}, of the form $A\rightarrow\beta$
+	\begin{itemize}
+		\item $A$ is a non-terminal (Left-Hand Side)
+		\item $\beta$ is a sequence of terminals and non-terminals (Right-Hand Side)
+		\item $A\rightarrow\beta$ means {\color{red} replace $A$ with $\beta$}
+	\end{itemize}
+	\item rules can be applied regardless of context (hence context-free grammar)
+	\item when a rule is applied to a symbol, nothing matters other than the symbol the rule is applied to
+\end{itemize}
+
+\subsection{Key Jargon from Linguistics}
+Smaller units combine into increasingly complex ones
+\begin{itemize}
+	\item phrase, a group of words standing together as a conceptual unit
+	\begin{itemize}
+		\item Noun Phrase, a phrase built around a noun
+		\item Verb Phrase, a phrase built around a verb
+		\item Prepositional Phrase, a phrase including a preposition and a noun phrase that indicates relations in space and time
+		\item Adjective or Adverb Phrase, a phrase built around adjectives and adverbs
+	\end{itemize}
+	\item clause, includes at least a subject and a verb
+	\item sentence, a group of clauses
+	\begin{itemize}
+		\item simple sentence, only an independent clause
+		\item compound sentence, at least two independent clauses
+		\item complex sentence, one  independent clause and one or more dependent clauses
+		\item compound-complex sentence, two or more independent clauses and one or more dependent clauses
+	\end{itemize}
+\end{itemize}
+
+A context-free grammar represents how words and phrases are organised in a sentence. If a sentence is a part of the language defined by a context-free grammar, the organisation of its constituents is known. In practice a probabilistic context-free grammar (PCFG) is needed, where every rule has a certain probability, with the sum over all rules being one.
+
+\subsection{Constituency Structure}
+\begin{minipage}{0.6\linewidth}
+	\begin{itemize}
+		\item \emph{interest} and \emph{rates} go together as noun phrase
+		\item \emph{raises} and \emph{interest rates} go together as a verb phrase
+		\item \emph{Fed} and \emph{raises interest rates} go together as a sentence
+		\item Each NP and VP unit is a \textbf{constituent}
+		\item Constituents can be indicated with square brackets\\
+		Fed [raises [interest rates]]
+	\end{itemize}
+\end{minipage}
+\hspace{\fill}
+\begin{minipage}{0.35\linewidth}
+	\begin{forest}
+		[S
+			[NP
+				[NNP
+					[\emph{Fed}]
+				]
+			]
+			[VP
+				[VBP
+					[\emph{raises}]
+				]
+				[NP
+					[NN
+						[\emph{interest}]
+					]
+					[NNS
+						[\emph{rates}]
+					]
+				]
+			]
+		]
+	\end{forest}
+\end{minipage}
+To determine what a constituent is a complex question and different linguists often disagree on. But there are some basic tests
+\begin{itemize}[nosep]
+	\item Look for words that stay together when phrases move around
+	\item Phrasal expansion and substitution\\
+	I sat [on the box]\\
+	I sat [on the box | right on top of the box | on top of it | there]
+	\item Lots of other tests
+\end{itemize}
+
+\subsubsection{Clause-Level Constituents}
+\begin{itemize}[leftmargin=*, labelindent=1.5cm, labelsep=0.5cm, noitemsep]
+	\item[S] simple declarative clause
+	\item[SBAR] clause introduced by a (possibly empty) subordinating conjunction
+	\item[SBARQ] direct questions introduced by a wh-word or a wh-phrase
+	\item[SINV] Inverted declarative sentence
+	\item[SQ] Yes or No questions
+\end{itemize}
+
+\subsection{Dependency Parsing}
+\begin{minipage}{0.45\linewidth}
+	The basic idea behind dependency parsing is that every word is another word’s dependent, except for the root. This root corresponds to the central theme of the sentence.
+\end{minipage}
+\hspace{\fill}
+\begin{minipage}{0.45\linewidth}
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/dependency_parsing}
+\end{minipage}
+
+\subsection{Key Algorithms}
+\begin{itemize}
+	\item Probabilistic Cocke-Kasami-Younger (CKY) Parser, Constituency Parsing
+	\item Arc-Standard Transition-Based Parser, Dependency Parser
+	\item Neural Dependency Parser
+\end{itemize}
+
+\subsubsection{Arc-Standard Transition-Based Parser}
+At any given time, the parser has a configuration
+\begin{itemize}[nosep]
+	\item \stack of words (left to right)
+	\item \buffer of words (left to right)
+	\item (partial) \dependencygraph
+\end{itemize}
+
+\vspace{1em}
+\noindent
+The parser begins in an \textbf{initial configuration}
+\begin{itemize}[nosep, leftmargin=*, labelindent=3cm, labelsep=0.5cm]
+	\item[\stack] ROOT symbol
+	\item[\buffer] all words
+	\item[\dependencygraph] empty
+\end{itemize}
+
+\vspace{1em}
+\noindent
+The possible actions are
+\begin{enumerate}
+	\item SHIFT: move a word from the top of the buffer to the top of the \stack
+	\item $\text{LA}_r$: Left Arc
+	\begin{itemize}[nosep]
+		\item the neighbour of the head of the \stack is a dependent of the head of the \stack
+		\item add a corresponding link to \dependencygraph with label $r$
+		\item remove the neighbour from the \stack
+	\end{itemize}
+	\item $\text{RA}_r$: Right Arc
+	\begin{itemize}[nosep]
+		\item the head of the \stack is a dependent of its neighbour
+		\item add a corresponding link to \dependencygraph with label $r$
+		\item remove the head of the \stack
+	\end{itemize}
+\end{enumerate}
+
+\subsubsection{Neural Dependency Parser}
+Represent words as $d$-dimensional word embeddings with $d\approx 1000$, do the same to represent PoS tags and already known dependency labels. Extract a set of tokens based on stack or buffer positions. Look up their embedding vectors and concatenate them with the PoS and label embedding vectors.
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/neural_dependency_parsing_vector}
+\end{center}
+\begin{itemize}
+	\item Input layer, the concatenated embedding vectors
+	\item Feedforward neural network with ReLu non-linearity
+	\item Output Layer, Softmax gives a probability distribution
+	\item Using Cross-Entropy Loss to measure the error
+\end{itemize}
+
+\subsubsection{CKY Constituency Parsing}
+CKY uses a parse chart
+\begin{figure}[H]
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{img/cky_constituency_parsing_graph01.png}
+		\caption{Fill in the cells with the things that can be described in single words}
+	\end{subfigure}
+	\hspace{\fill}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{img/cky_constituency_parsing_graph02.png}
+		\caption{Fill in the second row cells that describe combinations of two words}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{img/cky_constituency_parsing_graph03.png}
+		\caption{Fill in the third row cells that describe three-word constituents}
+	\end{subfigure}
+	\hspace{\fill}
+	\begin{subfigure}{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{img/cky_constituency_parsing_graph04.png}
+		\caption{Fill in the fourth row cells that covers the whole span}
+	\end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/cky_constituency_parsing_graph_example}
+	\caption{In practice it is easier to tilt the chart}
+\end{figure}
+
+\section{Information Extraction}
+The goal of information extraction is to extract the unstructured information embedded in texts and transform it into structured data. Structured data can be used to populate a relational database to enable further processing or anything else that requires structured input data.
+
+Typical information extraction tasks
+\begin{itemize}
+	\item \textbf{Named Entity Recognition}\\
+	to find names of people, places, organisations
+	\item \textbf{Co-reference resolution and entity linking}\\
+	to group together named entities into sets corresponding to real-world entities
+	\item \textbf{Relation extraction}\\
+	to find semantic relationships among entities in the text
+	\item \textbf{Event extraction and co-reference}\\
+	events are denoted by verbs or nouns, but temporal order matters very much
+	\item \textbf{Template filling}
+\end{itemize}
+
+\subsection{Named Entity Recognition}
+Fine-graded tags are often used
+\begin{itemize}[leftmargin=*, labelindent=1.5cm, labelsep=0.5cm]
+	\item[GPE] Geo-Political Entity
+	\item[FAC] Facility
+	\item[NORP] Nationalities, Religious or Political Groups
+\end{itemize}
+
+\subsubsection{Named Entity Recognition as Sequence Labelling}
+NER is a word-by-word sequence labelling task where the tags capture the boundary and type. Use a sequence classifier to label the tokens with {\color{red} IO}, {\color{Green3} IOB} or {\color{blue} IOBES} tagging
+\begin{itemize}[leftmargin=*, labelindent=2cm, labelsep=0.5cm]
+	\item[{\color{red} I-TYPE}] inside TYPE entity
+	\item[{\color{red} O}] outside any entity
+	\item[{\color{Green3} B-TYPE}] beginning of TYPE entity
+	\item[{\color{blue} E-TYPE}] end of TYPE entity
+	\item[{\color{blue} S-TYPE}] singleton TYPE entity
+\end{itemize}
+IO, when compared to IOB, has only I entities and no B-TYPEs, this makes things easier for machine learning system but at the cost of more ambiguity.
+
+\subsubsection{Features for NER}
+\begin{itemize}
+	\item Syntactic chunk labels, which allow parsing through basic constituent analysis
+	\item Gazetteer, list of toponyms
+	\item Word shapes, which are used to represent the abstract letter pattern of a word by mapping lower-case letters to $x$, upper-case to $X$, numbers to $d$, and retaining punctuation
+\end{itemize}
+
+\subsection{Neural Methods}
+Two basic intuitions
+\begin{itemize}
+	\item Names often consist of multiple tokens, so each tagging decision requires joint reasoning over multiple tokens
+	\item Token-level evidence that a token represents a name includes orthographic (use character-level embeddings) and distributional evidence (use word embeddings)
+\end{itemize}
+Feeding the output layer of a RNN directly to a softmax does not allow to impose any constraints on the tag sequence. To impose strong constraints on the output, a Conditional Random Field layer on top of the Bi-LSTM output is used. Bidirectional RNNs are used to capture the left and right context of each word.
+\begin{center}
+	\includegraphics[width=0.6\linewidth]{img/BiLSTM_CRF}
+\end{center}
+For a word sequence $\textbf{X}$ and a sequence of predictions $\textbf{y}$, a score is computed
+\begin{equation*}
+	s(\textbf{X},\textbf{y}) = \sum_{i=0}^{n}A_{y_i,y_{i+1}} + \sum_{i=1}^{n} P_{i,y_i}
+\end{equation*}
+$A_{y_i,y_{i+1}}$ is the transition score (going from tag $y_i$ to tag $y_{i+1}$), and $P_{i,y_i}$ is the emission score (labelling word $i$ as $y_i$)
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/BiLSTM_CRF_scores}
+	\caption{The CRF scores are not a probability but the raw output of the RNNs}
+	\label{fig:bilstmcrfscores}
+\end{figure}
+
+A softmax layer over all possible tag sequences $\textbf{Y}_{\textbf{X}}$ gives a probability for the sequence of predictions $\textbf{y}$
+\begin{equation*}
+	p(\textbf{y}|\textbf{X}) = \frac{e^{s(\textbf{X},\textbf{y})}}{\sum_{\tilde{\textbf{y}}\in\textbf{Y}_\textbf{X}} e^{s(\textbf{X},\tilde{\textbf{y}})}}
+\end{equation*}
+The global normalisation prevents the label bias problem of Maximum Entropy Markov Models.
+
+\subsubsection{Character-Level Embeddings}
+Such embeddings are very useful to represent unknown words based on their characters.
+
+\vspace{1em}
+\noindent
+\begin{minipage}{0.6\linewidth}
+	\begin{itemize}
+		\item Input: sequence of characters
+		\item Projection Layer (PL): lookup table to capture similarities across characters
+		\item Forward LSTM: returns a state sequence corresponding to the sequence of character representations from the projection layer
+		\item Reverse LSTM: returns a state sequence corresponding to the inverse sequence
+		\item Combine the two sequences into an embedding vector
+	\end{itemize}
+\end{minipage}
+\hspace{\fill}
+\begin{minipage}{0.35\linewidth}
+	\begin{center}
+		\includegraphics[width=\linewidth]{img/BiLSTM_character_embedding}
+	\end{center}
+\end{minipage}
+
+
 % ------------ APPENDIX ------------ %
 
+\clearpage
 \printbibliography
 
 \end{document}
