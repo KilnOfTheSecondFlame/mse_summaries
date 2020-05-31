@@ -60,6 +60,7 @@
 \newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
+\newcommand*\argmax[1]{\underset{#1}{\text{argmax}}}
 
 \newcommand{\incond}{\rotatebox[origin=c]{90}{$\vDash$}}
 \newcommand{\dcond}{\rotatebox[origin=c]{90}{$\nvDash$}}
@@ -746,7 +747,7 @@ This describes a D-dimensional ellipsoid with main axes $\sqrt{\lambda_i}$. The 
 
 Partition $\textbf{x}$ into two disjoint subsets $\textbf{x}_a$ and $\textbf{x}_b$. Without loss of generality, $\textbf{x}_a$ can be taken to form the first $M$ components of $\textbf{x}$ with $\textbf{x}_b$ comprising of the remaining $D-M$ components
 \begin{alignat*}{4}
-	\textbf{x}&=\begin{pmatrix}\textbf{x}_a\\\textbf{x}_b\end{pmatrix} &\qquad& \bm{\mu} &= \begin{pmatrix}\bm{\mu}_a\\\bm{\mu}_b\end{pmatrix} &\qquad& \bm{\Sigma} &= \begin{pmatrix}\bm{\Sigma}_a\\\bm{\Sigma}_b\end{pmatrix}
+	\textbf{x}&=\begin{pmatrix}\textbf{x}_a\\\textbf{x}_b\end{pmatrix} &\qquad& \bm{\mu} &= \begin{pmatrix}\bm{\mu}_a\\\bm{\mu}_b\end{pmatrix} &\qquad& \bm{\Sigma} &= \begin{pmatrix}\bm{\Sigma}_aa & \bm{\Sigma}_ab \\\bm{\Sigma}_ba & \bm{\Sigma}_bb\end{pmatrix}
 \end{alignat*}
 In most situations it is more convenient to work with the \textbf{inverse of the covariance matrix}, which is called the \textbf{precision matrix}
 \begin{align*}
@@ -756,10 +757,18 @@ In most situations it is more convenient to work with the \textbf{inverse of the
 		\bm{\Lambda}_{ba} & \bm{\Lambda}_bb
 	\end{pmatrix}
 \end{align*}
-
-% TODO Conditional probability distribution & Marginal probability distribution
-
-% TODO Conditional Gaussian Distributions
+The Conditional Probability Distribution of a Gaussian
+\begin{align*}
+	p(\textbf{x}_a| \textbf{x}_b) &= \N{\textbf{x}_a\middle| \bm{\mu}_{a|b}, \bm{\Delta}^{-1}_{aa}}\\
+	\bm{\mu}_{a|b} &= \bm{\mu}_{a} - \bm{\Delta}^{-1}_{aa}\bm{\Delta}_{ab}(\textbf{x}_b-\bm{\mu}_b)\\
+	&= \bm{\mu}_{a} + \bm{\Sigma}_{ab}\bm{\Delta}^{-1}_{bb}(\textbf{x}_b-\bm{\mu}_b)\\
+	\bm{\Sigma}_{ab} &= \bm{\Delta}^{-1}_{aa}\\
+	&= \bm{\Sigma}_{aa} - \bm{\Sigma}_{ab}\bm{\Sigma}^{-1}_{bb}\bm{\Sigma}_{ba}
+\end{align*}
+And the marginal probability distribution
+\begin{equation*}
+	p(\textbf{x}_a) = \N{\textbf{x}_a\middle| \bm{\mu}_{a}, \bm{\Sigma}_{aa}}
+\end{equation*}
 
 \subsection{Belief Networks or Bayesian Networks}
 A belief network is a directed acyclic graph (DAG) in which each node has associated the conditional probability of the node given its parents. The joint distribution is obtained by taking the product of the conditional probabilities
@@ -794,6 +803,27 @@ A collider contains two or more incoming arrows along a chosen path.
 \begin{center}
 	\includegraphics[width=0.6\linewidth]{img/bayes_theorem}
 \end{center}
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/bayes_theorem_descriptions}
+\end{center}
+
+In machine learning the condition of Bayes' theorem also includes the model $M$
+\begin{equation*}
+	p(\theta|D,M) = \frac{p(D | \theta, M) \cdot p(\theta | M)}{p(D|M)}
+\end{equation*}
+The Most probable A Posteriori (MAP) setting is that which maximises the posterior
+\begin{equation*}
+	\hat{\theta}_{\text{MAP}} = \argmax{\theta}\{p(\theta|D,M)\} = \argmax{\theta}\{p(\theta,D|M)\}
+\end{equation*}
+The Maximum Likelihood assignment is used whe $p(\theta|M)$ is constant
+\begin{equation*}
+	\hat{\theta}_{\text{ML}} = \argmax{\theta} \{p(\theta|D,M)\} = \argmax{\theta}\{p(D|\theta,M)\}
+\end{equation*}
+The Bayes optimal classifier gives the theoretically optimal classification, by combining the predictions of all hypotheses weighed by their posterior probabilities
+\begin{equation*}
+	Y \leftarrow \argmax{y_k} P(Y=y_k) \prod_{i} P(X_i | Y=y_k)
+\end{equation*}
 
 \section{Gaussian Processes}
 Is referred to as the \textbf{infinite-dimensional extension of the multivariate normal distribution}. When we are working with Gaussian Processes the intuition is that we observe some finite-dimensional subset of infinite-dimensional data, and this finite subset follows a multivariate normal distribution, as would every finite subset.
