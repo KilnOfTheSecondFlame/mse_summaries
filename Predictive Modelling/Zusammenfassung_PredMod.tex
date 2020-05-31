@@ -1261,6 +1261,7 @@ If a process is stationary the mean sequence is constant, thus a canonical estim
 	\hat{\mu} = \samplemean{x} = \frac{1}{n}\sum_{i=1}^n x_i
 \end{equation*}
 \begin{definition}
+	\textbf{Sample Autocovariance}
 	\begin{enumerate}
 		\item The \emph{sample autocovariance} is defined by
 		\begin{equation*}
@@ -1274,8 +1275,99 @@ If a process is stationary the mean sequence is constant, thus a canonical estim
 	\end{enumerate}
 \end{definition}
 
+\section{Forecasting}
 
+The goal of forecasting is to model a given time series data with a proper stochastic process to forecast future, unobserved values of the process. In other words, predict future values $x_{n+k}$ with $k=1,2,\dots$ given a time series up to the present time $\{x_1,\dots,x_n\}$.
 
+\subsection{Procedure}
+\begin{enumerate}
+	\item Ascertain that the underlying process is \textbf{predictable}, that is the process will not change dramatically in the future and will continue as it has to the present
+	\item Choose a \textbf{model class} by explorative data analysis of the given time series. After that, \textbf{fit} the model to the training data and receive model parameters that fully describe the fitted model
+	\item \textbf{Predict} the future values of the process with the fitted model
+\end{enumerate}
 
+\subsection{Autoregressive Models}
+Autoregressive models are based on the idea that the current value of the series can be explained by a linear combination of $p$ previous values
+\begin{definition}
+	The autoregressive model $AR(p)$ of order $p$ is a discrete stochastic process that satisfies
+	\begin{equation*}
+		X_n = a_1 X_{n-1} + a_2 X_{n-2} + \dots + a_p X_{n-p} + W_n
+	\end{equation*}
+	where $a_1,a_2,\dots,a_p$ are the model parameters and $W_1, W_2, \dots$ is a white noise process with variance $\sigma^2$. For a given autoregressive process, the \textbf{characteristic polynomial} is defined as
+	\begin{equation*}
+		\Phi(x) = 1 - a_1 x - a_2 x^2 - \dots - a_p x^p
+	\end{equation*}
+\end{definition}
+
+Autoregressive models are \textbf{exclusively} used for the modelling of \textbf{stationary} processes. There is a sufficient  condition on the parameters of an autoregressive process that render the process stationary.
+\begin{definition}
+	\textbf{Stationarity of $AR(p)$}
+	An $AR(p)$ stochastic process is weakly stationary, if all (complex) roots of the characteristic polynomial
+	\begin{equation*}
+		\Phi(x) = 1 - a_1 x - a_2 x^2 - \dots - a_p x^p
+	\end{equation*}
+	exceed 1 in absolute value.
+\end{definition}
+If the intent is to \textbf{fit an autoregressive model} to a given time series data set, two things have to be clarified in advance
+\begin{enumerate}
+	\item Is the \textbf{autoregressive model} the right choice for the given data
+	\item What is the proper \textbf{model order} $p$ for the given data
+\end{enumerate}
+In practice a sample autocorrelation of a given series is computed and compared with the theoretical autocorrelation of the $AR(p)$ model. This way, it can be determined if the time series is autoregressive. Partial autocorrelation is introduced as a further measure well suited for determining the order of an autoregressive model.
+
+The autocorrelation of an $AR(p)$ process is non-zero for a wide span of lags. This is due to propagation of correlation through the model: If $X_k$ is strongly correlated with $X_{k+1}$ and this in turn is strongly correlated with $X_{k+2}$, then $X_k$ will likely be correlated with $X_{k+2}$ as well. If the goal is to study the \textbf{direct} correlation between $X_k$ and $X_{k+2}$, that is the proportion of correlation that is \textbf{not} due to $X_{k+1}$, the \textbf{partial autocorrelation} has to be computed.
+
+\begin{definition}
+	For a weakly stationary stochastic process $\{X_1,X_2,\dots\}$ the partial autocorrelation is defined as
+	\begin{equation*}
+		\pi(h) = \Cor{X_k,X_{k+h}\middle|X_{k+1},\dots,X_{k+h-1}}
+	\end{equation*}
+	The quantity $\Cor{X,Y|Z}$ denotes the conditional correlation of $X$ and $Y$ given the value of $Z$
+\end{definition}
+Important properties of the partial autocorrelation
+\begin{enumerate}
+	\item The $p$-th coefficient $\alpha_p$ of an $AR(p)$ process equals $\pi(p)$, that is the partial autocorrelation value at lag $p$ of the process
+	\item For an autoregressive process $AR(p)$ the partial autocorrelation at lags greater than $p$ is zero, that is $\pi(k) = 0$ for $k>p$
+\end{enumerate}
+
+\subsection{Model Fitting Procedure}
+The estimation of an $AR(p)$ model from given time series data under the assumption that the time series is a realisation of a stationary stochastic process can be obtained by the following fitting procedure
+\begin{enumerate}
+	\item Decide whether a given time series stems from an autoregressive process, by investigating the autocorrelation and partial autocorrelation of the sequence. If the autocorrelation is decaying exponentially to zero (possibly with oscillations) and the partial autocorrelation is zero for larger lags, then the autoregressive model is appropriate
+	\item Choose the \textbf{largest lag} $p$ such that the partial autocorrelation is \textbf{not} zero
+	\item Choose parameters $a_1,\dots,a_p$ such that given data are likely to be realisations of corresponding autoregressive process
+\end{enumerate}
+Given the data $\{x_1,x_2,\dots,x_n\}$ and a model order $p$, an $AR(p)$ process can be fitted by solving the following linear equation system
+\begin{align*}
+	x_{p+1} &= a_1 x_p + a_2 x_{p-1} + \dots + a_p x_1 + W_{p+1}\\
+	x_{p+2} &= a_1 x_{p+1} + a_2 x_{p} + \dots + a_p x_2 + W_{p+2}\\
+	&\vdots \\
+	x_n &= a_1 x_{n-1} + a_2 x_{n-2} + \dots + a_p x_{n-p} + W_{p+1}
+\end{align*}
+This system can be solved with
+\begin{itemize}
+	\item Least Squares Method
+	\item Burg's algorithm
+	\item Yule-Walker
+	\item Maximum Likelihood Method
+\end{itemize}
+
+\subsection{Forecasting $AR(p)$ Processes}
+The general methodology of forecasting stationary time series can be summarized as follows
+\begin{definition}
+	\textbf{$k$-step ahead forecast}
+	Assume that $\{X_1,X_2,\dots\}$ is a stationary process and that there is a observation of a time series $\{x_1,x_2,\dots,x_n\}$. The $k$-steps ahead forecast is an estimate of the random variable $X_{n+k}$ given by
+	\begin{equation*}
+		\hat{X}_{n+k} = \ev{X_{n+k}\middle| X_1=x_1,\dots, X_n = x_n}
+	\end{equation*}
+	Here $\ev{X|Y=y}$ denotes the  conditional expectation of $X$ given $Y = y$
+\end{definition}
+A k-step ahead forecast of an $AR(1)$ process is exponentially decaying to zero from the last observation $x_n$ and does not dependent on earlier observations.
+
+The standard error $\sigma_k$ of an autoregressive process is the square root of the conditional variance
+\begin{equation*}
+	\sigma_k^2 = \Var{X_{n+k}|X_1= x_1,\dots, X_n = x_n}
+\end{equation*}
+This quantity is increasing with $k$ and converges to the process variance $\sigma_K^2$
 
 \end{document}
