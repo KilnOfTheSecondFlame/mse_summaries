@@ -1298,8 +1298,9 @@ BLEU should be used on corpus level, not on individual sentences, and while it i
 
 \subsection{Attention}
 \begin{minipage}{0.65\linewidth}
-	The source word encodings $x_1,x_2, \dots, x_T$ are individually weighted depending on the target word $y_{t-1}$. Therefore, there are as many context vectors $c_t$ as there are target words $y_t$ and every context vector $c_t$ for target word $y_t$ is a weighted average of the source words encodings. Depending on the previous target word $y_{t-1}$ the source word encoding will be weighted differently. This method is called global attention.
+	The source word encodings $x_1,x_2, \dots, x_T$ are individually weighted depending on the target word $y_{t-1}$. Therefore, there are as many context vectors $c_t$ as there are target words $y_t$ and every context vector $c_t$ for target word $y_t$ is a weighted average of the source words encodings. Depending on the previous target word $y_{t-1}$ the source word encoding will be weighted differently. This method is called global attention\footnotemark.
 \end{minipage}
+\footnotetext{\href{https://machinelearningmastery.com/how-does-attention-work-in-encoder-decoder-recurrent-neural-networks/}{A good example of attention calculated through on a simple Input and Output}}
 \begin{minipage}{0.3\linewidth}
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{img/seq2seq_attention2}
@@ -1625,6 +1626,167 @@ Such embeddings are very useful to represent unknown words based on their charac
 	\end{center}
 \end{minipage}
 
+\section{Contextual Embeddings and Transformer Architecture}
+Word embeddings have revolutionized the field of Natural Language Processing
+\begin{itemize}
+	\item 2013: Word2Vec
+	\item 2014: GloVe
+	\item 2015: FastText
+\end{itemize}
+
+But the problem with word representations is that a \textbf{word type has the same word embedding regardless of context}. Words also have different aspects depending on semantics, syntactic behavior, register or connotations. The solution to this is contextual word embeddings.
+
+\subsection{ELMo}
+ELMo is based on a bidirectional language model and a Bi-LSTM. Their goal was to make the language model reasonably compact so people can use it even with limited hardware. ELMo has two BiLSTM layers with 4096 units and an output projected to 512 dimensions, with residual connections from the first to second layer.
+
+\begin{center}
+	\includegraphics[width=0.15\linewidth]{img/ELMo_input_transformations}
+\end{center}
+Character embeddings allow to capture morphological features and handle out-of-vocabulary words, while convolutional filters capture local patterns. The key idea behind ELMo was to not just use the output, but use all the available hidden layers and combine them in a task-specific way with task-dependent trainable weights that you learn for each task.
+
+\begin{center}
+	\includegraphics[width=0.7\linewidth]{img/ELMo_key_idea}
+\end{center}
+
+\subsection{Transformer Architecture}
+Quick Overview:
+\begin{itemize}
+	\item Positional Embeddings: Models relative positioning and ordering of words
+	\item Self-Attention: Encodes the context (contextualized word embeddings)\\
+	Long-distance context has equal opportunities (without positional encoding it cannot even tell the difference since the path length of all words is one)
+	\item Multi-Head Attention: Independently and simultaneously focus on different positions of the input in parallel
+	\item Feed-Forward layers: Computes non-linear hierarchical features
+	\item Residual Connections: Flow of positional information across layers
+	\item Layer-Normalization: Makes it possible to train the network
+	\item Transformer Architecture is designed to allow for calculations in matrix form which can be efficiently implemented on GPUs/TPUs
+\end{itemize}
+Transformers were introduced in the paper \citetitle{vaswani2017attention} by \citeauthor{vaswani2017attention} to address the problem that RNNs require sequential calculations by design, which prohibits parallelisation and thus slows down training. The transformer solves this problem by employing an Encoder/Decoder structure.
+\begin{itemize}
+	\item \textbf{Encoder}:\\
+	N stacked \textbf{multi-head attention layers}, followed by a fully connected feed forward layers
+	\item \textbf{Decoder}:\\
+	N stacked \textbf{masked} multi-head attention layers, followed by multi-head attention layers (with input from encoder and decoder layers), followed by a fully connected feed forward layers
+\end{itemize}
+\begin{figure}[htb]
+	\begin{subfigure}[t]{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.8\linewidth]{img/transformer_architecture}
+		\caption{Simplified Encoder and Decoder architecture of a Transformer}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\linewidth}
+		\centering
+		\includegraphics[width=0.8\linewidth]{img/transformer_stacked_enc_dec}
+		\caption{Exploded view of stacked encoders and decoders}
+	\end{subfigure}
+\end{figure}
+In the first layer the input words are mapped to their embeddings, the words in each position flow through their own paths, which can be executed in parallel. Self-attention looks at other positions in the input sequence for clues that lead to a better encoding for the current word, which results in contextualised word embeddings.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/transformer_context_embedding}
+	\caption{Different self-attention embeddings for 'it' depending on position and context}
+\end{figure}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/transformer_self_attention_matrix_form}
+	\caption{Self-attention calculations done in matrix form for faster processing}
+\end{figure}
+
+The attention capacity is increased by splitting attention heads using different projections or subspaces. This improves the performance of the attention layer by providing multiple representation subspaces, with multiple Query, Key and Value weight matrices projecting the inputs (word embeddings or vectors from encoders/decoders) into different subspaces.
+Thus expanding the model's ability to independently and simultaneously focus on different positions of the input sequence in parallel.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/transformer_attention_head}
+	\caption{Three attention heads with their results being concatenated and multiplied by an additional weight matrix}
+	\label{fig:transformerattentionhead}
+\end{figure}
+
+\subsubsection{Positional Encoding}
+Position and order of words are essential parts of any language and are inherently taken into account by RNNs. A transformer however does not have a sense of position or order. This is addressed by adding a vector to each input embedding. These vectors follow a specific pattern that allows to determine the position of each word and the distance between words. This encoding satisfies the following criteria:
+\begin{itemize}
+	\item Output a unique encoding for each time-step or word position in the sentence
+	\item Distance between any two time-steps is consistent across sentences with different lengths
+	\item Model generalises to longer sentences without any efforts and with bounded values
+	\item Model is deterministic
+\end{itemize}
+The proposed method by \citeauthor{vaswani2017attention} is to use a $d$ dimensional vector which contains information about a specific position in a sentence. This encoding is not integrated in the model itself but enhances the word with information about its position in a sentence \footnotemark.
+
+\footnotetext{\href{https://kazemnejad.com/blog/transformer_architecture_positional_encoding}{Transformer Architecture: The Positional Encoding by Amirhossein Kazemnejad}}
+
+Let $t$ be the desired position in an input sentence, $\vec{p_t} \in \mathbb{R}^d$ be its corresponding encoding, and d be the encoding dimension (where $d \equiv_2 0$) Then $f:\mathbb{N}\rightarrow\mathbb{R}^d$ will be the function that produces the output vector $\vec{p_t}$ and it is defined as follows:
+\begin{align*}
+	\vec{p_t}^{(i)} = f(t)^{(i)} & := 
+	\begin{cases}
+		\sin({\omega_k} \cdot t),  & \text{if}\  i = 2k \\
+		\cos({\omega_k} \cdot t),  & \text{if}\  i = 2k + 1
+	\end{cases}
+\end{align*}
+where $\omega_k = \frac{1}{10000^{2k / d}}$. Calculating the correspondent embedding which is fed to the model is as follows
+\begin{equation*}
+	\psi^\prime(w_t) = \psi(w_t) + \vec{p_t}
+\end{equation*}
+To make this summation possible, the positional embedding’s dimension has to be equal to the word embeddings’ dimension, thus
+\begin{equation*}
+	d_{\text{word embedding}} = d_{\text{positional embedding}}
+\end{equation*}
+
+\begin{figure}[tbh]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/transformer_attention_residuals}
+	\caption{Each sub-layer in each encoder has a residual connection followed by a layer-normalisation step}
+	\label{fig:transformerattentionresiduals}
+\end{figure}
+
+The decoder has a final linear layer which is  a fully connected neural network that projects the vector produced by the decoder stack into a vector with the size of the output vocabulary. The linear layer is followed by a softmax layer turning the score for each individual word into a probability. The training is done by comparing the ground truth with predicted output for each position and using teacher forcing. This is done by supplying the expected translation instead of predicted output from previous time step, but self-attention layers are only allowed to attend to earlier positions in the output sequence by using masks (see figure \ref{fig:transformerteacherforcing}). Otherwise the decoder could just attend to the next word in the provided sequence.
+
+\begin{figure}[tbh]
+	\begin{subfigure}[t]{0.45\linewidth}
+		\includegraphics[width=\linewidth]{img/transformer_teacher_forcing}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\linewidth}
+		\includegraphics[width=\linewidth]{img/transformer_teacher_forcing2}
+	\end{subfigure}
+	\caption{Masked target output and trained model output}
+	\label{fig:transformerteacherforcing}
+\end{figure}
+
+\subsection{Transformer Models}
+
+\subsubsection{BERT: Bidirectional Encoder Representation from Transformers}
+Pre-train deep bidirectional representations by jointly conditioning on both left and right context in all layers. Pre-trained BERT representations can be fine-tuned with just one additional output layer to create models for a wide range of tasks without substantial task-specific architecture modifications.
+
+Initial training is done in two steps
+\begin{itemize}
+	\item Perform an unsupervised pre-training on a large amount of unlabelled data to train a general purpose language understanding model by learning a latent representation of the input text
+	\item Reuse pre-trained model and perform an individual supervised fine-tuning on a small amount of labelled data for the downstream tasks
+\end{itemize}
+This provides a Transfer Learning platform for NLP tasks. BERT uses WordPiece tokenisation for input representation. For Pre-Training Masked Language Modelling (MLM), where $k\%$ of the input words are randomly masked and the model has to predict the original words based on the context, and Next Sentence Prediction (NSP) is used. The goal of NSP is to learn relationships between sentences by predicting if a sentence B is an actual sentence that proceeds sentence A, or just a random sentence.
+
+This pre-trained BERT can be used to create contextualised word embeddings for existing models.
+
+\subsubsection{Reducing the Size of Trained Models}
+\begin{itemize}
+	\item \textbf{Distillation}\\
+	Train a smaller model to replicate the behaviour of the original model
+	\item \textbf{Pruning}\\
+	Make model smaller by removing not- or less-important Weights or Neurons, Layers, or Heads
+	\item \textbf{Quantisation}\\
+	Approximate the weights of a NN with lower precision (int8 instead of float32 often works quite well)
+	\item \textbf{TensorRT}\\
+	Platform for high-performance DL inference
+\end{itemize}
+
+\subsubsection{Summary}
+\begin{itemize}
+	\item Pre-training and fine-tuning Transformer models works very well
+	\item Models are extremely expensive
+	\item Improvements come from even more expensive models and more data
+	\item One option to address the inference or serving problem is through distillation
+\end{itemize}
 
 % ------------ APPENDIX ------------ %
 
