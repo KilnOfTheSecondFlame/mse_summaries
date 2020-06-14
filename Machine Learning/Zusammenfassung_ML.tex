@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
-\usepackage[a4paper,margin=1cm]{geometry}
+\usepackage[a4paper,margin=2.4cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{isodate}
 \usepackage{gensymb}
@@ -12,6 +12,7 @@
 \usepackage[x11names]{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{bbm}
 \usepackage{amsthm}
 \usepackage{array}
 \usepackage{wrapfig}
@@ -22,12 +23,14 @@
 \usepackage{multicol}
 \usepackage{bm}
 \usepackage{enumitem}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{mdframed}
 \usepackage{scalerel}
 \usepackage{stackengine}
 \usepackage{mathtools}
 \usepackage{pdfpages}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
 
 % Code highlighting
 \usepackage{minted}
@@ -41,8 +44,17 @@
 \theoremstyle{definition}
 \newmdtheoremenv{definition}{Definition}[section]
 
-
-\geometry{a4paper, margin=2.4cm}
+% Bibliography & citing
+\usepackage[
+	backend=biber,
+	style=apa,
+	bibstyle=apa,
+	citestyle=apa,
+	sortlocale=en_UK
+]{biblatex}
+\addbibresource{Bibliography.bib}
+% print the whole bibliography
+\nocite{*}
 
 \newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
 \newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
@@ -53,6 +65,10 @@
 \newcommand*\R{\mathbb{R}}
 \newcommand*\Z{\mathbb{Z}}
 \newcommand*\N[1]{\mathcal{N}\left(#1\right)}
+\newcommand*\D{\mathcal{D}}
+\newcommand*\GP[1]{\mathcal{GP}\left\{#1\right\}}
+\newcommand*\X{\ensuremath{\mathcal{X}}}
+\newcommand*\Hilbert{\ensuremath{\mathcal{H}}}
 \newcommand*\Likelihood{\mathcal{L}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}}
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
@@ -61,6 +77,8 @@
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
 \newcommand*\argmax[1]{\underset{#1}{\text{argmax}}}
+\newcommand*\argmin[1]{\underset{#1}{\text{argmin}}}
+\newcommand*\isocov{\ensuremath{\mathbbm{1}}}
 
 \newcommand{\incond}{\rotatebox[origin=c]{90}{$\vDash$}}
 \newcommand{\dcond}{\rotatebox[origin=c]{90}{$\nvDash$}}
@@ -110,10 +128,10 @@ Approximate the mapping function from example $x$ to label $y$ with a hypothesis
 	\includegraphics[width=0.7\linewidth]{img/hypothesis_space}
 \end{center}
 
-The hypothesis space $\mathcal{H}$ contains all possible hypotheses that can be built with the chosen representation, learning can thus be understood as a search for the global minima in this space $\mathcal{H}$.
+The hypothesis space $\Hilbert$ contains all possible hypotheses that can be built with the chosen representation, learning can thus be understood as a search for the global minima in this space \Hilbert.
 
 \noindent
-Formally this goal is expressed as follows: Find the hypothesis $h^* (x,\theta) = \hat{y}$ that best fits the training data, according to a loss function $L(h(x,\theta))$ by searching the hypothesis space $\mathcal{H} = \left\{ h(x,\theta) \middle| \theta \in P\right\}$.
+Formally this goal is expressed as follows: Find the hypothesis $h^* (x,\theta) = \hat{y}$ that best fits the training data, according to a loss or cost function $L(h(x,\theta))$ by searching the hypothesis space $\Hilbert = \left\{ h(x,\theta) \middle| \theta \in P\right\}$.
 
 \subsection{Inductive Bias}
 \begin{theorem}
@@ -125,7 +143,7 @@ No free lunch theorem regarding the general equivalence of learners states that 
 
 The inductive bias of a learning algorithm $\mathcal{L}$ for instances in $X$ are any \textbf{minimal set of assertions} $B$ that, together with $\mathcal{L}$ and the training set $D$ \textbf{allows for deductively inferring} the $y'$ for a new $x\in X$. Make all assumptions \textbf{explicit} in $B$ such that $\forall x' \in X: \left(B, \mathcal{L}, D, x' \right) \Rightarrow y'$ is provable.
 
-Machine Learning depends on the intelligent choice of the class $\mathcal{H}$ where $\mathcal{L}$ optimises the parameters. Machine Learning algorithms can be categorised by the strength of their inductive bias.
+Machine Learning depends on the intelligent choice of the class \Hilbert where $\mathcal{L}$ optimises the parameters. Machine Learning algorithms can be categorised by the strength of their inductive bias.
 
 \subsection{Inductive Unsupervised Learning}
 \begin{minipage}{0.6\linewidth}
@@ -139,21 +157,21 @@ Machine Learning depends on the intelligent choice of the class $\mathcal{H}$ wh
 \end{minipage}
 
 \subsection{Learnability}
-Any target function $f$ over an instance $X$ is learnable given an expressive enough deterministic hypothesis space $\mathcal{H}$, a large enough training set $D$, and stationarity of the distribution $X$, that is instances in $D_{\text{train}}$ and $D_{\text{test}}$ are independently, identically distributed.
+Any target function $f$ over an instance $X$ is learnable given an expressive enough deterministic hypothesis space \Hilbert, a large enough training set $D$, and stationarity of the distribution $X$, that is instances in $D_{\text{train}}$ and $D_{\text{test}}$ are independently, identically distributed.
 
 Better questions are what size of \textbf{$D_{\text{train}}$} are large enough and given a large enough training set, how well does the \textbf{training error predict generalisability}. These questions are in the domain of \emph{computational learning theory}.
 
 \subsection{Probably Approximate Correct Learning and Vapnik-Chervonenkis Complexity}
-Sample complexity bounds using $\abs{\mathcal{H}}$ usually do substantially overestimate, thus the assumption that $\bm{f} \in \mathcal{H}$ is unrealistic.
+Sample complexity bounds using $\abs{\Hilbert}$ usually do substantially overestimate, thus the assumption that $\bm{f} \in \Hilbert$ is unrealistic.
 
-Measuring Vapnik-Chervonenkis (VC) dimension for infinite $\mathcal{H}$:
-$h\in\mathcal{H}$ is \textbf{shattering a set of instances} $S\in X$ \textbf{iif} $h$ can partition $S$ in any way possible.\\
-$VC(\mathcal{H}) := \abs{\{S\in X | S \text{ is the largest subset of } X \text{ shattered by any } h\in\mathcal{H}\}}$. $VC(\mathcal{H})$ can be used as an alternative measure of $\abs{\mathcal{H}}$ to compute sample complexity.
+Measuring Vapnik-Chervonenkis (VC) dimension for infinite \Hilbert:
+$h\in\Hilbert$ is \textbf{shattering a set of instances} $S\in X$ \textbf{iif} $h$ can partition $S$ in any way possible.\\
+$VC(\Hilbert) := \abs{\{S\in X | S\ \text{is the largest subset of}\ X\ \text{shattered by any}\ h\in\Hilbert\}}$. $VC(\Hilbert)$ can be used as an alternative measure of $\abs{\Hilbert}$ to compute sample complexity.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[keepaspectratio,width=0.9\linewidth]{VC_shattering}
-	\caption{A two-dimensional linear classifier can shatter three points, $VC(\text{two-dimensional straight lines}=3$ but $\abs{\mathcal{H}} = \infty$}
+	\caption{A two-dimensional linear classifier can shatter three points, $VC(\text{two-dimensional straight lines}=3$ but $\abs{\Hilbert} = \infty$}
 \end{figure}
 
 \section{Formulating Learning Problems}
@@ -229,7 +247,7 @@ The empirical test error $E_{emp}$ is the proportion of \textbf{sample $S\in D$}
 
 \subsection{Error Sources}
 
-The chosen hypothesis $\mathcal{H}$ is the \textbf{best hypothesis at a distance of the true function}. Different chosen samples $X$ give \textbf{different information}.
+The chosen hypothesis \Hilbert is the \textbf{best hypothesis at a distance of the true function}. Different chosen samples $X$ give \textbf{different information}.
 
 \noindent
 Error decomposition:
@@ -273,7 +291,7 @@ Check \textbf{purity}, \textbf{rand index} and \textbf{misclassification rate}.
 On what basis can one \emph{algorithm be favoured over another} and how probable is it that the chosen method is \emph{truly significantly better}.
 
 \subsection{Maximum Likelihood and Ockham's Razor}
-Given competing $h_i \in \mathcal{H}_j$ \textbf{maximum likelihood parameters} can be found by \textbf{calculating the likelihood} $p(X|h_i)$ and \textbf{selecting the best} $\hat{h} = \underset{h_i}{\max} p(X|h_i)$.
+Given competing $h_i \in \Hilbert_j$ \textbf{maximum likelihood parameters} can be found by \textbf{calculating the likelihood} $p(X|h_i)$ and \textbf{selecting the best} $\hat{h} = \underset{h_i}{\max} p(X|h_i)$.
 
 The goal is to find a compromise between model complexity and accuracy on the validation data. Ockham's razor, an axiom in machine learning, states that "given two models with the \textbf{same empirical error}, the simpler one should be preferred because \textbf{simplicity is desirable in itself}". The reasoning is that for a simple hypothesis the \textbf{probability of it having unnecessary conditions is reduced}.
 
@@ -308,8 +326,8 @@ Each observation is a vector of values ($p$-dimensional) for which the SVM \text
 \end{definition}
 Separating hyperrplanes for classes encoded $\pm 1$
 \begin{align*}
-	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &> 0 \qquad \text{ if } y_i = 1\\
-	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &< 0 \qquad \text{ if } y_i = -1\\
+	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &> 0 \qquad \text{if}\ y_i = 1\\
+	\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} &< 0 \qquad \text{if}\ y_i = -1\\
 	\intertext{Equivalently}
 	y_i\cdot (\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip}) &> 0
 \end{align*}
@@ -837,30 +855,30 @@ Gaussian random variables are useful in machine learning and statistics for two 
 \subsection{Bayesian Regression}
 \begin{align*}
 	\intertext{Parameter Posterior}
-	p(\theta|\mathcal{D}) &= \frac{p(\mathcal{D}|\theta)\cdot p(\theta)}{\int_{\theta'} p(\mathcal{D}|\theta)\cdot p(\theta) \diff \theta'}
+	p(\theta|\D) &= \frac{p(\D|\theta)\cdot p(\theta)}{\int_{\theta'} p(\D|\theta)\cdot p(\theta) \diff \theta'}
 	\intertext{Posterior Predictive Distribution}
-	p(y_{*}|x_{*}\mathcal{D}) &= \int_{\theta} p(x_{*}|y_{*},\theta)\cdot p(\theta|\mathcal{D})\diff\theta
+	p(y_{*}|x_{*}\D) &= \int_{\theta} p(x_{*}|y_{*},\theta)\cdot p(\theta|\D)\diff\theta
 \end{align*}
 \texttt{pymc3} is a comfortable package for Bayesian Inference in python.
-\begin{minted}{python}
+\begin{minted}[breaklines, fontsize=\small]{python}
 from pymc3 import *
 
 with Model() as model:
-	# model specifications in PyMC3 are wrapped in a with-statement
-	# Define priors (#tau = precision = 1/variance = 1/sigma^2)
-	sigma = HalfCauchy('sigma', beta=10, testval=1.)
-	intercept = Normal('Intercept', 0, tau=1/20**2)
-	x_coeff = Normal('x', 0, tau=1/20**2)
-	
-	# Define likelihood
-	likelihood = Normal('y', mu=intercept + x_coeff * x, tau=1/sigma**2, observed=y)
-	
-	# Inference!
-	trace = sample(3000, cores=2)
-	
-	# draw 3000 posterior samples using NUTS sampling
-	plt.figure(figsize=(7, 7))
-	traceplot(trace[100:]); plt.tight_layout();
+    # model specifications in PyMC3 are wrapped in a with-statement
+    # Define priors (#tau = precision = 1/variance = 1/sigma^2)
+    sigma = HalfCauchy('sigma', beta=10, testval=1.)
+    intercept = Normal('Intercept', 0, tau=1/20**2)
+    x_coeff = Normal('x', 0, tau=1/20**2)
+    
+    # Define likelihood
+    likelihood = Normal('y', mu=intercept + x_coeff * x, tau=1/sigma**2, observed=y)
+    
+    # Inference!
+    trace = sample(3000, cores=2)
+    
+    # draw 3000 posterior samples using NUTS sampling
+    plt.figure(figsize=(7, 7))
+    traceplot(trace[100:]); plt.tight_layout();
 \end{minted}
 
 \subsection{Gaussian Processes}
@@ -869,15 +887,181 @@ with Model() as model:
 \end{equation*}
 \textbf{Gaussian Processes} are the extension of multivariate Gaussians to infinite-sized collections of real-valued variables. Gaussian processes can be thought of as distributions not just over random vectors but in fact distributions over random functions. A Gaussian process is a stochastic process such that any finite sub-collection of random variables has a multivariate Gaussian distribution.
 
-In particular, a collection of random variables $ \{h(x): x\in\mathcal{X}\} $ is said to be drawn from a Gaussian process with \textbf{mean function $\bm{m(\cdot)}$} and \textbf{covariance function} $\bm{k(\cdot,\cdot)}$ if for any finite set of elements $x_1,x_2,\dots,x_m\in\mathcal{X}$ and the associated finite set of random variables $h(x_1), h(x_2),\dots,h(x_m)$ have a distribution
-
+In particular, a collection of random variables $ \{h(x): x\in\X\} $ is said to be drawn from a Gaussian process with \textbf{mean function $\bm{m(\cdot)}$} and \textbf{covariance function} 
+$\bm{k(\cdot,\cdot)}$ if for any finite set of elements $x_1,x_2,\dots,x_m\in\X$ and the associated finite set of random variables $h(x_1), h(x_2),\dots,h(x_m)$ have a distribution
 \begin{center}
 	\includegraphics[width=0.8\linewidth]{img/gaussian_processes}
 \end{center}
 
-\subsection{Non-Parametric Gaussian Process Models}
-% TODO NP GPM
+\noindent
+\textbf{Gaussian Likelihood}
+\begin{align*}
+p(\textbf{y}|\textbf{x}, f(x), M_i) &\sim \N{\textbf{f}, \isocov\sigma_n^2}\\
+p(\textbf{y}|\textbf{x}, f(x), M_i) &\propto \prod_i e^{-\frac{1}{2\sigma_n^2}\left(y_i -f(x_i)\right)^2}
+\end{align*}
+With $\isocov$ being the isotropic\footnote{A covariance matrix $\textbf{C}$ is called \emph{isotropic or spherical} if it is proportionate to the identity matrix $\textbf{C} = \lambda\cdot\mathbb{I}$} covariance matrix.
 
+\vspace{1em}
+\noindent
+Zero mean Gaussian \textbf{process prior}
+\begin{equation*}
+p(f|M_i) \sim \GP{m(x) \equiv 0, k(x,x')}
+\end{equation*}
+Gaussian \textbf{process posterior}
+\begin{align*}
+	p\left( f(x) \middle| \textbf{x},\textbf{y}, M_i \right) &\sim \GP{m_p, k_p(x,x')}\\
+	m_p(x) &= k(x,\textbf{x})[K(\textbf{x},\textbf{x}) + \isocov\sigma_n^2]^{-1}\textbf{y}\\
+	k_p(x,x') &= k(x,x') - k(x,\textbf{x})[K(\textbf{x},\textbf{x}) + \isocov\sigma_n^2]^{-1} k(\textbf{x},x')
+\end{align*}
+Gaussian \textbf{predictive distribution}
+\begin{align*}
+	p\left( y^* \middle| x^*, \textbf{x},\textbf{y}, M_i \right) &\sim \GP{m^*, k^*(x,x')}\\
+	m^*(x) &= k(x^*,\textbf{x})[K(\textbf{x},\textbf{x}) + \isocov\sigma_n^2]^{-1}\textbf{y}\\
+	k^*(x,x') &= k(x^*,x^*) - k(x^*,\textbf{x})[K(\textbf{x},\textbf{x}) + \isocov\sigma_n^2]^{-1} k(x^*,\textbf{x})
+\end{align*}
+
+\subsection{Non-Parametric Gaussian Process Models}
+Parametric models assume some finite set of parameters $\theta$. Given the parameters, future predictions $x$, are independent of the observed data $\D$, then $P(x|\theta,\D) = P(x|\theta)$ and therefore $\theta$ captures everything that is to know about the data. This makes the complexity of the model bounded even though the amount of data might be unbounded, and makes the model inflexible. Non-parametric models assume that the data distribution can't be defined in terms of such a finite set of parameters. But they can often be defined by assuming an infinite dimensional $\theta$. Usually $\theta$ is thought of as a function. This gives the following \textbf{Gaussian likelihood}
+\begin{equation*}
+	p(\textbf{y}| \textbf{x}, f, M_i) \sim \N{\textbf{f}, \isocov\sigma_n^2}
+\end{equation*}
+And a zero mean Gaussian process prior of
+\begin{equation*}
+	p(f|M_i) \sim \GP{\textbf{m},\textbf{k}}
+\end{equation*}
+\textbf{Posterior "functions" distribution} (over functions)
+\begin{equation*}
+	p(f|\textbf{x},\textbf{y}, M_i) = \frac{p(\textbf{y}| \textbf{x}, f, M_i)\cdot p(f|M_i)}{p(\textbf{y}| \textbf{x},M_i)}
+\end{equation*}
+Predictive distribution
+\begin{equation*}
+	p\left( y^* \middle| x^*, \textbf{x},\textbf{y}, M_i \right) = \int p\left( y^* \middle| x^*, f, M_i \right) \cdot p(f|\textbf{x},\textbf{y}, M_i) \diff f
+\end{equation*}
+Intuitively, one can think of a function $f(\cdot)$ drawn from a Gaussian process prior as an extremely high-dimensional vector drawn from an extremely high- dimensional multivariate Gaussian. In Machine Learning, each dimension of the Gaussian corresponds to an element $x$ from the index set \X, and the corresponding component of the random vector represents the value of $f(x)$.
+
+\subsubsection{Mercer Kernel}
+The positive semi-definiteness requirement for covariance matrices computed based on arbitrary input points is identical to \textbf{Mercer's condition for kernels}. A function $(\cdot,\cdot)$ is a valid kernel provided the resulting \textbf{kernel matrix $K$} defined as above is always positive semi-definite for any set of input points $x_1, x_2, \dots, x_m \in \X$. Therefore, Gaussian processes are kernel-based probability distributions in the sense that any valid kernel function can be used as a covariance function.
+\begin{definition}
+	Let \X be a measure space with $k: L^2(\X\times\X)\rightarrow \R$. $k$ is called a kernel iff there is some feature map $\phi: \X \rightarrow \Hilbert$ into a separable Hilbert space \Hilbert such that
+	\begin{equation*}
+		k(x,x') = \left\langle \theta(x) \middle| \theta(x') \right\rangle_{\Hilbert}
+	\end{equation*}
+	that is $k$ is a kernel iff for some space \Hilbert and map $\theta$ the following diagram commutes
+	\begin{center}
+		\begin{tikzpicture}
+		\matrix (m) [matrix of math nodes,row sep=3em,column sep=4em,minimum width=2em]
+		{
+			\X\times\X & \\
+			\Hilbert\cdot\Hilbert & \R\\
+		};
+		\path[-stealth]
+			(m-1-1) edge node [left] {$\varphi$} (m-2-1)
+			edge node [above] {$k$} (m-2-2)
+			(m-2-1) edge node [below] {$\left\langle\cdot,\cdot\right\rangle_{\Hilbert}$} (m-2-2);
+		\end{tikzpicture}
+	\end{center}
+	This means that $k(x,x')$ is a kernel, if there is a feature mapping $\varphi(x)$ into some (higher dimensional) space \Hilbert, where it can be represented by a \textbf{scalar or dot product}.
+\end{definition}
+
+\subsubsection{Mercer Theorem}
+Let \X\ be a measure space with $k:L^2(\X\times\X)\rightarrow \R$ and $k$ be a function with the following properties
+\begin{itemize}
+	\item $k$ is \emph{symmetric}:
+	\begin{equation*}
+		k(x,x') = k(x',x)
+	\end{equation*}
+	\item $k$ is \emph{positive-semidefinite}:
+	\begin{equation*}
+		k(x,x') \geq\qquad \forall x,x'
+	\end{equation*}
+	\item $k$ is \emph{continuous}: $k(x,x') \rightarrow \R$ is a continuous function in $x$ and $x' \in \X$ 
+\end{itemize}
+Then there is a feature mapping $\theta : \X \rightarrow \R^d$, such that
+\begin{equation*}
+	k(x,x') = \left\langle \theta(x) \middle| \theta(x') \right\rangle_\Hilbert = \theta(x)^T \cdot \theta(x')
+\end{equation*}
+
+\subsubsection{Kernel Properties}
+If $k_1(x,y)$ and $k_1(x,y)$ are kernels, then the following functions are kernels as well
+\begin{align*}
+	k(x,y) &= \langle\theta(x) | \theta(x')\rangle_{\mathcal{F}}\\
+	k(x,y) &= k_1(x,y) + k_2(x,y)\\
+	k(x,y) &= \alpha\cdot k_1(x,y)\qquad\text{where}\ \alpha>0\\
+	k(x,y) &= f(x) \cdot f(y)\qquad\text{for any function}\ f(x)\\
+	k(x,y) &= k_1(x,y) \cdot k_2(x,y)
+\end{align*}
+
+\subsubsection{Radial Basis Function or Squared Exponential Kernel}
+\begin{equation*}
+	k(x,x') = \sigma_0^2 e^{-\frac{1}{2}\left(\frac{x-x'}{\lambda}\right)^2}
+\end{equation*}
+The radial basis function kernel (RBF) kernel is a stationary kernel. It is known as the \textbf{squared exponential kernel} as well and parametrised by a length-scale parameter $\lambda$. This parameter can either be a scalar (the isotropic variant of the kernel) or a vector with the same number of dimensions as the inputs (the anisotropic variant of the kernel). The RBF kernel is infinitely differentiable, which implies that a $\mathcal{GP}$ with this kernel as covariance function has mean square derivatives of all orders, and \textbf{is thus very smooth}.
+
+\subsubsection{Rational-Quadratic Kernel}
+\begin{equation*}
+	k(x,x') = \left( 1 + \frac{(x-x')^2}{2\alpha\lambda^2} \right)^{-\alpha}
+\end{equation*}
+
+\noindent
+\begin{minipage}{0.55\linewidth}
+	The Rational Quadratic kernel can be seen as a scale mixture (an infinite sum) of RBF kernels with different characteristic length-scales. It is parametrised by a length-scale parameter $\lambda$ and a scale mixture parameter $\alpha$.
+\end{minipage}
+\hfill
+\begin{minipage}{0.42\linewidth}
+	\includegraphics[width=\linewidth]{img/rational_quadratic_kernel}
+\end{minipage}
+
+\subsubsection{Exp-Sine-Squared Kernel}
+\begin{equation*}
+	k(x,x') = e^{-\frac{2\cdot \sin^2\left(\frac{\pi}{p}\cdot\abs{x-x'}\right)}{\lambda^2}}
+\end{equation*}
+
+\noindent
+\begin{minipage}{0.55\linewidth}
+	The Exp-Sine-Squared kernel allows modelling periodic functions. An example of such a periodic function would be the $\text{CO}_2$ concentration or daily temperature changes. It is parametrised by a length-scale parameter $\lambda$ and a periodicity parameter $p$.
+\end{minipage}
+\hfill
+\begin{minipage}{0.42\linewidth}
+	\includegraphics[width=\linewidth]{img/exp_sine_kernel}
+\end{minipage}
+
+\subsubsection{Dot-Product Kernel}
+\begin{equation*}
+	k(x,x') = \sigma_0^2 + x\cdot x'
+\end{equation*}
+
+\noindent
+\begin{minipage}{0.55\linewidth}
+	The Dot-Product kernel is non-stationary and can be obtained from linear regression by putting $a_d \sim \N{0,1}$ priors on the coefficients of $x_d\quad d=1..D$ and a prior of $b_0 \sim \N{0,\sigma_0^2}$ on the bias. The Dot-Product kernel is invariant to a rotation of the coordinates about the origin, but not translations. It is parametrised by a parameter $\sigma_0^2$. For $\sigma_0^2=0$ the kernel is called the homogeneous linear kernel, otherwise it is inhomogeneous.
+\end{minipage}
+\hfill
+\begin{minipage}{0.42\linewidth}
+	\includegraphics[width=\linewidth]{img/dot_product_kernel}
+\end{minipage}
+
+\subsubsection{Matérn Kernel}
+\begin{equation*}
+	k(x_i, x_j) =  \frac{1}{\Gamma(\nu)2^{\nu-1}}\left( \frac{\sqrt{2\nu}}{l} d(x_i , x_j ) \right)^\nu K_\nu\left( \frac{\sqrt{2\nu}}{l} d(x_i , x_j )\right)
+\end{equation*}
+
+\noindent
+\begin{minipage}{0.55\linewidth}
+	The Matérn kernel is a stationary kernel and a generalization of the RBF kernel. It has an additional parameter $\nu$ which controls the smoothness of the resulting function. It is parametrised by a length-scale parameter $\lambda$, which can either be a scalar (isotropic variant of the kernel) or a vector with the same number of dimensions as the inputs (anisotropic variant of the kernel). 
+	
+	For a finite $\nu$, the Matérn kernel generates much rougher sample functions than RBF. For the special case of $\nu = \frac{1}{2}$ the kernel becomes $ k(x,x') = e^{-\abs{x-x'}\lambda}$. This is called an \textbf{Ornstein-Uhlenbeck process}, yielding very rough sample functions.
+\end{minipage}
+\hfill
+\begin{minipage}{0.42\linewidth}
+		\includegraphics[width=\linewidth]{img/matern_kernel}
+\end{minipage}
+
+\subsection{Section Summary}
+\begin{itemize}
+	\item \emph{Assumptions} are made explicit in the form of a \textbf{prior}
+	\item \emph{Predictions} are made by \textbf{averaging over the posterior}, taking all possible interpretations of the data into account
+	\item Bayesian inference does not involve any maximization so there is \textbf{no possibility of over-fitting}. Instead, parameters are integrated out.
+	\item Bayesian inference is \textbf{usually difficult}, because it is difficult to do integrals.
+\end{itemize}
 
 \section{Dimensionality Reduction}
 The "Curse of Dimensionality" is the problem that inputs are high dimensional when working with data from speech, images, genomes and other sources. One of the characteristics of high-dimensional data is that the number of dimensions is comparable or larger than the number of samples. This has the consequence that the sample complexity of function approximation can grow exponentially.
@@ -885,7 +1069,7 @@ The "Curse of Dimensionality" is the problem that inputs are high dimensional wh
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\linewidth]{img/curse_dimensionality}
-	\caption{The curse of dimensionality is well illustrated by a subcubical neighborhood for uniform data in a unit cube. The figure on the right shows the side-length of the subcube needed to capture a fraction r of the volume of the data, for different dimensions p. In ten dimensions we need to cover 80\% of the range of each coordinate to capture 10\% of the data.}
+	\caption{The curse of dimensionality is well illustrated by a sub-cubical neighbourhood for uniform data in a unit cube. The figure on the right shows the side-length of the sub-cube needed to capture a fraction r of the volume of the data, for different dimensions p. In ten dimensions we need to cover 80\% of the range of each coordinate to capture 10\% of the data.}
 	\label{fig:cursedimensionality}
 \end{figure}
 
@@ -950,10 +1134,237 @@ It turns out that the optimization corresponds to a diagonalization of the covar
 	\end{center}
 \end{minipage}
 
+\begin{minted}{python}
+pca = PCA(n_components=0.80)
+pca.explained_variance_ratio_
+1 - pca.explained_variance_ratio_.sum
+\end{minted}
 
-% TODO PCA
+\subsubsection{Choosing The Right $k$}
+The first criterion, the total variance $V_{tot}$, can be calculated as (total variance is preserved under rotation)
+\begin{equation*}
+	V_{tot} = \sum_{j=1}^{p}\Var{\textbf{X}_j} = \sum_{j=1}^{p} \Var{\textbf{Z}_j} = \sum_{j=1}^{p} \lambda_j
+\end{equation*}
+While the second criterion, $P_k$ as a function of the dimension, can only be obtained through testing (grid search)
+\begin{center}
+	\includegraphics[width=0.4\linewidth]{img/pca_k}
+\end{center}
 
-% TODO PCA Rotation
+\subsection{Maximum Variance Formulation}
+Given $D$-dimensional data vectors $\{\textbf{x}_n\}\ (n=1..N)$ and a data matrix $X_{(D\times N)} = \left[\textbf{x}_1,\dots, \textbf{x}_N\right]$, project the data to an $M$-dimensional subspace with $M<D$ while maximising the variance of the projected data.
+
+Assuming $M=1$, then there is a $D$-dimensional vector $\textbf{u}_1$ that does this. As only the direction defined by this vector and not the magnitude of $\textbf{u}_1$ itself is interesting, the norm is to choose a unit vector so that $\textbf{u}_1^T\textbf{u}_1 = 1$.
+
+The mean $\overline{\textbf{x}}_p$ and variance $\text{Var}_p$ of the projected data are given by
+\begin{tabularx}{\linewidth}{m{0.3\linewidth} m{0.7\linewidth}}
+	projected data & \[ \samplemean{\textbf{x}}_p = \textbf{u}_1^T\samplemean{\textbf{x}} \]\\
+	data mean & \[ \samplemean{\textbf{x}} = \frac{1}{N}\sum_{n=1}^{N}\textbf{x}_n \]\\
+	variance of projected data & \[\text{Var}_p = \frac{1}{N}\sum_{n=1}^{N}\{\textbf{u}_1^T\textbf{x}_n - \textbf{u}_1^T\samplemean{\textbf{x}}\}^2 = \textbf{u}_1^T C \textbf{u}_1 \]\\
+	data covariance matrix & \[ C = \frac{1}{N}\sum_{n=1}^{N}(\textbf{x}_n - \samplemean{\textbf{x}})(\textbf{x}_n - \samplemean{\textbf{x}})^T \]
+\end{tabularx}
+\noindent
+Maximise $\text{Var}_p$ under the constraint, that the norm of the projection operator is one ($\textbf{u}_1^T\textbf{u}_1 = 1$). Use a Lagrange multiplier $\lambda_1$ to be able to use unconstrained optimisation
+\begin{align*}
+	 L(\textbf{u}_1, \lambda_1) &= \textbf{u}_1^T C \textbf{u}_1 + \lambda_1(1 - \textbf{u}_1^T\textbf{u}_1) \tag*{\textbf{Lagrange Function}}\\
+	\left.\begin{matrix}\frac{\partial L}{\partial \textbf{u}_1} = 0\\ \frac{\partial L}{\partial \lambda_1} = 0\end{matrix}\right\} &\Rightarrow \textbf{u}_1 = \lambda_1\textbf{u}_1\\
+	&\Rightarrow \textbf{u}_1^T C \textbf{u}_1 = \lambda_1
+\end{align*}
+The variance will be a maximum when $\textbf{u}_1$ is set equal to the eigenvector of $C$ having the largest eigenvalue $\lambda_1$. This eigenvector is known as the \textbf{first principal component}.
+
+Additional principal components $\lambda_k$ can be defined in an incremental fashion by choosing each new direction that maximises the variance amongst all possible directions orthogonal to those already considered. The optimal linear projection matrix is then given by $[\textbf{u}_1,\textbf{u}_2,\dots,\textbf{u}_M]$ \parencite[p. 561-565]{bishop2006pattern}.
+
+\subsection{Kernel PCA}
+Principal component analysis can be employed in a nonlinear way by means of the kernel trick. Data that inseparable in the input space can be transformed in higher dimensional space where it is linearly separable. For example
+\begin{equation*}
+	\theta: \R^2 \rightarrow \R^2 : (x_1,x_2) \mapsto (x_1,x_2, x_1^2 + x_2^2)
+\end{equation*}
+High-dimensional mapping can seriously increase computation time. But by using the \textbf{Kernel-Trick} this can be avoided
+\begin{equation*}
+	K(x_i,x_j) = \theta(x_i)^T\cdot \theta(x_j)
+\end{equation*}
+Given any algorithm that can be expressed solely in terms of \textbf{dot products}, this trick allows us to \textbf{construct different non-linear versions} of it.
+
+\subsubsection{Popular Kernels}
+\begin{tabularx}{\linewidth}{m{0.3\linewidth} m{0.7\linewidth}}
+	Gaussian (RBF) & \[ K(\textbf{x},\textbf{x}') = e^{-\beta\cdot\norm{\textbf{x}-\textbf{x}'}^2} \]\\
+	Laplacian & \[ K(\textbf{x},\textbf{x}') = e^{-\gamma\abs{\textbf{x}-\textbf{x}'}_1} \]\\
+	Polynomial & \[ K(\textbf{x},\textbf{x}') = (1+\textbf{x}^T\textbf{x}')^p \]\\
+	Sigmoid & \[ K(\textbf{x},\textbf{x}') = \tanh(\alpha \textbf{x}^T\textbf{x}' + \delta) \]\\
+	Linear Kernel & \[ K(\textbf{x},\textbf{x}') = \textbf{x}^T\textbf{x}' \]\\
+\end{tabularx}
+\noindent
+Kernel Principal Component Analysis (KPCA) extends conventional principal component analysis (PCA) to a high dimensional feature space $D$ using the \textbf{kernel trick}.
+\begin{enumerate}
+	\item Mapping to a non-linear feature space\quad$x_i\mapsto\theta(x_i)$
+	\item Extract the PCA in that space, the result will be non-linear in the original space
+\end{enumerate}
+
+\subsection{Manifold Learning}
+A collection of methodologies for analyzing high dimensional data based on the hypothesis that data tend to lie near a low dimensional manifold is now called Manifold Learning.
+
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/manifold_learning}
+\end{center}
+
+\subsection{Similarity-based Methods}
+Given data $\vec{\textbf{x}}$ in high dimensional space with distance. Have distances or dissimilarities $d_{ij}$ between many objects in high dimensional space and draw them in low dimensional space ($\R^2,\R^3$).
+\begin{center}
+	\includegraphics[width=0.8\linewidth]{img/similarity_methods}
+\end{center}
+The distances in low-dimensional $d_{ij}^*$ should match the original ones $d_{ij}$ in high dimensions as good as possible.
+
+Methods:
+\begin{enumerate}
+	\item Multi-dimensional Scaling (\textbf{MDS})
+	\item Local Linear Embedding (\textbf{LLE})
+	\item Isometric Mapping (\textbf{Isomap})
+	\item t-Distributed Stochastic Neighbour Embedding (\textbf{t-SNE})
+\end{enumerate}
+Similarity is based on a metric, a generalized form of distance measure.
+
+\subsubsection{Similarity - A Metric and Non-Metric}
+A metric $d(x,y)$ is a generalised distance measure that follows the following axioms
+\begin{enumerate}
+	\item \textbf{Non-negativity} $ d(x,y) \geq 0 $
+	\item \textbf{Coincidence} $ d(x,y) = 0 \Leftrightarrow x = y $
+	\item \textbf{Symmetry} $ d(x,y) = d(y,x) $
+	\item \textbf{Triangle Inequality} $ d(x,y) + d(y,z) \geq d(x,z) $
+\end{enumerate}
+
+\vspace{1em}
+\noindent
+Examples of metrics
+\begin{enumerate}[label=\alph*]
+	\item \textbf{Euclidean} and other $L_p$-metrics\\
+	Induced metric by the norm of the vector $\norm{x-y}_p$
+	\item \textbf{Jaccard Distance}\\
+	1 - Jaccard Index
+	\item \textbf{Graph Distance}\\
+	Shortest path
+	\item \textbf{Wasserstein} metric\\
+	Between two probability distributions
+\end{enumerate}
+
+\subsubsection{Multidimensional Scaling}
+MDS reduces dimensionality while trying to preserve the distances between all the instances. It seeks a low-dimensional representation of the data in which the distances respect well the distances in the original high-dimensional space. MDS attempts \textbf{to model similarity or dissimilarity} of the data as distances in a geometric spaces. In general, is a technique used for analysing similarity or dissimilarity data.
+
+Classical MDS takes an input matrix $I$ giving dissimilarities between pairs of items and outputs a coordinate matrix whose configuration minimizes a \textbf{loss function called strain}. Given a matrix $D = [d_{ij}]$ where $d_{ij}$ is the distance between $i$ and $j$, and wanting to find $x_i$, the \textbf{strain} is given by
+\begin{align*}
+	S_D(x_1,\dots,x_N) &= \left(\frac{\sum_{ij}(d_{ij} - \langle x_i|x_j\rangle)^2}{\sum_{ij}d_{ij}^2}\right)^{\frac{1}{2}}\\
+	S_D(x_1,\dots,x_N) &\sim \sum_{i<j}\norm{d_ij - d_{ij}^*}
+\end{align*}
+MDS attempts to find an embedding from the high dimensional objects in $I$ into $x_i\in\R^N$ such that distances $d_{ij}$ are preserved.
+
+\vspace{1em}
+\noindent
+\textbf{Steps of A Classical MDS Algorithm}
+Classical MDS uses the fact that the coordinate matrix can be derived by an eigenvalue decomposition from $B = XX^T$. And the matrix $B$ can be computed from the proximity matrix $D$ by using \textbf{double centring}
+
+\begin{enumerate}
+	\item Set up squared proximity matrix (covariance): $C = D^{(2)} = [d_{ij}^2]$
+	\item Apply double centring $B = -\frac{1}{2} HCH^T$ using the \textbf{centring matrix} $H = \mathbb{I}_n - \frac{1}{n} \mathbb{O}^T $ where $n$ is the number of objects and $\mathbb{O}$ the matrix of all ones
+	\item Determine the \textbf{$m$ largest eigenvalues} and corresponding \textbf{eigenvectors} $\{u_1,\dots,u_m\}$ of $B$ ($m$ equals the output dimension)
+	\item Now calculate $X = U_m (\Delta_m)^{\frac{1}{2}}$, where $U_m$ is the matrix of eigenvectors $[u_1,\dots,u_m]$ and $\Delta_m$ is the diagonal matrix of $m$ eigenvalues of $B$ 
+\end{enumerate}
+Classical MDS assumes \textbf{Euclidean distances}. So this is not applicable for direct dissimilarity ratings.
+
+Example of a centring matrix in Python
+\begin{minted}[fontsize=\small]{python}
+H = np.eye(4) - 1/4 * np.ones((4,4))
+#   array([
+#   [ 0.75, -0.25, -0.25, -0.25],
+#   [-0.25,  0.75, -0.25, -0.25],
+#   [-0.25, -0.25,  0.75, -0.25],
+#   [-0.25, -0.25, -0.25,  0.75]])
+C = np.array([[1,2,3,4],[2,1,5,6],[3,5,1,7],[4,6,7,1]])
+#   array([
+#   [1, 2, 3, 4],
+#   [2, 1, 5, 6],
+#   [3, 5, 1, 7],
+#   [4, 6, 7, 1]])
+H*C*H.T
+#   array([
+#   [-0.375, -0.375,  0.125,  0.625],
+#   [-0.375, -2.375,  1.125,  1.625],
+#   [ 0.125,  1.125, -3.375,  2.125],
+#   [ 0.625,  1.625,  2.125, -4.375]])
+\end{minted}
+
+\paragraph{Summary of MDS}
+\begin{itemize}
+	\item MDS is fast, because it is based on linear algebra
+	\item Only distances are needed as input (as all MDS methods)
+	\item The formulation as a cost function is valid for Euclidean distances only (internally Eigenvalues are used). If other distances (besides Euclidean) are used, nothing is guaranteed.
+	\item MDS tries to preserve the distance between all data points, even if they are far separated.
+	\item For Euclidean distances, classical MDS is equivalent to PCA	
+\end{itemize}
+
+\subsubsection{Local Linear Embedding}
+LLE reduces dimensionality while trying to preserve the distances between close instances only. It describes the local properties of the manifold around a data point $x_i$ by writing the data point as a linear combination (the so-called reconstruction weights $w_{ij}$) of its $k$ \emph{nearest neighbours}
+\begin{equation}
+	x_i \approx \sum_j w_{ij} x_j
+	\label{eq:LLEnearestneighbours}
+\end{equation}
+In the low dimension LLE attempts to \textbf{retain the reconstruction weights $W$ as well as possible}. Hence, this method fits a hyperplane through the data point $x_i$ and its nearest neighbours, thereby \textbf{assuming that he manifold is locally linear}.
+
+The local linearity assumption implies that the reconstruction weights $ w_{ij} $ of the data points $x_i$ are \textbf{invariant to translation, rotation, and rescaling}. Because of the invariance to these transformations, any linear mapping of the hyperplane to a space of lower dimensionality preserves the reconstruction weights in the space of lower dimensionality.
+
+As a consequence, finding the $d$-dimensional data representation $Y$ amounts to minimising the cost function $\phi$:
+\begin{equation*}
+	\phi(Y) = \sum_{i}\left(y_i - \sum_{j=1}^{k}w_{ij}y_j\right)^2
+\end{equation*}
+For each training instance $x_i$, the algorithm identifies its $k$ closest neighbours, then tries to reconstruct $x_i$ as a linear function of these neighbours (see equation \ref{eq:LLEnearestneighbours}). More specifically, it finds the weights $w_{ij}$ such that the squared distance between $x_i$ and $\sum_j w_{ij} x_j$ is as small as possible, assuming $w_{ij} = 0$ if $x_j$ is note one of the $k$ closest neighbours of $x_i$. Thus the first step of LLE is the \textbf{constrained optimisation problem} where $W$ is the weight matrix containing all the weights $w_{ij}$.
+
+The second constraint simply normalises the weights for each training instance $x_i$
+\begin{align*}
+	\widehat{W} &= \argmin{W}\left\{ \sum_{i=1}^{m}\norm{x_i - \sum_j w_{ij}x_j}^2 \right\}\\
+	\text{subject to} \quad &\begin{cases}
+	w_{ij} = 0 & \text{if $x_j$ is not one of the $k$-nearest neighbours of $x_i$}\\
+	\sum_{j=1}^{m} w_{ij} = 1 & (i=1\dots m)
+	\end{cases}
+\end{align*}
+
+\subsubsection{Isomap}
+Isomap creates a graph by connecting each instance to its nearest neighbours, then reduces dimensionality while trying to preserve the geodesic distances between the instances. It is a \textbf{non-linear method} for dimensionality reduction and finds the that preserves the global, non-linear geometry of the data by \textbf{preserving the geodesic manifold inter-point distances}. A geodesic is the shortest curve along the manifold connecting two points.
+
+This method first approximates the geodesic inter-point distances and then runs MDS to find the projection that preserves these distances. Thus, it uses the same basic idea as PCA, but preserves linearity only locally via small neighbourhoods.
+
+\begin{enumerate}
+	\item For each object, find a small set of neighbouring objects and their distances
+	\item Compute \emph{all-pairs shortest paths} on the above neighbourhood graph
+	\item Run \emph{multidimensional scaling} using the matrix of shortest-path distances
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/isomap}
+	\caption{Graph geodesic: In the field of graph theory, the distance between two vertices in a graph is the number of edges in a shortest path connecting them. This is also known as the geodesic distance.}
+	\label{fig:isomap}
+\end{figure}
+
+\subsubsection{t-Distributed Stochastic Neighbour Embedding}
+t-SNE reduces dimensionality while trying to keep similar instances close and dissimilar instances apart. It is mostly used for visualization, in particular to visualize clusters of instances in high-dimensional space. It is a manifold learning algorithm that in essence constructs a probability distribution $p$ over the dataset $X$, and then another probability distribution $q$ in a lower dimensional data space $Y$, making both distributions as similar to each other as possible.
+
+t-SNE uses a tuneable parameter \textbf{perplexity}, which defines how to balance attention between local and global aspects of the data. The parameter can be understood as a guess about the number of \emph{close} neighbours each point has. This method is incredibly flexible and can often find structures in the data, where other dimensionality reduction algorithms fail to do. Unfortunately, this flexibility is gained at the cost of interpretability.
+
+\begin{enumerate}
+	\item In the high dimensional space $X$, create a probability distribution $p_{i|j}$ that dictates the relationships between various neighbouring points $x_i$ and $x_j$
+	\item Try to recreate a probability distribution $q_{i|j}$ in a low dimensional space $Y$ that follows that probability distribution $p_{i|j}$ as best as possible. Use Kullback–Leibler divergence as loss function
+\end{enumerate}
+
+\paragraph{Stochastic Neighbour Embedding} constructs a probability distribution $q$ in the lower dimensional space using the following formula for pairwise points $y$
+\begin{align*}
+	p_{i|j} &= \frac{e^{-\frac{\norm{x_i - x_j}^2}{2\sigma_i^2}}}{\sum_{k\neq i}e^{-\frac{\norm{x_i - x_k}^2}{2\sigma_i^2}}}\\
+	q_{i|j} &= \frac{e^{-\norm{y_i - y_j}^2}}{\sum_{k\neq i}e^{\norm{y_i - y_k}^2}}
+\end{align*}
+The goal is to make sure the two probability distributions are as similar as possible. This is achieved by considering the \textbf{Kullback-Leibler divergence}, which is a measure of how different two probability distributions are from one another
+\begin{equation}
+	\text{KL}(P|Q) = \sum_{i\neq j} p_{i|j} ln\left(\frac{p_{i|j}}{q_{i|j}}\right)
+\end{equation}
+In essence, the KL divergence is the expected value of the log difference of the probabilities of the data points.
+
+\subsubsection{Linear Discriminant Analysis}
+LDA is actually a classification algorithm. During training it learns the most discriminative axes between the classes. These axes can be used to define a hyperplane onto which to project the data. The projection will keep classes as far apart as possible, so LDA is a good technique to reduce dimensionality before running another classification algorithm such as an SVM classifier.
 
 \section{Clustering}
 Clustering is finding groups in data. Given $n$ data points, separate them into $K$ clusters ($n$: number of data points, $K$: number of clusters, $\Delta$: a partition $\Delta = \{C_1, C_2,\dots, C_K\}$, $\mathcal{L}(\Delta)$: loss of $\Delta$ to be minimised). There is a differentiation between hard clustering, where each data point is assigned to a unique cluster, and soft clustering, where each data point $i$ is assigned a probability that it is in cluster $k:=\{\gamma_{ki}\}_{k=1:K}$. Clustering is related to vector quantisation.
@@ -1128,7 +1539,176 @@ The distortion can also be expressed as \textbf{sum of (squared) intra-cluster d
 \end{itemize}
 
 \subsubsection{K-Medoid and K-Maxoid Clustering}
-% TODO KMeans Methods
+The \textbf{medoid} $\textbf{m}$ of \X coincides with the data point $x_j \in \X$ that is closest to the mean $\mu$. The point $x_j \in X$ with the smallest average distance to all other points in \X is closest to the sample mean $\mu$. The \textbf{maxoid} is the point farthest from the mean and thus the one with the largest average distance to all points closest to the sample mean.
+\begin{align*}
+	\text{Medoid:}\qquad \textbf{m} &= \argmin{\textbf{x}_l} \frac{1}{n} \sum_{i=1}^{n}\norm{\textbf{x}_l - \textbf{x}_i}^2\\
+	\text{Maxoid:}\qquad \textbf{m} &= \argmax{\textbf{x}_l} \frac{1}{n} \sum_{i=1}^{n}\norm{\textbf{x}_l - \textbf{x}_i}^2
+\end{align*}
+Contrary to the $\mu_k$ in K-Means, the $m_k$ in K-medoids or maxoids are guaranteed to coincide with data points so that \textbf{K-medoids or -maxoids clustering exclusively relies on distance between data points}. All distances evaluated during these methods can therefore be precomputed and stored in a distance matrix $\textbf{D}$ where
+\begin{equation*}
+	\textbf{D}_{ij} = \norm{\textbf{x}_i - \textbf{x}_j}^2
+\end{equation*}
+
+\subsubsection{Heuristics for Result Improvement}
+\begin{itemize}
+	\item \textbf{Restart} many times with different initializations.
+	\item \textbf{Swap} individual points between clusters.
+	\item \textbf{Remove a cluster centre}, and introduce a completely new centre instead.
+	\item \textbf{Merge clusters} and additionally introduce a completely new cluster centre.
+	\item \textbf{Split a cluster in two pieces}, preferably one which has a bad objective function. Then, reduce the number of clusters again, for example by randomly removing one.
+	\item Choose $K$ by using the \textbf{elbow method} or preferably by using \textbf{Cross-Validation}
+	\begin{itemize}
+		\item Repeatedly split the data into training and validation datasets
+		\item Cluster the training dataset
+		\item Measure average distance to centres on validation data
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[tbh]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/elbow_method_illustration}
+	\caption{An example for the elbow method of choosing $K$}
+	\label{fig:elbowmethodillustration}
+\end{figure}
+
+\subsubsection{Silhouette Method for $K$ Selection}
+Given $K$ and $K$ clusters, given any data point $i$, let $a_i$ be the average distance or dissimilarity of $i$ with all other points in the same cluster.
+\begin{equation*}
+	s_i = \frac{b_i - a_i}{\max(b_i,a_i)} \tag*{\textbf{Silhouette Score} $s_i \in [-1,1]$}
+ \end{equation*}
+For the Euclidean $k$-means use the Euclidean distance for dissimilarity. $a_i$ measures the fit of $i$ into its cluster and $b_i$ is the smallest average distance of $i$ to other clusters. The score $s_i$ is close to $1$ if point $i$ is in a tight cluster and far away from other clusters. Therefore, $s_i$ is close to $-1$ if $i$ is in a loose cluster and close to other clusters.
+\begin{equation*}
+	\text{Maximise}\quad \frac{1}{n}\sum_{i=1}^{n}s_i\ \text{over} K
+\end{equation*}
+
+\noindent
+\begin{minipage}{0.4\linewidth}
+	Silhouette analysis can be used to study the separation distance between the resulting clusters.
+	\begin{itemize}
+		\item[$a_i$:] 5.52
+		\item[$b_i$:] 21.82 (because the other cluster is further away by visual inspection)
+		\item[$s_i$:] 0.75
+	\end{itemize}
+	So the $i$th point is in a pretty tight cluster
+\end{minipage}
+\hfill
+\begin{minipage}{0.57\linewidth}
+	\includegraphics[width=\linewidth]{img/silhouette_score_example}
+\end{minipage}
+
+The silhouette plot displays a measure of how close each point in one cluster is to points in the neighbouring clusters and thus provides a way to assess parameters like number of clusters visually.
+
+The average silhouette method calculates the \textbf{average silhouette of observations} for each $k$. The location of the maximum on the curve of average silhouette as function over the number of clusters $k$ is considered as the appropriate number of clusters.
+
+\begin{center}
+	\includegraphics[width=0.9\linewidth]{img/silhouette_plot}
+\end{center}
+
+\subsection{Cluster Metrics}
+
+\subsubsection{Inertia $W$}
+The \textbf{within-cluster inertia $W$} of the partition $C_K$ is the sum of the \emph{inertia} of the clusters and measures the \textbf{heterogeneity} within the clusters.
+\begin{align*}
+	W &= \sum_{k=1}^{K} I(C_K)\\
+	I(C_K) &= \sum_{i\in C_K} \norm{x_i - \mu_k}^2
+\end{align*}
+The \textbf{between-cluster inertia $B$} of the partition $C_K$ is the inertia of the gravity centres of the clusters weighted by $\mu_k$ and measures the \emph{separation between the clusters}. A good partition has a \textbf{large between-cluster inertia} and a \textbf{small within-cluster inertia}.
+
+\begin{minted}{python}
+Sum_of_squared_distances = []
+K = range(1,15) for k in K:
+	km = KMeans(n_clusters=k)
+	km = km.fit(data_transformed)
+	Sum_of_squared_distances.append(km.inertia_)
+
+plt.plot(K, Sum_of_squared_distances, 'bx-')
+\end{minted}
+
+\subsubsection{Rand Index Adjusted for Chance (RI and ARI)}
+The Rand Index (RI) computes a similarity measure between two clusterings by \emph{considering all pairs of samples and counting pairs that are assigned in the same or different clusters} in the predicted and true clusterings.
+
+Given a set of $n$ elements in $S = \{o_1,\dots,o_n\}$ and two partitions of $S$ to compare, $\textbf{X} = \{X_1,\dots, X_r\}$ a partition of $S$ into $r$ subsets, and $\textbf{Y} = \{Y_1,\dots, Y_s\}$ a partition of $S$ into $s$ subsets, define
+\begin{itemize}[nosep]
+	\item $a$, the number of pairs of elements in $S$ that are the \textbf{same subset} in $\textbf{X}$ and in the \textbf{same subset} in $\textbf{Y}$
+	\item $b$, the number of pairs of elements in $S$ that are \textbf{different subsets} in $\textbf{X}$ and in \textbf{different subsets} in $\textbf{Y}$
+	\item $c$, the number of pairs of elements in $S$ that are the \textbf{same subset} in $\textbf{X}$ and in \textbf{different subsets} in $\textbf{Y}$
+\end{itemize}
+\begin{equation*}
+	\text{RI} = \frac{a + b}{a + b + c + d} = \frac{a + b}{\binom{n}{2}} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
+\end{equation*}
+The Rand index RI is ensured to have a value close to $0.0$ for random labelling independent of the number of clusters and samples. It is exactly $1.0$ when the clusterings are identical (up to a permutation).
+
+Since the denominator is the total number of pairs, the Rand index \textbf{RI} represents the \textbf{frequency of occurrence of agreements over the total pairs}, or the probability that $X$ and $Y$ will agree on a randomly chosen pair, or it can be seen as a measure of the percentage of correct decisions made by the algorithm.
+
+The adjusted Rand index ARI is the corrected-for-chance version of the Rand index (permutation model) and is a symmetric model.
+\begin{equation*}
+	\text{ARI}(X,Y) = \frac{\text{RI} - \ev{\text{RI}}}{\max(\text{RI}) - \ev{\text{RI}}}
+\end{equation*}
+
+\subsubsection{Normalised Mutual Information (NMI)}
+NMI is a good measure for determining the quality of clustering and an external measure because the class labels of the instances are needed to determine the NMI. As it is normalised, the NMI can be measured and compared between different clusterings having different number of clusters.
+\begin{align*}
+	\text{NMI} &= \frac{2\cdot I(Y;C)}{H[Y] + H[C]}\\
+	I(Y;C) &= H[Y] - \sum_k H[Y|C_k]
+\end{align*}
+\begin{itemize}[nosep, leftmargin=*, labelindent=5cm, labelsep=0.5cm]
+	\item[$I(Y;C)$] mutual information between $Y$ and $C$
+	\item[$H\lbrack Y \rbrack$] Entropy of class labels
+	\item[$H\lbrack C \rbrack$] Entropy of cluster labels
+\end{itemize}
+\begin{minted}[breaklines, fontsize=\small]{python}
+sklearn.metrics.normalized_mutual_info_score(labels_true, labels_pred, average_method=’warn’)
+\end{minted}
+
+\subsubsection{Bayesian Information Criterium (BIC)}
+The BIC can measure the efficiency of the parametrised model in terms of predicting the data. It penalises the complexity of the model, here complexity refers to the number of parameters $B = K\cdot d$ used. The BIC can be used to choose the number of clusters according to the intrinsic complexity present in a particular dataset. It is independent of the prior.
+\begin{align*}
+	\text{BIC} &= \ln{n} \cdot B - 2 \ln{\hat{L}}\\
+	&= \ln{n} \cdot (K \cdot d) + W
+\end{align*}
+\begin{itemize}[nosep, leftmargin=*, labelindent=1.5cm, labelsep=1cm]
+	\item[$\hat{L}$] maximised value of the likelihood function of the model $\mathcal{M}$\\
+	$\hat{L} = p(x|\hat{\theta},\mathcal{M})$ where $\hat{\theta}$ are the maximum likelihood estimates of the parameters
+	\item[$x$] observed data with dimension $d$
+	\item[$n$] number of data points
+	\item[$B$] number of parameters estimated by the model $\mathcal{M}: B = K\cdot d$
+	\item[$W$] within-cluster-inertia $W$ equals to the Residual Sum of Squares
+\end{itemize}
+\begin{minted}[breaklines, fontsize=\small]{python}
+from sklearn import mixture
+lowest_bic = np.infty; bic = []
+n_components_range = range(1, 7)
+for n_components in n_components_range:
+	# Fit a Gaussian mixture with EM
+	gmm =mixture.GaussianMixture(n_components=n_components, covariance_type='full')
+	gmm.fit(X)
+	bic.append(gmm.bic(X))
+	if bic[-1] < lowest_bic:
+		lowest_bic = bic[-1]
+		best_gmm = gmm
+
+bic = np.array(bic)
+\end{minted}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/BIC_inertia_plot}
+	\caption{An alternative to elbow-curve is the plot of the inertia}
+	\label{fig:bicinertiaplot}
+\end{figure}
+
+\subsubsection{Density Based Spatial Clustering of Applications with Noise (DBSCAN)}
+The basic idea of DBSCAN is that \textbf{clusters form dense regions} in the data and are separated by relatively empty areas. Points within a dense region are called core points. DBSCAN identifies points in densely populated regions of the feature space in which many data points lie close together.
+
+The advantages are that (a) the user \textbf{can't set the number of clusters} beforehand, (b) DBSCAN is able to capture clusters with \textbf{complex shapes} and (c) that it identifies points that do not belong to any of the clusters.
+
+The DBSCAN procedure is slower than the agglomerative clustering and k-Means, but scales relatively well for large data sets.
+
+\begin{itemize}
+	\item Two parameters: \texttt{min\_samples} and \texttt{eps}
+	\item If at least \texttt{min\_samples} data points are within the distance \texttt{eps} to a given point, this data point is classified as a \textbf{core object}. Core objects that are closer than \texttt{eps} to each other are assigned to the same cluster.
+	\item At the start the the algorithm selects any starting point. Then it finds all points at distance \texttt{eps} or closer to this point. If less than \texttt{min\_samples} points are found within the distance \texttt{eps} to the starting point, this point will be classified as \textbf{noise} and not belonging to any cluster.
+	\item If there are more than \texttt{min\_samples} points at a distance of \texttt{eps}, the point is used as core object and receives a new cluster designation.
+\end{itemize}
 
 \section{Gaussian Mixture Models And The Expectation Maximisation Algorithm}
 \subsection{The EM Algorithm: A General-Purpose, Unsupervised Learning Algorithm}
@@ -1143,7 +1723,7 @@ Expectation Maximisation is an iterative method to learn in the presence of unob
 	\item Iterate until convergence while always replacing old estimates with new ones
 \end{enumerate}
 
-\subsubsection{K-Means Revisited}
+\subsection{K-Means Revisited}
 Assume that K is known. The optimisation that leads to the clusters is the following
 \begin{flalign*}
 	\underset{\textbf{z},\bm{\mu}}{\min}\mathcal{L}(\textbf{z},\bm{\mu}) = \sum_{n=1}^{N}\sum_{k=1}^{K} z_{nk} \norm{\textbf{x}_n - \bm{\mu}_k}^2 &\qquad (\text{K-Means Loss Function})
@@ -1156,9 +1736,147 @@ With $\bm{\mu}_k \in \R^D$, $z_{nk} \in \{0,1\}$, $\sum_{k=1}^{K} z_{nk} = 1$ an
 \end{alignat*}
 The indicator variable is an assignment of datapoint $n$ to a certain cluster, also called membership or latent variable (point $n$ belongs to cluster 3, $\textbf{z}_n = [0,0,1,0,\dots,0]^T$).
 
-For fixed centres $\bm{\mu}_k$, the cost is minimized if we map each sample to its nearest centre, where we measure distance in terms of Euclidean distance.
+For fixed centres $\bm{\mu}_k$, the cost is minimised if each sample is mapped to its nearest centre, where the distance is measured in terms of Euclidean distance. In other words, each sample is assigned to \textbf{exactly one centre or cluster}. This is indicated by setting the corresponding indicator variable $z_{nk}$ to 1 and all other ones $z_{nk'}$ to 0. This leads to the very intuitive algorithm
+\begin{enumerate}
+	\item[(0.)] initialise $\bm{\mu}_k\quad\forall k$
+	\item For all $n$, compute $\textbf{z}_n$ given $\bm{\mu}$
+	\item For all $k$, compute $\bm{\mu}_k$ given $\textbf{z}$
+\end{enumerate}
+Calculating the derivative of the cost function with regards to $\bm{\mu}_k$ and solving for the cluster centres yields
+\begin{align*}
+	\frac{\partial\Likelihood}{\partial\bm{\mu}_k} &= 0\\
+	\Rightarrow \bm{\mu}_k = \frac{\sum_{n=1}^{N} z_{nk}\textbf{x}_n}{\sum_{n=1}^{N} z_{nk}}
+\end{align*}
 
-% TODO The rest <.<
+\textbf{Convergence} to a \emph{local optimum} is assured since each step decreases the cost (see \cite[Exercise 9.1]{bishop2006pattern}). But note that there is \textbf{no guarantee to reach the globally optimal solution} with this iterative algorithm. K-mean is thus a \textbf{coordinate descent} algorithm
+\begin{equation*}
+	\underset{\textbf{z},\bm{\mu}}{\min} \Likelihood(\textbf{z},\bm{\mu}) \begin{cases}
+	\textbf{z}^{(t+1)} = \argmin{\textbf{z}} \Likelihood(\textbf{z},\bm{\mu}^{(t)})\\
+	\bm{\mu}^{(t+1)} = \argmin{\bm{\mu}} \Likelihood(\textbf{z}^{(t)},\bm{\mu})
+	\end{cases}
+\end{equation*}
 
+\subsection{Probabilistic K-Means}
+Assuming that, conditioned that a point is associated to cluster $k$, it is considered a sample for the $D$-dimensional Gaussian with mean $\bm{\mu}_k$ and a covariance matrix $\isocov$, that is the \textbf{likelihood} of a sample $x$ given the cluster assignment $\textbf{z}$ and centres $\bm{\mu}$ is
+\begin{equation*}
+	p(\textbf{x}|\textbf{z},\bm{\mu}) = \prod_{k=1}^{K}\left[\N{\textbf{x}\middle| \bm{\mu}_k,\isocov}\right]^{z_{nk}}
+\end{equation*}
+Then, the likelihood for the whole data set is
+\begin{equation*}
+	p(\textbf{X}|\textbf{z},\bm{\mu}) = \prod_{n=1}^{N}\prod_{k=1}^{K}\left[\N{\textbf{x}\middle| \bm{\mu}_k,\isocov}\right]^{z_{nk}}
+\end{equation*}
+Calculating the negative logarithm in order to minimise the negative log-likelihood, yields the \textbf{k-means cost function} again
+\begin{equation*}
+	-\log p(\textbf{X}|\textbf{z},\bm{\mu}) = \sum_{n=1}^{N}\sum_{k=1}^{K}z_{nk}\norm{\textbf{x}_n - \bm{\mu}_k}^2
+\end{equation*}
+
+\subsection{Hard and Soft Clustering}
+Given a simple data set consisting of class \texttt{heights} $\textbf{X} = \{x_i\}$ with groups $Z = {z_1,z_2}$ separated by gender. Imagine that there are no convenient gender labels associated with each data point. How could the two group means be estimated?
+
+Assume that the observed values $\textbf{X}$ of the \texttt{height} data are drawn from two independent Gaussian distributions with mean $\mu_k$ and variances $\sigma_1^2, \sigma_2^2$. Understanding the range the $z_j$ values can take is important. In \textbf{K-means} the two $z_j$ can only take the values $[0,1]$, which is called \textbf{hard clustering}. In Gaussian Mixture Models, the $z_j$ can take on any value between 0 and 1, which is called \textbf{soft or fuzzy clustering}.
+
+\subsubsection{Clustering with Gaussians}
+K-means is equivalent to assuming that the data came from $K$ \emph{spherically symmetric} Gaussians. Instead of isotropic covariances $\isocov$, the full covariance matrices $\bm{\Sigma}_k$ are used to model elliptical clusters.
+\begin{equation*}
+	p(\textbf{X}|\textbf{z},\bm{\mu},\bm{\Sigma}) = \prod_{n=1}^{N}\prod_{k=1}^{K}\left[\N{\textbf{x}\middle| \bm{\mu}_k,\bm{\Sigma}_k}\right]^{z_{nk}}
+\end{equation*}
+In K-means each sample belongs to exactly one cluster. This is not always a good choice, especially for points belonging to the boundary. By interpreting $z_n$ as \emph{random variable} taking the values $[1,2,\dots,K]$ with a \emph{prior distribution} that follows a multinomial distribution, define a fractional assignment or \textbf{soft clustering} can be defined.
+\begin{align*}
+	p(z_n = k) = \pi_k\\
+	\pi_k \leq 0\quad k\\
+	\sum_{k=1}^{K}\pi_k = 1\\
+	p(\textbf{z}) = \prod_{k=1}^{K} (\pi_k)^{z_k}
+\end{align*}
+
+\subsection{Gaussian Mixture Models}
+A \textbf{Gaussian mixture model} is a probabilistic model that assumes all the data points are generated from a mixture of a finite number $K$ of Gaussian distributions with unknown parameters $(\mu_k, \Sigma_k)$.
+
+One can think of mixture models as generalizing K-means clustering to incorporate information about the covariance structure of the data as well as the centres of the latent Gaussians.
+\begin{tabularx}{\linewidth}{m{2cm} X}
+	Speed & It is the \textbf{fastest algorithm} for learning mixture models \\
+	Agnostic & As this algorithm maximizes only the likelihood, it will not bias the means towards zero, or bias the cluster sizes to have specific structures that might or might not apply. \\
+	Singularities & When one has insufficiently many points per mixture, estimating the covariance matrices becomes difficult, and the algorithm is known to diverge and find solutions with infinite likelihood unless one regularizes the covariances artificially.
+\end{tabularx}
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/GMM01}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/GMM02}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/GMM03}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{img/GMM04}
+	\end{subfigure}
+\end{figure}
+
+Assume that the samples $\{x_i\}$ are iid samples from a weighted sum of $K$ $D$-dimensional Gaussians. The probability density is characterised by the parameter $\bm{\theta}$
+\begin{equation*}
+	\bm{\theta} = \{\bm{\mu}, \bm{\Sigma}, \bm{\pi}\}
+\end{equation*}
+The joint probability density is given by
+\begin{align*}
+	p(\textbf{X},\textbf{z} | \bm{\mu}, \bm{\Sigma}, \bm{\pi}) &= \prod_{n=1}^{N} p(\textbf{x}_n|z_n,\bm{\mu}, \bm{\Sigma}) \cdot p(z_n|\bm{\pi})\\
+	&= \prod_{n=1}^{N}\prod_{k=1}^{K} \left[ \N{\textbf{x}_n\middle|\bm{\mu}_k, \bm{\Sigma}_k} \right]^{z_{nk}} \prod_{k=1}^{K}[\pi_k]^{z_{nk}}
+\end{align*}
+\textbf{Marginal likelihood}: The $z_n$ are \textbf{latent variables} that can be marginalised out to get a cost function that does not depend on $z_n$.
+\begin{equation*}
+	p(\textbf{x}_n|\theta) = \sum_{k=1}^{K} \pi_k \N{\textbf{x}_n|\bm{\mu}_k, \bm{\Sigma}_k}
+\end{equation*}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/GMM05}
+	\caption{Illustration of a mixture of three Gaussians in a two-dimensional space.\\
+	(a) Contours of constant density for each of the mixture components, in which the three components are denoted red, blue and green, and the values of the mixing coefficients are shown below each component. (b) Contours of the marginal probability density $p(\textbf{x})$ of the mixture distribution. (c) A surface plot of the distribution  $p(\textbf{x})$ \parencite{bishop2006pattern}.}
+	\label{fig:gmm05}
+\end{figure}
+
+\subsubsection{EM Algorithm for GMM}
+To determine the unknown parameters the log-likelihood is maximised
+\begin{equation*}
+	\Likelihood(\theta) = \ln p(\textbf{X}|\bm{\mu}, \bm{\Sigma}, \bm{\pi}) = \sum_{n=1}^{N}\left\{\sum_{k=1}^{K}\pi_k\N{\textbf{x}_n|\bm{\mu}_k, \bm{\Sigma}_k}\right\}
+\end{equation*}
+Compute the \textbf{cluster assignments} (E-Step)
+\begin{equation*}
+	\gamma_{nk}^{(t)} = P(z_{nk}|\bm{\theta}^{(t)}, \textbf{x}_n) = \frac{\pi_k^{(t)} \N{\textbf{x}_n|\bm{\mu}_k, \bm{\Sigma}_k}}{\sum_{k=1}^{K}\pi_k^{(t)} \N{\textbf{x}_n|\bm{\mu}_k, \bm{\Sigma}_k}}
+\end{equation*}
+\textbf{Update the cluster centres, covariances and probabilities} (M-Step)
+\begin{align*}
+	\bm{\mu}_k^{(t+1)} &= \frac{\sum_{n}\gamma_{nk}^{(t)}\textbf{x}_n}{\sum_{n}\gamma_{nk}^{(t)}}\\
+	\pi_k^{(t+1)} &= \frac{1}{N}\sum_n\gamma_{nk}^{(t)}\\
+	\bm{\Sigma}_k^{(t+1)} &= \frac{1}{Z^{(t)}} \cdot \sum_n \gamma_{nk}^{(t)} \left(\textbf{x}_n - \bm{\mu}_k^{(t+1)}\right)\left(\textbf{x}_n - \bm{\mu}_k^{(t+1)}\right)^T
+\end{align*}
+The main difficulty in learning Gaussian mixture models from unlabeled data is that one usually doesn’t know which points came from which \textbf{latent component}.
+
+Expectation-maximisation is a well-founded statistical algorithm to get around this problem by an iterative process.
+\begin{itemize}
+	\item \textbf{E-Step}\quad First, one assumes random components (randomly centred on data points, learned from k-means, or even just normally distributed around the origin) and computes for each point a probability of being generated by each component of the model.
+	\item \textbf{M-Step}\quad Then, one tweaks the parameters to maximise the likelihood of the data given those assignments. Repeating this process is guaranteed to always converge to a local optimum.
+\end{itemize}
+
+\subsubsection{GMM Best Practices}
+\begin{itemize}
+	\item Use log-likelihoods instead of likelihoods\\
+	Likelihoods become so small that one ends up with numerical instabilities otherwise
+	\item Use a diagonal covariance matrix\\
+	Simpler/faster training, same/better results due to more compact model (with more mixtures)
+	\item Use a variance limit and beware of curse of dimensionality\\
+	Prohibit artifacts through underestimation of components
+	\item Find optimal number of mixtures for data via brute force and BIC
+	\item Compare models via
+	\begin{itemize}
+		\item Score-wise (more precise): Generalized Likelihood Ratio (GLR)
+		\item Parameter-wise (faster): Earth Mover‘s Distance (EMD) \parencite{beigi1998distance}
+	\end{itemize}
+\end{itemize}
+
+%% APPENDIX %%
+
+\printbibliography
 
 \end{document}
