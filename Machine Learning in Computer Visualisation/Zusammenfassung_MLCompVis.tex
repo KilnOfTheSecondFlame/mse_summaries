@@ -292,8 +292,6 @@ For every point in normal space there will be a Sinusoid the polar Hough space.
 \subsection{Hough Transformation Algorithm}
 The algorithm transforms each edge point in the image to the Hough space, where an Accumulator array gets filled with votes. The bin size of the accumulator is an important hyperparameter, if the size is too small, there will be many weak peak due to noise, if too large accuracy of locating a line drops and many votes from clutter might end up in the same bin. A solution is to keep the bin size small but also count votes from neighbours.
 
-% TODO Hough circles
-
 \subsubsection{Voting Algorithm for Finding Lines}
 \begin{enumerate}
 	\item Every edge point casts votes for all circles that are compatible with it
