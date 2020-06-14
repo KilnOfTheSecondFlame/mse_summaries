@@ -62,6 +62,7 @@
 \newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
 \newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
 \newcommand*\predvar[1]{{\color{SeaGreen4} \texttt{#1}}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -99,7 +100,7 @@ The set of all possible outcomes of a random experiment is called sample space $
 \subsection{Properties of Probability Density Functions}
 \begin{enumerate}
 	\item $f(x) \geq 0\quad \text{for all }x$
-	\item $P(a<X\leq b) = F(b) - F(a) = \int_{a}^{b}f(x) dx\quad \text{area between }a \text{ and }b \text{ under }f(x)$
+	\item $P(a<X\leq b) = F(b) - F(a) = \int_{a}^{b}f(x) dx\quad \text{area between }a\ \text{and }b\ \text{under }f(x)$
 	\item $ \int_{-\infty}^{\infty}f(x) dx = 1$
 \end{enumerate}
 
@@ -292,7 +293,7 @@ Infinitesimal intervals $\text{d}x_i$ do not depend on parameter value $\theta$,
 If assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\Likelihood(\theta)$.
 
 \subsection{Maximum Likelihood for Exponential Distribution}
-Given observation $X_1, X_2, \dots, X_n\text{ i.i.d. }\sim \Exp{\lambda}$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
+Given observation $X_1, X_2, \dots, X_n\ \text{i.i.d.}\ \sim \Exp{\lambda}$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
 \begin{equation*}
 	\Likelihood = \prod_{i=1}^{n} \lambda e^{-\lambda x_i}
 \end{equation*}
@@ -307,9 +308,9 @@ In the z-Test the value of $\sigma_X$ is known.
 \begin{enumerate}
 	\item \textbf{Model} $X_i$ is a continuous measurement variable
 	\begin{equation*}
-		X_i, \dots, X_n \text{i.i.d.} \N(\mu, \sigma_X^2)\quad \sigma_X\text{ known}
+		X_i, \dots, X_n \text{i.i.d.} \N(\mu, \sigma_X^2)\quad \sigma_X\ \text{known}
 	\end{equation*}
-	\item \textbf{Null Hypothesis} $H_0: \mu = \mu_0$\\ \textbf{Alternative Hypothesis} $H_A: \mu \neq \mu_0 \text{ or } \mu < \mu_0 \text{ or } \mu > \mu_0$
+	\item \textbf{Null Hypothesis} $H_0: \mu = \mu_0$\\ \textbf{Alternative Hypothesis} $H_A: \mu \neq \mu_0\ \text{or}\ \mu < \mu_0\ \text{or}\ \mu > \mu_0$
 	\item \textbf{Test statistic}
 	\begin{equation*}
 		Z = \frac{\samplemean{X}_n - \mu_0}{\sigma_{\samplemean{X}_n}} = \frac{\samplemean{X}_n - \mu_0}{\sigma_X / \sqrt{n}} = \frac{\text{observed} - \text{expected}}{\text{standard error}}
@@ -318,9 +319,9 @@ In the z-Test the value of $\sigma_X$ is known.
 	\item \textbf{Significance Level} $\alpha$
 	\item \textbf{Rejection region for test statistic}
 	\begin{alignat*}{2}
-		K &= (-\infty,z_{\frac{\alpha}{2}}] \cup [z_{1-\frac{\alpha}{2}}, \infty) &\quad \text{ for } H_A : \mu\neq \mu_0\\
-		K &= (-\infty, z_\alpha] &\quad \text{ for } H_A : \mu < \mu_0\\
-		K &= [ z_{1-\alpha}, \infty ) &\quad \text{ for } H_A : \mu > \mu_0
+		K &= (-\infty,z_{\frac{\alpha}{2}}] \cup [z_{1-\frac{\alpha}{2}}, \infty) &\qquad \text{for } H_A : \mu\neq \mu_0\\
+		K &= (-\infty, z_\alpha] &\qquad \text{for } H_A : \mu < \mu_0\\
+		K &= [ z_{1-\alpha}, \infty ) &\qquad \text{for } H_A : \mu > \mu_0
 	\end{alignat*}
 	\item \textbf{Test Statistic} Check whether the observed value of the test statistic fall into the rejection region
 \end{enumerate}
@@ -338,13 +339,63 @@ In the z-Test the value of $\sigma_X$ is known.
 \end{definition}
 
 \subsection{Example: Statistical Test for Average Body Height}
-% TODO Example Average Woman's Height
+\textit{According to the Federal Statistical Office the average body length of Swiss women is 1.64m. You doubt this statement is true. How can you reject it?}\\
 
+\vspace{1em}
+\noindent
+The answer is to measure the body length of women in Zürich (150 in this case). These measured body lengths $x_1,\dots,x_{150}$ can be considered as realisations of the random variables $X_1,\dots,X_{150} \sim \N{\mu, \sigma_X^2}$. Now the empirical mean $\samplemean{x}_{150}$ of the 150 measurements is computed, the value of this empirical mean will vary. The measured mean $\samplemean{x}_{150}$ is considered a realisation of the random variable $\samplemean{X}_{150}$, which is also called the sample mean. The distribution of the sample mean $\samplemean{X}_{150}$ is
+\begin{equation*}
+	\samplemean{x}_{150} \sim \N{\mu, \sigma_{\samplemean{X}_150}^2}
+\end{equation*}
+To decide whether the measured average of your sample is compatible with the value 1.64m given by the Federal Statistical Office the \textbf{null hypothesis} $\mu_0 = 1.64$ is defined. The probability to observe $\samplemean{x}_{150}$ or an even more extreme value assuming
+\begin{equation*}
+	\samplemean{x}_{150} \sim \N{\mu=1.64, \frac{\sigma_X^2}{150}}
+\end{equation*}
+is then calculated.
+\begin{itemize}
+	\item p-value for a one-sided alternative hypothesis pointing upwards (true $\mu > \mu_0$)
+	\begin{equation*}
+		P(\samplemean{x}_{n} < \samplemean{X}_{n})
+	\end{equation*}
+	\item p-value for a one-sided alternative hypothesis pointing downwards (true $\mu < \mu_0$)
+	\begin{equation*}
+		P(\samplemean{X}_{n} < \samplemean{x}_{n})
+	\end{equation*}
+	\item p-value for a \textbf{two-sided alternative hypothesis} (true $\mu \neq \mu_0$)
+	\begin{equation*}
+		P(\samplemean{x}_{n} < \abs{\samplemean{X}_{n}})
+	\end{equation*}
+\end{itemize}
+If the p-value is smaller than a significance level $\alpha$, which is usually $0.05$, then the null hypothesis is rejected. In the example this means that the average body length is significantly larger, smaller or different than 164cm.
 
+\begin{definition}
+	The \textbf{p-value} is the probability that the test statistic will take on a value that is at least as extreme (with respect to the alternative hypothesis) as the observed value of the statistic when the null hypothesis $H_0$ is true.
+	
+	By means of the p-value the test decision can be concluded directly: If the p-value is smaller than the significance level, then the null hypothesis $H_0$ is rejected, otherwise retained. For a given significance level $\alpha$ (usually $\alpha = 0.05$) on the basis of the p-value the conclusion is as follows:
+	\begin{enumerate}
+		\item Reject $H_0$ if the p-value $\leq \alpha$
+		\item Retain $H_0$ if the p-value $> \alpha$
+	\end{enumerate}
+\end{definition}
 
 \subsection{Confidence Intervals}
-% TODO Confidence Interval
+The confidence interval consists of all values $\mu$, for which the corresponding statistical test does not reject the null hypothesis. For a two-sided $t$-test, the rejection region is
+\begin{equation*}
+	K = \left( -\infty, t_{n-1; \frac{\alpha}{2}} \right] \cup \left[ t_{n-1; 1- \frac{\alpha}{2}}, \infty \right)
+\end{equation*}
+The t-test does not reject $H_0$ , if the value of the test statistic does not fall into the rejection region of the test statistic
+\begin{align*}
+	t_{n-1; \frac{\alpha}{2}} &\leq \frac{\sqrt{n}(\samplemean{x}_n - \mu_0)}{\widehat{\sigma}_X}\\
+	\text{and } &\\
+	t_{n-1; 1 - \frac{\alpha}{2}} &\geq \frac{\sqrt{n}(\samplemean{x}_n - \mu_0)}{\widehat{\sigma}_X}
+\end{align*}
 
+\begin{definition}
+	The two-sided confidence interval at the level $1-\alpha$ is:
+	\begin{equation*}
+		\left[ \samplemean{x}_n - t_{n-1,1-\frac{\alpha}{2}}\cdot\frac{\widehat{\sigma}_X}{\sqrt{n}}, \samplemean{x}_n + t_{n-1,1-\frac{\alpha}{2}}\cdot\frac{\widehat{\sigma}_X}{\sqrt{n}} \right]
+	\end{equation*}
+\end{definition}
 
 \section{Multivariate Probability Distributions}
 
@@ -382,7 +433,7 @@ Consider two machines with exponentially distributed life expectancy $X\sim \Exp
 
 The density functions for life expectancy of the two machines are:
 \begin{equation*}
-	f_X(x) = \lambda_1 e^{-\lambda_1 x}\text{ and } f_Y(y) = \lambda_2 e^{-\lambda_2 y}
+	f_X(x) = \lambda_1 e^{-\lambda_1 x}\ \text{and}\ f_Y(y) = \lambda_2 e^{-\lambda_2 y}
 \end{equation*}
 Due to \textbf{independence} of the two random variables, the \textbf{joint density} can be calculated as follows
 \begin{align}
@@ -464,18 +515,12 @@ $\rho$ has the following property
 \begin{equation*}
 	-1 \leq \Cor{X,Y} \leq 1
 \end{equation*}
-The correlation is a measure for the strength and direction of the linear dependency between $X$ and $Y$. We have
+The correlation is a measure for the strength and direction of the linear dependency between $X$ and $Y$.
 \begin{align*}
-	\Cor{X,Y} &= +1 \qquad\text{iff}\qquad Y=a+bX \text{ for $a\in\R$ and $b>0$}\\
-	\Cor{X,Y} &= -1 \qquad\text{iff}\qquad Y=a+bX \text{ for $a\in\R$ and $b<0$}\\
+	\Cor{X,Y} &= +1 \qquad\text{iff}\qquad Y=a+bX\ \text{for $a\in\R$ and $b>0$}\\
+	\Cor{X,Y} &= -1 \qquad\text{iff}\qquad Y=a+bX\ \text{for $a\in\R$ and $b<0$}\\
 \end{align*}
 If $\abs{\Cor{X,Y}} = 1$, then there is a perfectly linear relationship between $X$ and $Y$.
-\begin{figure}[tbh]
-	\centering
-	\includegraphics[width=0.6\linewidth]{img/correlation_contour_lines}
-	\caption{Contour lines of bivariate normal distributions for different correlation coefficients}
-	\label{fig:correlationcontourlines}
-\end{figure}
 
 \begin{definition}
 	If $\Cor{X,Y}=0$ then $X$ and $Y$ are \textbf{uncorrelated}. In this case there is no linear relationship between $X$ and $Y$. There may be a non-linear relationship however.
@@ -483,7 +528,7 @@ If $\abs{\Cor{X,Y}} = 1$, then there is a perfectly linear relationship between 
 
 \subsubsection{Uncorrelatedness and Independence}
 \begin{equation*}
-	X\text{ and } Y \text{ independent} \Rightarrow \Cor{X,Y}=0\Rightarrow \Cov{X,Y}=0
+	X\ \text{and}\ Y\ \text{independent} \Rightarrow \Cor{X,Y}=0\Rightarrow \Cov{X,Y}=0
 \end{equation*}
 However, the converse is generally not true, that is independence does not follow from uncorrelatedness.
 
@@ -493,7 +538,7 @@ These relations follow immediately from the definition of the covariance
 \begin{enumerate}
 	\item $\Var{X} = \Cov{X,X}$
 	\item $\Cov{X,Y} = \ev{XY} - \ev{X}\ev{Y}$
-	\item $\ev{XY} = \ev{X}\ev{Y}\qquad (X,Y \text{ independent})$
+	\item $\ev{XY} = \ev{X}\ev{Y}\qquad (X,Y\ \text{independent})$
 	\item
 	\begin{equation*}
 		\Var{\sum_{i=1}^{n}X_i} = \sum_{i=1}^{n}\Var{X_i} + 2\sum_{i<j}^{n}\Cov{X_i,X_j}
@@ -508,9 +553,108 @@ These relations follow immediately from the definition of the covariance
 	\end{equation*}
 \end{enumerate}
 
-% TODO Bivariate Normal Distribution
+\subsection{Bivariate Normal Distribution}
+The bivariate normal distribution is completely defined by expected values and variances of the marginal distributions $\mu_X, \sigma_X^2, \mu_Y, \sigma_Y^2$ and the covariance between $X$ and $Y$, $\Cov{X,Y} = \rho_{XY}\sigma_X\sigma_Y$. The \textbf{joint density} of a bivariate normal distribution is given by
+\begin{equation*}
+	F_{X,Y}(x,y) = \frac{1}{2\pi\sqrt{\det(\Sigma)}} e^{-\frac{1}{2} (x-\mu_X, y-\mu_Y) \Sigma^{-1}\begin{pmatrix}
+		x-\mu_X\\
+		y-\mu_Y
+		\end{pmatrix} }
+\end{equation*}
+and the \textbf{covariance matrix} $\Sigma$ is defined as
+\begin{equation*}
+	\Sigma = \begin{pmatrix}
+	\Cov{X,X} & \Cov{X,Y}\\
+	\Cov{X,Y} & \Cov{Y,Y}
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+		\sigma_X^2 & \rho_{XY}\sigma_X\sigma_Y\\
+		\rho_{XY}\sigma_X\sigma_Y & \sigma_Y^2
+	\end{pmatrix}
+\end{equation*}
 
-% TODO Principal Component Analysis
+The \textbf{marginal distributions} of bivariate normal distributions are again normal distributions
+\begin{equation*}
+	X\sim\N{\mu_X,\sigma_X^2}\qquad\text{and}\qquad Y\sim\N{\mu_Y,\sigma_Y^2}
+\end{equation*}
+The correlation between $X$ and $Y$ is given by the predefined value $\rho_{XY}$, for example $\rho_{XY} = -0.85$. Contour lines of the bivariate normal distribution are \textbf{ellipses}. The higher the absolute value of the correlation $\rho_{XY}$, the narrower the ellipses are (see figure \ref{fig:correlationcontourlines}).
+
+\begin{figure}[tbh]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/correlation_contour_lines}
+	\caption{Contour lines of bivariate normal distributions for different correlation coefficients}
+	\label{fig:correlationcontourlines}
+\end{figure}
+
+\subsection{Principal Component Analysis}
+Principal component analysis is a popular approach for deriving a low-dimensional set of features from a large set of variables.
+PCA is a technique for \textbf{reducing} the dimension of a $n \times p$ data matrix $X$ where $n$ corresponds to the number of observations and $p$ to the number of variables.
+\textbf{First principal component} direction of the data is that along which the observations \textbf{vary the most}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/Principal_component_analysis}
+	\caption{Principal component decomposition of the \predvar{USArrests} dataset}
+	\label{fig:principalcomponentanalysis}
+\end{figure}
+
+The green solid line in figure \ref{fig:principalcomponentanalysis} \textbf{represents the first principal component direction} of the data which is the direction along which there is the greatest variability in the data.
+
+The projection of the observations onto this \textbf{ first principal component direction} results in the projected observations having the largest possible variance.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/Principal_component_analysis02}
+	\caption{Projection on the first principal component direction}
+	\label{fig:principalcomponentanalysis02}
+\end{figure}
+
+The two principal components $Z_1$ and $Z_2$ are \textbf{uncorrelated}, which implies that their covariance matrix $\Sigma$ has vanishing off-diagonal elements. Thus the covariance matrix has to be diagonalised by transforming the basis vectors. This can be achieved by an appropriate rotation matrix $\Phi$ so that
+\begin{align*}
+\begin{pmatrix} Z_1\\Z_2 \end{pmatrix} = (X-\mu_X, Y-\mu_Y) \cdot \begin{pmatrix}\phi_{11}&\phi_{12}\\\phi_{21}&\phi_{22}\end{pmatrix} &= \begin{pmatrix}
+\phi_{11}(X-\mu_X) + \phi_{21}(Y-\mu_Y)\\
+\phi_{12}(X-\mu_X) + \phi_{22}(Y-\mu_Y)
+\end{pmatrix}\\
+\intertext{and}
+\begin{pmatrix} \Cov{Z_1,Z_1} & \Cov{Z_1,Z_2}\\ \Cov{Z_2,Z_1} & \Cov{Z_2,Z_2} \end{pmatrix} = \begin{pmatrix} \sigma_{Z_1}^2 & 0 \\ 0 & \sigma_{Z_2}^2 \end{pmatrix}
+\end{align*}
+The rotation matrix $\Phi$ needs to satisfy the condition $\phi_{11}^2 + \phi_{21}^2 = 1$ and $\phi_{12}^2 + \phi_{22}^2 = 1$
+
+\vspace{1em}
+\noindent
+For the example dataset \predvar{USArrests} the PCA is done with
+\begin{minted}{R}
+pr.out <- prcomp(USArrests[, c("Murder", "Assault")])
+head(pr.out$x)
+
+## PC1 PC2
+## Alabama -65.40950 2.6728663
+## Alaska -92.25166 -1.6559620
+## Arizona -123.14478 -4.8535831
+## Arkansas -19.26551 0.2047123
+## California -105.19832 -3.1999471
+## Colorado -33.21549 -1.2812733
+
+pr.out <- prcomp(USArrests[, c("Murder", "Assault")])
+pr.out$rotation[, 2]
+
+## Murder Assault
+## 0.9991213 -0.0419126
+\end{minted}
+If the first principal component direction is considered as a coordinate axis, then any point $(\predvar{Murder},\predvar{Assault})$ has the following first principal component coordinate when projected onto the line
+\begin{equation*}
+Z_1 = -0.0419126\cdot(\text{\predvar{Murder}} - \overbar{\text{\predvar{Murder}}}) - 0.9991213\cdot(\text{\predvar{Assault}} - \overbar{\text{\predvar{Assault}}})
+\end{equation*}
+The point $(\overbar{\text{\predvar{Murder}}},\overbar{\text{\predvar{Assault}}})$ corresponds to the origin on the first principal component axis, where $\overbar{\text{\predvar{Murder}}}$ indicates the mean of all $\predvar{Murder}$ values in this data set, and $\overbar{\text{\predvar{Assault}}}$ indicates the mean of all arrests for $\predvar{Assault}$ values.
+
+$\phi_{11} = -0.0419126$ and $\phi_{21} = -0.9991213$ are the \textbf{principal component loadings}. They are chosen such that
+\begin{equation*}
+\Var{\phi_{11}\cdot(\text{\predvar{Murder}} - \overbar{\text{\predvar{Murder}}}) + \phi_{21}\cdot(\text{\predvar{Assault}} - \overbar{\text{\predvar{Assault}}})}
+\end{equation*}
+is \textbf{maximised} under the constraint $\phi_{11}^2 + \phi_{12}^2 = 1$.
+
+The second principal component $Z_2$ is a linear combination of predictor variables and is uncorrelated with $Z_1$, and has largest variance subject to this constraint. The zero correlation condition of $Z_1$ with $Z_2$ is equivalent to the condition that the direction must be \textbf{perpendicular} or \textbf{orthogonal} to the first principal component direction
 
 \section{Simple Linear Regression}
 \subsection{Regression Analysis}
@@ -562,14 +706,14 @@ Let $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$ be the predictor for $Y$ bas
 	\end{equation*}
 	where
 	\begin{equation*}
-		\samplemean{x} = \frac{1}{n}\sum_{i=1}^{n} x_i\quad\text{ and }\quad\samplemean{y} = \frac{1}{n}\sum_{i=1}^{n} y_i	
+		\samplemean{x} = \frac{1}{n}\sum_{i=1}^{n} x_i\qquad\text{and}\qquad\samplemean{y} = \frac{1}{n}\sum_{i=1}^{n} y_i	
 	\end{equation*}
 \end{definition}
 
 \begin{definition}
 	Standard Error
 	\begin{equation*}
-		\text{se}(\hat{\beta}_0)^2 = \sigma^2 \left( \frac{1}{n} + \frac{\samplemean{x}^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2} \right) \quad\text{ and }\quad \text{se}(\hat{\beta}_1)^2 = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\samplemean{x})^2}
+		\text{se}(\hat{\beta}_0)^2 = \sigma^2 \left( \frac{1}{n} + \frac{\samplemean{x}^2}{\sum_{i=1}^{n}(x_i - \samplemean{x})^2} \right) \qquad\text{and}\qquad \text{se}(\hat{\beta}_1)^2 = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i-\samplemean{x})^2}
 	\end{equation*}
 	where $\sigma^2 = \Var{\epsilon}$
 \end{definition}
@@ -842,6 +986,7 @@ The idea underlying \emph{logistic regression} is to modify a linear function by
 \begin{center}
 	\includegraphics[width=0.4\linewidth]{img/logistic_function}
 \end{center}
+
 
 \begin{definition}
 	\textbf{Simple logistic regression}\qquad Given a binary response variable $Y$ and a quantitative predictor $X$, the simple logistic regression model is defined as
