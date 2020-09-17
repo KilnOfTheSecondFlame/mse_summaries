@@ -119,12 +119,12 @@ Applications of text analysis include:
 Analysis of Text Data lies at the intersection of Machine Learning, Computational Linguistics and Human-Computer Interaction. Artificial Intelligence is applied to human language, while human speech data is a related problem which makes use of different technologies, like signal processing.
 
 \subsection{Basic Concepts in NLP}
-Machine Learning is a powerful tool in NLP, thus the same vocabulary is used. For Text Analysis supervised learning is used mostly, where the labelled data is classified by human experts and is called the reference or ground truth.
+Machine Learning is a powerful tool in NLP, thus the same vocabulary is used. Most of the time, supervised learning is used for Text Analysis, where the labelled data is classified by human experts and called the reference or ground truth.
 
 Significance addresses the key question if the difference between the two systems is really due to the fact that one is better than the other or if it can be explained by randomness. This is easier to compute when cross-validation is used, and paired $t$-tests can be used to compare two systems. Performance scores vary depending on the data set it is difficult to predict actual performance on a data set of a different
 nature than the test set, this is called the problem of portability.
 
-\subsection{Key Jargon from Linguistic}
+\subsection{Key Jargon from Linguistics}
 \begin{itemize}
 	\item letter
 	\item syllable
@@ -141,8 +141,8 @@ nature than the test set, this is called the problem of portability.
 	\item text
 	\item corpus: collection of text, pl. corpora
 	\item utterance: an uninterrupted chain of spoken or written language
-	\item lexeme: basic abstract unit of meaning that roughly corresponds to a set of forms taken by a single root word - for example run, runs, ran and running are forms of the same lexeme
-	\item lemma:  one form chosen by convention as the canonical form of a lexeme - go, goes, went, gone, going for the lexeme \emph{go}
+	\item lexeme: basic abstract unit of meaning that roughly corresponds to a set of forms taken by a single root word — for example run, runs, ran and running are forms of the same lexeme
+	\item lemma: one form chosen by convention as the canonical form of a lexeme — go, goes, went, gone, going for the lexeme \emph{go}
 \end{itemize}
 
 \subsection{Utterance Decoding}
@@ -203,7 +203,7 @@ Dependency Parsing helps in understanding what depends on what. The assumption i
 \end{itemize}
 
 \subsection{Data for Text Analysis}
-Text analysis using machine learning requires large amounts of training data and finding suitable data is often a bottleneck due to expense or limited rights. An annotated corpus typically contains a selection of texts based on explicit criteria, metadata like author, date, source, title, sectioning, and annotations in a more or less standardises format.
+Text analysis using machine learning requires large amounts of training data and finding suitable data is often a bottleneck due to expense or limited rights. An annotated corpus typically contains a selection of texts based on explicit criteria, metadata like author, date, source, title, sectioning, and annotations in a more or less standardised format.
 
 \subsection{Preprocessing}
 Most text processing tasks begin with a set of standard preprocessing steps
@@ -238,6 +238,9 @@ Not as straightforward as one may think
 	\end{itemize}
 \end{itemize}
 
+\subsubsection{Lemmatisation and Stemming}
+Stemming is the process of reducing inflected or derived words to their word stem, also called base or root form. Lemmatisation refers to the process of determining the lemma of a word based on its intended meaning. Lemmatisation is closely related to stemming, but a stemmer \emph{operates without knowledge of the context of the word}. Lemmatisation, on the other hand, depends on correctly identifying the intended part of speech and meaning of a word in a sentence, as well as the larger context surrounding that sentence.
+
 \subsubsection{Sentence Segmentation}
 Can be easier or more difficult depending on the source text formatting. If no particular information is available from the layout, punctuations and casing can be used. While question and exclamation marks are quite reliable indicator of sentences periods are not. A good approach is to try to combine Tokenisation and Sentence Splitting, focusing on full stops.
 
@@ -246,7 +249,7 @@ The goal of text classification is to assign text documents to one or more categ
 
 To tackle this problem there are different strategies: (a) have hard-coded rules carefully crafted by an expert on the basis on combinations of words or other features, (b) through supervised machine learning with understanding building on semantic representation of texts and labels or (c) supervised machine learning without understanding where word-based features are derived from text and the relationship between features and labels from the training texts.
 
-Stopwords are words like conjunctions or preposition, which may not have meaning given the task at hand.
+Stop-words are words like conjunctions or prepositions, which may not have meaning given the task at hand.
 
 \subsection{Formalising Text Classification}
 
@@ -317,7 +320,7 @@ The typical solution to this is to do Laplace Smoothing like this
 \begin{equation*}
 	P(w|c)\text{ can be estimated as }\frac{\text{number of occurrences of token $w$ in class } c + 1}{\text{total number of tokens in class } c+V}
 \end{equation*}
-This prevents probabilities of zero to occur.
+This prevents probabilities of zero from occurring.
 
 \subsection{Metrics}
 \begin{itemize}[leftmargin=*, labelindent=3cm, labelsep=1cm]
@@ -375,7 +378,7 @@ A simple effective workaround by Das and Chen is to prepend \texttt{NOT\_} to ev
 \end{itemize}
 
 \subsection{Various Degrees of Complexity}
-In principle, all quintuplets in a document should be discovered, which would allow to represent unstructured information in a structured form. However, this is extremely hard to do. In practice, simplified forms of sentiment analysis are typically solved
+In principle, all quintuplets in a document should be discovered, which would allow representing unstructured information in a structured form. However, this is extremely hard to do. In practice, simplified forms of sentiment analysis are typically solved
 \begin{itemize}
 	\item Document-level sentiment classification
 	\item Sentence-level sentiment classification
@@ -413,7 +416,7 @@ Entropy in information theory refers to a measure of the information content, wh
 	\item Let it further be that a test sample with the word \texttt{love} is 90\% likely to be positive and equally likely to be either {\color{Firebrick3} negative} (10\%) or {\color{gray} neutral} (10\%)
 	\item All other things unknown are assumed to be equally likely (maximum entropy)
 \end{itemize}
-Unlike in text classification, topic words are not as important as \textbf{sentiment words} that carry an emotional charge, but the mapping between emotional states and the written word can be exceedingly subtle
+Unlike in text classification, topic words are not as important as \textbf{sentiment words} that carry an emotional charge, but the mapping between emotional states and the written word can be exceedingly subtle.
 \begin{itemize}[label=-]
 	\item {\color{Green3} good}, {\color{Green3} splendid}, {\color{Green3} nice}
 	\item {\color{Firebrick3} bad}, {\color{Firebrick3} racist}, {\color{Firebrick3} dismal}
@@ -425,23 +428,24 @@ Unlike in text classification, topic words are not as important as \textbf{senti
 	\item Estimate the semantic orientation
 	\item Classify based on the average semantic orientation
 \end{enumerate}
-Semantic orientation is computed based on Pointwise Mutual Informaiton (PMI)
+Semantic orientation is computed based on Pointwise Mutual Information (PMI)
 \begin{equation*}
 \text{PMI} (w_1,w_2) = \log_2 \left( \frac{P(w_1,w_2)}{P(w_1)P(w_2)} \right) = \log_2 \left( \frac{P(w_1 | w_2)}{P(w_1)} \right) = \log_2 \left( \frac{P(w_2 | w_1)}{P(w2)} \right)
 \end{equation*}
-PMI is computed using approximate probabilities with normalised word counts in a corpus. Or the web can be used as a corpus using the number of hits from a search engine when $w_1$ and $w_2$ are searched. Following Barrière (2016) the number of hits of \texttt{the, a, of} are used, which results in a total of $2.527\cdot 10^10$ hits.
+PMI is computed using approximate probabilities with normalised word counts in a corpus. Or the web can be used as a corpus using the number of hits from a search engine when $w_1$ and $w_2$ are searched. Following Barrière (2016) the number of hits of \texttt{the, a, of} are used, which results in a total of $2.527\cdot 10^{10}$ hits.
 \subsubsection{Example PMI of Academy and Awards}
 \begin{itemize}
 	\item $w_1 = \text{\texttt{Academy}}$, $w_2 = \text{\texttt{Awards}}$
 	\item $P(w_1,w_2) \propto \text{\#\texttt{Academy} AND \texttt{Awards}} \approx 1.01\cdot 10^9\text{hits}$
 	\item $P(w_1) \propto \text{\#\texttt{Academy}} \approx 1.94\cdot 10^9 \text{hits}$
 	\item $P(w_2) \propto\text{\#\texttt{Awards}} \approx 5.57\cdot 10^9\text{hits} $
-	\item $\text{PMI}(w_1,w_2) \approx \log_2\left( \frac{1.01\cdot 10^9\cdot2.527\cdot 10^10}{1.94\cdot 10^9\cdot 5.57\cdot 10^9} \right)\approx 1.24 $
+	\item $\text{PMI}(w_1,w_2) \approx \log_2\left( \frac{1.01\cdot 10^9\cdot2.527\cdot 10^{10}}{1.94\cdot 10^9\cdot 5.57\cdot 10^9} \right)\approx 1.24 $
 \end{itemize}
 Two words with high PMI are very likely to occur jointly, while two words with low PMI are very likely to occur separately. PMI can also be used to compute Semantic Orientation (SO), by computing the PMI of selected bigrams with reference words.
 
 \section{Representation and Querying}
-User has information needs and expresses them as a text query, the system matches the query with the documents and returns results. The system is using system-specific document or query representations to make comparison possible. The problem is, that computers have difficulties to work with text directly, so the text has to be transformed into something the machine can work with, usually a vector of numbers.
+The user has information needs and expresses them as a text query, the system matches the query with the documents and returns the results.
+The system is using system-specific document or query representations to make comparison possible. The problem is, that computers have difficulties to work with text directly, so the text has to be transformed into something the machine can work with, usually a vector of numbers.
 
 \subsection{Document Representation}
 The idea is to count the words that are shared between documents. The higher the score, the more words are shared, the higher the apparent similarity between documents. But lexemes and capitalisation makes this task harder.
@@ -457,8 +461,8 @@ The actual steps taken in the preprocessing depends heavily on the use case.
 \begin{itemize}[noitemsep]
 	\item Remove markup
 	\item Expand contractions
-	\item Truecase
-	\item Remove stopwords
+	\item TrueCase
+	\item Remove stop-words
 	\item Only keep specific word forms
 \end{itemize}
 
@@ -479,12 +483,13 @@ The idea to count the words that are shared between documents to account for sim
 	J(\text{document}_1,\text{document}_2) = \frac{\text{document}_1\cap\text{document}_2}{\text{document}_1\cup\text{document}_2}
 	\end{equation*}
 \end{minipage}
+\hfill
 \begin{minipage}{0.4\linewidth}
 	\begin{center}
-		\includegraphics[width=0.9\linewidth]{img/jaccard_set}
+		\includegraphics[width=\linewidth]{img/jaccard_set}
 	\end{center}
 \end{minipage}
-Jaccard similarity has the issue of preferring short documents and that it ignores the number a word is occurring.
+Jaccard similarity has the issue of preferring short documents and that it ignores the number of times a word is occurring.
 
 \subsection{Bag of Words Model}
 Focuses on the number of occurrence of words, with the intuition that if a queried word occurs more in the document it is more relevant.
@@ -615,7 +620,7 @@ Represent mutual information of a word with other words by global co-occurrence 
 \begin{center}
 	\includegraphics[width=0.8\linewidth]{img/context_counting}
 \end{center}
-The problem is that this matrix increases with vocabulary and windows size, which results in a very high dimensional, but sparse feature matrix. Use single value decomposition (SVD) to project the co-occurrence matrix to smaller dimension and take the sub-matrix as the word embedding matrix.
+The problem is that this matrix increases with vocabulary and windows size, which results in a very high dimensional, but sparse feature matrix. Single value decomposition (SVD) is used to project the co-occurrence matrix to a smaller dimension and this sub-matrix is taken as the word embedding matrix.
 
 \subsection{Word2Vec}
 Word2Vec is a simple and computationally efficient way to learn embeddings. It is a prediction based method and comes in two flavours, the Continuous Bag of Words (CBOW) and the Skip-gram model.
@@ -742,7 +747,7 @@ Look at the shortest path between sense nodes.
 \textbf{Intrinsic} evaluation
 \begin{itemize}
 	\item Use a labeled corpus
-	\item Measure the accuracy, evaluated based on held-out data from the labeled corpus
+	\item Measure the accuracy, evaluated based on held-out data from the labelled corpus
 \end{itemize}
 As a baseline choose the most frequent sense or use the Lesk Algorithm.
 
@@ -898,15 +903,15 @@ The Penn Treebank tags are widely used for English language PoS tagging.
 \subsection{Other English Part of Speech Components}
 \begin{itemize}
 	\item Adjectives characterise nouns
-	\item Adverbs characterize verbs, adjectives, other adverbs, or word groups, they are separated into directional, degree, manner or temporal adverbs
+	\item Adverbs characterise verbs, adjectives, other adverbs, or word groups, they are separated into directional, degree, manner or temporal adverbs
 	\item Prepositions specify relationships, be that spatial, temporal or agency\\
-	\emph{arrive at the theater on time}
+	\emph{arrive at the theatre on time}
 	\item Particles look like prepositions or adverbs but serve to modify the meaning of the verb that precedes them\\
 	\emph{to find out}
 	\item Determiners appear directly before a noun
 	\begin{itemize}
 		\item definite article: the
-		\item indefinite article: a,an
+		\item indefinite article: a, an
 		\item demonstratives: this, that, these, those
 	\end{itemize}
 	\item Conjunctions join clauses
@@ -965,7 +970,7 @@ Notice that the probabilities sum to one for each state ($ \alpha + (1-\alpha) =
 \end{equation*}
 $n$ steps of a Discrete State Markov Chain (DSMC) can be simulated simply b y repeated multiplication of the transition matrix with itself.
 
-Unfortunately Markov Chains only work if the interest lies in the probability of observed events. In PoS tagging, interest lies in the probability of things that can't be observed directly. Namely these are the tags, which are hidden. Fortunately \textbf{Hidden Markov Chains} enable the modelling of sequences with both observed events and related hidden events. In PoS tagging these correspond to words and tags.
+Unfortunately Markov Chains only work if the interest lies in the probability of observed events. In PoS tagging, interest lies in the probability of things that can't be observed directly. Namely, these are the tags, which are hidden. Fortunately \textbf{Hidden Markov Chains} enable the modelling of sequences with both observed events and related hidden events. In PoS tagging these correspond to words and tags.
 \begin{itemize}
 	\item a set of $N$ states
 	\item a $N\times N$ \textbf{transition matrix} $A$ where $a_{i,j}$ is the probability of transitioning from state $i$ to state $j$
@@ -1085,7 +1090,7 @@ Minimizing perplexity is the same as maximizing probability.
 Another evaluation metric is the word error rate (the number of insertions, deletions and substitutions normalised by sentence length needed to re-construct a reference sentence). The word error rate can be measured with the Levenshtein Edit Distance (which allows to weight insertions, deletions and substitutions differently) and is efficiently implemented using dynamic programming.
 
 \section{Recurrent Neural Networks and Language Models}
-The task of a Language Model is at its core to take as an input a sequence of word $x^{(1)}, x^{(2)}, \dots, x^{(t-1)}$ and output a probabilty distribution of the next word $P\left( x^{(t)} \middle| x^{(1)}, x^{(2)}, \dots, x^{(t-1)} \right)$.
+The task of a Language Model is at its core to take as an input a sequence of word $x^{(1)}, x^{(2)}, \dots, x^{(t-1)}$ and output a probability distribution of the next word $P\left( x^{(t)} \middle| x^{(1)}, x^{(2)}, \dots, x^{(t-1)} \right)$.
 
 A fixed-window neural language model uses a fixed input size of preceding words to predict the next word
 \begin{center}
@@ -1112,7 +1117,7 @@ The hidden state vector $h^{(t)}$ has two inputs, the input word $x^{(t)}$ and t
 	&
 	\begin{itemize}[label={\color{Firebrick3}-}, leftmargin=*]
 		\item recurrent computation is slow as no parallelisation is possible because inputs have to be handled sequentially by design
-		\item difficult to access information from many timesteps back in practice
+		\item difficult to access information from many time steps back in practice
 	\end{itemize}
 \end{tabularx}
 \begin{center}
@@ -1126,7 +1131,7 @@ The average of the loss is the overall loss for the training set
 \begin{equation*}
 	J(\theta) = \frac{1}{T}\sum_{t=1}^{T}J^{(t)} (\theta) = \frac{1}{T} \sum_{t=1}^{T}\left(-\log\left(\hat{y}_{x_{t+1}}^{(t)}\right)\right)
 \end{equation*}
-Errors are backpropagated at each individual timestep and then across all timesteps, in a process that is called backpropagation through time. Computing gradients with regard to $h_0$ involves many factors of $W_h$ and repeated gradient computations, which can lead to the exploding and vanishing gradient problem.
+Errors are backpropagated at each individual time step and then across all time steps, in a process that is called backpropagation through time. Computing gradients with regard to $h_0$ involves many factors of $W_h$ and repeated gradient computations, which can lead to the exploding and vanishing gradient problem.
 
 Measures against the problem
 \begin{itemize}
@@ -1212,7 +1217,7 @@ For numerical stability the logarithm is used to score a candidate solution
 \subsection{Beam Search}
 On each step of the decoder, keep track of the $k$ \textbf{most probable partial translations}, which are called hypotheses. Beam search is a heuristic search strategy, where $k$ is called the beam size (in practice around 5 to 10).
 
-In order to choose the best $k$ hypotheses for the next word in timestep $t$ we score the alternatives.
+In order to choose the best $k$ hypotheses for the next word in time step $t$ we score the alternatives.
 \begin{equation*}
 	\text{score}\left(y^{(1)},\dots,y^{(t)}\right) = \sum_{t=1}^{T} \log\left( y^{(t)} \middle| y^{(1)},\dots,y^{t-1}, x \right)
 \end{equation*}
@@ -1740,7 +1745,7 @@ To make this summation possible, the positional embedding’s dimension has to b
 	\label{fig:transformerattentionresiduals}
 \end{figure}
 
-The decoder has a final linear layer which is  a fully connected neural network that projects the vector produced by the decoder stack into a vector with the size of the output vocabulary. The linear layer is followed by a softmax layer turning the score for each individual word into a probability. The training is done by comparing the ground truth with predicted output for each position and using teacher forcing. This is done by supplying the expected translation instead of predicted output from previous time step, but self-attention layers are only allowed to attend to earlier positions in the output sequence by using masks (see figure \ref{fig:transformerteacherforcing}). Otherwise the decoder could just attend to the next word in the provided sequence.
+The decoder has a final linear layer which is  a fully connected neural network that projects the vector produced by the decoder stack into a vector with the size of the output vocabulary. The linear layer is followed by a softmax layer turning the score for each individual word into a probability. The training is done by comparing the ground truth with predicted output for each position and using teacher forcing. This is done by supplying the expected translation instead of predicted output from previous time step, but self-attention layers are only allowed to attend to earlier positions in the output sequence by using masks (see figure \ref{fig:transformerteacherforcing}). Otherwise, the decoder could just attend to the next word in the provided sequence.
 
 \begin{figure}[tbh]
 	\begin{subfigure}[t]{0.45\linewidth}

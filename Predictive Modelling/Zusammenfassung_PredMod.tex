@@ -184,7 +184,11 @@ The corresponding cumulative distribution function is given by
 		\end{matrix}
 	\right.
 \end{equation*}
-
+\begin{align*}
+	\ev{X} &= \frac{1}{\lambda}\\
+	\Var{X} &= \frac{1}{\lambda^2}
+\end{align*}
+\clearpage
 \subsection{Normal Distribution}
 The normal distribution or Gaussian distribution is the most frequent distribution occurring with measurement values.
 \begin{definition}
@@ -290,7 +294,7 @@ Infinitesimal intervals $\text{d}x_i$ do not depend on parameter value $\theta$,
 	\Likelihood = \prod_{i=1}^{n} f(x_i;\theta)
 \end{equation*}
 
-If assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\Likelihood(\theta)$.
+If the assumed probability density function $f (x_i ;\theta)$ and parameter value of $\theta$ are correct, we expect a high probability for the actually observed data to occur, which corresponds to a \textbf{maximisation} of $\Likelihood(\theta)$.
 
 \subsection{Maximum Likelihood for Exponential Distribution}
 Given observation $X_1, X_2, \dots, X_n\ \text{i.i.d.}\ \sim \Exp{\lambda}$, that is $f(x_i;\lambda) = \lambda e^{-\lambda x_i}$. The \textbf{likelihood function} for such a  dataset is given by
@@ -308,14 +312,14 @@ In the z-Test the value of $\sigma_X$ is known.
 \begin{enumerate}
 	\item \textbf{Model} $X_i$ is a continuous measurement variable
 	\begin{equation*}
-		X_i, \dots, X_n \text{i.i.d.} \N(\mu, \sigma_X^2)\quad \sigma_X\ \text{known}
+		X_i, \dots, X_n \text{i.i.d.} \N{\mu, \sigma_X^2}\quad \sigma_X\ \text{known}
 	\end{equation*}
 	\item \textbf{Null Hypothesis} $H_0: \mu = \mu_0$\\ \textbf{Alternative Hypothesis} $H_A: \mu \neq \mu_0\ \text{or}\ \mu < \mu_0\ \text{or}\ \mu > \mu_0$
 	\item \textbf{Test statistic}
 	\begin{equation*}
 		Z = \frac{\samplemean{X}_n - \mu_0}{\sigma_{\samplemean{X}_n}} = \frac{\samplemean{X}_n - \mu_0}{\sigma_X / \sqrt{n}} = \frac{\text{observed} - \text{expected}}{\text{standard error}}
 	\end{equation*}
-	\textbf{Null distribution} $Z \sim \N(0,1)$
+	\textbf{Null distribution} $Z \sim \N{0,1}$
 	\item \textbf{Significance Level} $\alpha$
 	\item \textbf{Rejection region for test statistic}
 	\begin{alignat*}{2}
@@ -573,7 +577,6 @@ and the \textbf{covariance matrix} $\Sigma$ is defined as
 		\rho_{XY}\sigma_X\sigma_Y & \sigma_Y^2
 	\end{pmatrix}
 \end{equation*}
-
 The \textbf{marginal distributions} of bivariate normal distributions are again normal distributions
 \begin{equation*}
 	X\sim\N{\mu_X,\sigma_X^2}\qquad\text{and}\qquad Y\sim\N{\mu_Y,\sigma_Y^2}
@@ -617,7 +620,7 @@ The two principal components $Z_1$ and $Z_2$ are \textbf{uncorrelated}, which im
 \phi_{12}(X-\mu_X) + \phi_{22}(Y-\mu_Y)
 \end{pmatrix}\\
 \intertext{and}
-\begin{pmatrix} \Cov{Z_1,Z_1} & \Cov{Z_1,Z_2}\\ \Cov{Z_2,Z_1} & \Cov{Z_2,Z_2} \end{pmatrix} = \begin{pmatrix} \sigma_{Z_1}^2 & 0 \\ 0 & \sigma_{Z_2}^2 \end{pmatrix}
+\begin{pmatrix} \Cov{Z_1,Z_1} & \Cov{Z_1,Z_2}\\ \Cov{Z_2,Z_1} & \Cov{Z_2,Z_2} \end{pmatrix} &= \begin{pmatrix} \sigma_{Z_1}^2 & 0 \\ 0 & \sigma_{Z_2}^2 \end{pmatrix}
 \end{align*}
 The rotation matrix $\Phi$ needs to satisfy the condition $\phi_{11}^2 + \phi_{21}^2 = 1$ and $\phi_{12}^2 + \phi_{22}^2 = 1$
 
@@ -674,7 +677,7 @@ The basic assumption behind this is, that there is a relationship between $Y$ an
 \end{equation*}
 \begin{itemize}
 	\item $f$ is some \emph{fixed} but unknown function of $X_1, X_2,\dots, X_p$
-	\item $\epsilon$ is a random error term which is independent of $X_1, X_2,\dots, X_p$ and is $\sim\N(0,r^2)$
+	\item $\epsilon$ is a random error term which is independent of $X_1, X_2,\dots, X_p$ and is $\sim\N{0,r^2}$
 \end{itemize}
 The simple assumption is that $f$ is linear. But Linear Regression also allows to fit non-linear curves.
 
@@ -1051,6 +1054,7 @@ The idea behind a decision tree is to recursively partition the predictor variab
 Assume that the response $Y$ has $K$ levels and a tree $T$ with $M$ terminal nodes.
 
 \vspace{1em}
+\noindent
 \textbf{Classification error rate}: fraction of training samples in a region that do not belong to the most common class
 \begin{equation*}
 	E_m(T) = 1 - \max_k \hat{p}_{mk}
@@ -1058,6 +1062,7 @@ Assume that the response $Y$ has $K$ levels and a tree $T$ with $M$ terminal nod
 $\hat{p}_{mk}$ is the proportion of the training data in region $m$ that is from level $k$. However, this classification is not sufficiently sensitive for tree growing.
 
 \vspace{1em}
+\noindent
 \textbf{Gini Index}: measure of total variance across the $K$ classes 
 \begin{equation*}
 	G_m(T) = \sum_{k=1}^{K} \hat{p}_{mk} (1 - \hat{p}_{mk})
@@ -1065,6 +1070,7 @@ $\hat{p}_{mk}$ is the proportion of the training data in region $m$ that is from
 Gini index takes on a small value if all the $p_{mk}$ are close to zero or one. The Gini index is referred to as node purity measure. A small value indicates that a node contains predominantly observations from the same class.
 
 \vspace{1em}
+\noindent
 \textbf{Cross Entropy}: an alternative to the Gini Index
 \begin{equation*}
 	D_m(T) = -\sum_{k=1}^{K} \log(\hat{p}_{mk})
@@ -1514,5 +1520,55 @@ The standard error $\sigma_k$ of an autoregressive process is the square root of
 	\sigma_k^2 = \Var{X_{n+k}|X_1= x_1,\dots, X_n = x_n}
 \end{equation*}
 This quantity is increasing with $k$ and converges to the process variance $\sigma_K^2$
+
+\clearpage
+\appendix
+
+\section{R-Code}
+\subsection{Introduction to R}
+\begin{minted}{R}
+data <- read.table(file="./child.txt", header=TRUE, sep=",")
+dim(data)
+> 30 21
+summary(data)
+# row with lowest 'infant mortality'
+index_lowest_infant_mortality <- which.min(data[,"Infant.mortality"])
+index_lowest_infant_mortality
+> 12
+mean(data[,"Physical.activity"], na.rm=T)
+\end{minted}
+
+\subsection{QQPlot}
+\begin{minted}{R}
+options(repr.plot.width=20, repr.plot.height=7)
+dfs = c(20,7,3)
+par(mfrow = c(1,3))
+
+for (df in dfs){
+	x <- rt(20, df=df)
+	qqnorm(x)
+}
+
+par(mfrow = c(1,3))
+for (df in dfs){
+	x <- rt(100, df=df)
+	qqnorm(x)
+}
+\end{minted}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
