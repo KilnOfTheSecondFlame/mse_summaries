@@ -491,7 +491,7 @@ The gradient of the MSE cost contains in each summand a factor $\hat{y}^{(i)} (1
 
 \subsubsection{Gradient of the Cross-Entropy Cost}
 
-The calculation of the update rule for the cross-entropy cost function is more complicated. Here it is computed for the binary classification case. When calculating the gradient for the MSE cost one starts with:
+The calculation of the update rule for the cross-entropy cost function is more complicated. Here it is computed for the binary classification case. When calculating the gradient for the CE cost one starts with:
 \begin{equation}\label{eq:celossgradient}
 	\nabla h_\theta(\textbf{x}) = h_\theta(\textbf{x})\cdot(1-h_\theta(\textbf{x}))\begin{pmatrix}
 	\textbf{x}\\
@@ -1695,9 +1695,12 @@ Most popular regularisation technique for deep neural networks, and highly succe
 The implications of using Dropout are that simpler models with less units are considered during training, models learn to be less dependent on single units and units cannot co-adapt with their neighbouring units, they have to be as useful as possible on their own. As a result a more robust network is obtained that generalises better.
 
 \begin{itemize}
-	\item Computationally very cheap\quad Drawing a random binary number for each unit, O(n) additional memory to store these numbers, no additional cost at test time or in production
-	\item Very versatile\quad Is not limited to certain architectures or models, and can be combined with other regularisation techniques
-	\item Reduced representational capacity\quad As a regularisation technique, dropout reduces the effective capacity of a model. For very large datasets, regularisation implies little reduction in generalisation error, so the computational cost of using dropout and larger models may outweigh the benefit of regularisation
+	\item \textbf{Computationally very cheap}\\
+	Drawing a random binary number for each unit, O(n) additional memory to store these numbers, no additional cost at test time or in production
+	\item \textbf{Very versatile}\\
+	Is not limited to certain architectures or models, and can be combined with other regularisation techniques
+	\item \textbf{Reduced representational capacity}\\
+	As a regularisation technique, dropout reduces the effective capacity of a model. For very large datasets, regularisation implies little reduction in generalisation error, so the computational cost of using dropout and larger models may outweigh the benefit of regularisation
 \end{itemize}
 
 \subsubsection{Early Stopping}
