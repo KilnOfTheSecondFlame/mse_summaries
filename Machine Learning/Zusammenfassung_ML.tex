@@ -208,6 +208,7 @@ Algorithm
 	\item End at a local minimum
 \end{itemize}
 
+\paragraph{Pseudocode for Gradient Descent} Take note that the gradients with respect to each parameter are fully calculated before the update step.
 \begin{align*}
 	\text{\texttt{tmp\_0}} &:= \theta_0 - \alpha \cdot \frac{\partial J}{\partial \theta_0} J(\theta_0,\theta_1)\\
 	\text{\texttt{tmp\_1}} &:= \theta_1 - \alpha \cdot \frac{\partial J}{\partial \theta_1} J(\theta_0,\theta_1)\\
@@ -227,9 +228,11 @@ Search for methods that help to learn and evaluate algorithms based on \emph{lim
 	\item[Model Selection] \textbf{Select} among competing models the one with the \textbf{proper level of flexibility}
 \end{itemize}
 
-\begin{center}
+\begin{figure}[H]
+	\centering
 	\includegraphics[width=0.9\linewidth]{img/model_flexibility}
-\end{center}
+	\caption{Different classifiers used on same training set; source: \href{https://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html}{scikit-learn classifier comparison}}
+\end{figure}
 
 \subsection{Optimal Usage of a Small Dataset}
 Split into Training, Validation and Test set. Do k-fold Cross Validation on Training and Validation set, final test on Test set. Train k times on $(l - 1)$ folds, validate on the remaining one (until each fold was used for validation once), then average the error.
@@ -237,7 +240,7 @@ Split into Training, Validation and Test set. Do k-fold Cross Validation on Trai
 \subsection{Observable and Unobservable Errors}
 True error $E_D$ is the probability that $h$ will misclassify a random instance from the \textbf{complete domain} $\bm{E}$ and is unobservable.
 
-The empirical test error $E_{emp}$ is the proportion of \textbf{sample $S\in D$} misclassified by $h$ is en estimate for the true error and gets better with more error.
+The empirical test error $E_{emp}$ is the proportion of \textbf{sample $S\in D$} misclassified by $h$ is an estimate for the true error and gets better with more data.
 
 \begin{itemize}
 	\item Assumption that training and test data are representative of underlying distribution of $D$
@@ -247,7 +250,7 @@ The empirical test error $E_{emp}$ is the proportion of \textbf{sample $S\in D$}
 
 \subsection{Error Sources}
 
-The chosen hypothesis \Hilbert is the \textbf{best hypothesis at a distance of the true function}. Different chosen samples $X$ give \textbf{different information}.
+The chosen hypothesis \Hilbert\ is the \textbf{best hypothesis at a distance of the true function}. Different chosen samples $X$ give \textbf{different information}.
 
 \noindent
 Error decomposition:
@@ -271,12 +274,15 @@ First used in signal detection to show trade-off between \textbf{hit rate} and \
 \end{itemize}
 
 \subsection{Error Measures}
-\begin{tabularx}{\linewidth}{lX}
-	Mean Square Error & $ E_{MSE} = \frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 $\\
-	Root Mean-Squared Error & $E_{RMSE} = \sqrt{\frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 } $\\
-	Mean Absolute Error & $ E_{MAE} = \frac{1}{F}\sum_{i=1}^{N} \abs{\widehat{y}_i - y_i}$\\
-	(less sensitive to outliers)
-\end{tabularx}
+\vspace{-1.5em}
+\begingroup
+	\renewcommand{\arraystretch}{2}
+	\begin{tabularx}{\linewidth}{p{0.55\linewidth}X}
+		Mean Square Error & $ E_{MSE} = \frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 $\\
+		Root Mean-Squared Error & $E_{RMSE} = \sqrt{\frac{1}{F}\sum_{i=1}^{N} (\widehat{y}_i - y_i)^2 } $\\
+		Mean Absolute Error (less sensitive to outliers) & $ E_{MAE} = \frac{1}{F}\sum_{i=1}^{N} \abs{\widehat{y}_i - y_i}$
+	\end{tabularx}
+\endgroup
 
 \subsection{Evaluating Clustering Methods}
 \textbf{Without Labels}:\\
@@ -291,7 +297,7 @@ Check \textbf{purity}, \textbf{rand index} and \textbf{misclassification rate}.
 On what basis can one \emph{algorithm be favoured over another} and how probable is it that the chosen method is \emph{truly significantly better}.
 
 \subsection{Maximum Likelihood and Ockham's Razor}
-Given competing $h_i \in \Hilbert_j$ \textbf{maximum likelihood parameters} can be found by \textbf{calculating the likelihood} $p(X|h_i)$ and \textbf{selecting the best} $\hat{h} = \underset{h_i}{\max} p(X|h_i)$.
+Given competing $h_i \in \Hilbert_j$ \textbf{maximum likelihood parameters} can be found by \textbf{calculating the likelihood} $p(X|h_i)$ and \textbf{selecting the best} $\hat{h} = \underset{h_i}{\max}\ p(X|h_i)$.
 
 The goal is to find a compromise between model complexity and accuracy on the validation data. Ockham's razor, an axiom in machine learning, states that "given two models with the \textbf{same empirical error}, the simpler one should be preferred because \textbf{simplicity is desirable in itself}". The reasoning is that for a simple hypothesis the \textbf{probability of it having unnecessary conditions is reduced}.
 
@@ -336,7 +342,7 @@ Evaluating the hyperplane formula for a point $x$ gives its distance to the hype
 \subsection{Formulation of Optimisation Problem}
 Intuitive Optimisation
 \begin{itemize}[noitemsep]
-	\item $\underset{\beta_0,\beta_1,\dots,\beta_p}{\text{maximise}} M$
+	\item $\underset{\beta_0,\beta_1,\dots,\beta_p}{\text{maximise}}\ M$
 	\begin{itemize}
 		\item subject to $\sum_{j=1}^{p}\beta_j^2 = 1$
 		\item and $y_i\cdot (\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip}) \geq M\qquad\forall i = 1..N$
@@ -392,9 +398,11 @@ A possible solution for linearly completely non-separable data is to map the dat
 \subsubsection{Variable Transformation}
 The same idea applies, transform a non-linearly separable input function in $\R^n$ to $\R^{n+k}, k\geq 1$ where it may be linearly separable.
 
-\begin{center}
+\begin{figure}[H]
+	\centering
 	\includegraphics[keepaspectratio,width=0.6\linewidth]{variable_transformation.png}
-\end{center}
+	\caption{Transform single variable $x$ to $x$ and $x^2$ where the data is separable by hyperplane}
+\end{figure}
 
 The power of feature space transformation lies in the fact, that with an appropriately chosen feature space of sufficient dimensionality any consistent training set can be made separable.
 \begin{equation*}
@@ -495,7 +503,7 @@ Intuitively, as in the real world a learner is never trained on the whole data t
 	\includegraphics[width=0.7\linewidth]{img/cross_validation_hyperparameter_tuning}
 \end{center}
 \subsubsection{Stratified k-Fold Cross Validation for Unequal Classes}
-In cases where classes are unevenly distributed, {\color{DodgerBlue3} stratified k-fold cross-validation} reduces bias and variance of the estimation. The implementation takes care to ensure that the classes are distributed approximately equally in the subsets. This ensures that the individual subsets are representative of the class distribution in the training data set.
+In cases where classes are unevenly distributed, {\color{DodgerBlue3} stratified k-fold cross-validation} reduces bias and variance of the estimation. This implementation takes care to ensure that the \textbf{classes are distributed approximately equally in the subsets}. This ensures that the individual subsets are representative of the class distribution in the training data set.
 
 \begin{minted}[linenos,fontsize=\small]{python}
 from sklearn.model_selection import validation_curve
@@ -556,10 +564,19 @@ Increasing the complexity of a model usually increases its variance and lowers i
 \subsubsection{Minimisation of the Loss Function with Regularisation}
 \begin{align*}
 	L(\theta) &= \sum_{i=1}^{N} \left( y_i - \hat{y}_i(\theta) \right)^2 + \lambda \norm{\theta}_R\\
-	\norm{\theta}_R:\qquad \norm{\theta}_2^2 &= \sum_{i=1}^{n} (\theta_k)^2\qquad \text{Ridge-Regression}\\
-	\norm{\theta}_1 &= \sum_{i=1}^{n} \abs{\theta_k}\qquad \text{LASSO-Regression}\\
+	\norm{\theta}_R:\qquad \norm{\theta}_2^2 &= \sum_{i=1}^{n} \abs{\theta_k}^2\qquad \text{Ridge-Regression (L2)}\\
+	\norm{\theta}_1 &= \sum_{i=1}^{n} \abs{\theta_k}\qquad \text{LASSO-Regression (L1)}\\
+	\norm{\theta}_q &= \sum_{i=1}^{n} \abs{\theta_k}^q\qquad \text{Generalised Regression Term}\\
 \end{align*}
-with $\lambda$ being the Regularisation hyperparameter. By assigning larger values to the hyper parameter $\lambda$, we increase the regularisation strength and reduce the weights of our model. LASSO is an approach that can lead to sparse models. Depending on the regularisation strength, certain weights can become zero, which means that LASSO can also function as a \textbf{monitored feature selection procedure}.
+with $\lambda$ being the Regularisation hyper-parameter. By assigning larger values to the hyper parameter $\lambda$, we increase the regularisation strength and reduce the weights of our model. LASSO is an approach that can lead to sparse models. Depending on the regularisation strength, certain weights can become zero, which means that LASSO can also function as a \textbf{monitored feature selection procedure}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/regularisation_term_shape}
+	\caption{Contours of the regularisation term for various values of the parameter $q$ \parencite{bishop2006pattern}}
+	\label{fig:regularisationtermshape}
+\end{figure}
+
 
 \section{System Design}
 Machine Learning systems as a whole are pipelines composed of individual components, that can be developed collaboratively as a team.
@@ -705,7 +722,10 @@ lasso.fit(X,Y)
 \texttt{Lasso model: -3.707 * LSTAT + 2.992 * RM + -1.757 * PTRATIO + -1.081 * DIS\\
 	+ -0.7 * NOX + 0.631 * B + 0.54 * CHAS + -0.236 * CRIM + 0.081 * ZN\\
 	+ {\color{red} -0.0 * INDUS} + {\color{red} -0.0 * AGE} + {\color{red}0.0 * RAD} + {\color{red}-0.0 * TAX}}
-L2 or Ridge regularisation squares the coefficients in the penalty expression. This forces the coefficient values to be spread out more equally.
+
+\vspace{0.5em}
+\noindent
+Ridge regularisation squares the coefficients in the penalty expression. This forces the coefficient values to be spread out more equally.
 
 \subsection{Tree-based Methods for Feature Selection}
 Random forest are popular methods due to their good accuracy, robustness and ease of use. Additionally, they provide a mean decrease purity and mean decrease accuracy.
@@ -727,13 +747,13 @@ Given an external estimator that weighs features, RFE selects features by recurs
 
 \section{Bayes' Theorem}
 \subsection{Multivariate Gaussian Distribution}
-Gaussian defined over a vector x of continuous variables in a D-dimensional space with mean vector $\mu$ and covariance matrix $\bm{\Sigma}$, where $ \abs{\bm{\Sigma}} $ is the determinant of $\bm{\Sigma}$.
+Gaussian defined over a vector x of continuous variables in a D-dimensional space with mean vector $\bm{\mu}$ and covariance matrix $\bm{\Sigma}$, where $ \abs{\bm{\Sigma}} $ is the determinant of $\bm{\Sigma}$.
 \begin{equation*}
-	p(\bm{x}) = \N{\bm{x}|\mu, \bm{\Sigma}} = \frac{1}{(2\pi)^{\frac{D}{2}} \norm{\bm{\Sigma}}^{\frac{1}{2}}} \exp\left\{ -\frac{1}{2} (\bm{x} - \mu)^T \bm{\Sigma}^{-1} (\bm{x} - \mu) \right\}
+p(\bm{x}) = \N{\bm{x}|\bm{\mu}, \bm{\Sigma}} = \frac{1}{(2\pi)^{\frac{D}{2}} \norm{\bm{\Sigma}}^{\frac{1}{2}}} \exp\left\{ -\frac{1}{2} (\bm{x} - \bm{\mu})^T \bm{\Sigma}^{-1} (\bm{x} - \bm{\mu}) \right\}
 \end{equation*}
 The quadratic form in the argument of the exponential is called \emph{Mahalanobis distance}
 \begin{equation*}
-	\bm{\Delta} = (\bm{x} - \mu)^T \bm{\Sigma}^{-1} (\bm{x} - \mu)
+\bm{\Delta} = (\bm{x} - \bm{\mu})^T \bm{\Sigma}^{-1} (\bm{x} - \bm{\mu})
 \end{equation*}
 Without loss of generality, we can assume that $\bm{\Sigma}$ is symmetric with real eigenvalues and an orthonormal set of eigenvectors $\mu_i$.
 
@@ -745,7 +765,7 @@ Since $\bm{\Sigma}$ is real and symmetric, the eigenvectors $\lambda_i$ are real
 	\bm{\Sigma}^{-1} &= \sum_{i=1}^{D} \frac{1}{\lambda_i} \textbf{u}_i\textbf{u}_i^T\\
 	\intertext{The quadratic form becomes}
 	\Delta^2 &= \sum_{i=1}^{D}\frac{y_i^2}{\lambda_i}\\
-	y_i &= \textbf{u}_j^T (\textbf{x} - \mu)
+	y_i &= \textbf{u}_j^T (\textbf{x} - \bm{\mu})
 \end{align*}
 This describes a D-dimensional ellipsoid with main axes $\sqrt{\lambda_i}$. The determinant is given by the product of the eigenvalues
 \begin{equation*}
@@ -942,7 +962,7 @@ Intuitively, one can think of a function $f(\cdot)$ drawn from a Gaussian proces
 \subsubsection{Mercer Kernel}
 The positive semi-definiteness requirement for covariance matrices computed based on arbitrary input points is identical to \textbf{Mercer's condition for kernels}. A function $(\cdot,\cdot)$ is a valid kernel provided the resulting \textbf{kernel matrix $K$} defined as above is always positive semi-definite for any set of input points $x_1, x_2, \dots, x_m \in \X$. Therefore, Gaussian processes are kernel-based probability distributions in the sense that any valid kernel function can be used as a covariance function.
 \begin{definition}
-	Let \X be a measure space with $k: L^2(\X\times\X)\rightarrow \R$. $k$ is called a kernel iff there is some feature map $\phi: \X \rightarrow \Hilbert$ into a separable Hilbert space \Hilbert such that
+	Let \X be a measure space with $k: L^2(\X\times\X)\rightarrow \R$. $k$ is called a kernel iff there is some feature map $\phi: \X \rightarrow \Hilbert$ into a separable Hilbert space \Hilbert\ such that
 	\begin{equation*}
 		k(x,x') = \left\langle \theta(x) \middle| \theta(x') \right\rangle_{\Hilbert}
 	\end{equation*}
@@ -982,7 +1002,7 @@ Then there is a feature mapping $\theta : \X \rightarrow \R^d$, such that
 \end{equation*}
 
 \subsubsection{Kernel Properties}
-If $k_1(x,y)$ and $k_1(x,y)$ are kernels, then the following functions are kernels as well
+If $k_1(x,y)$ and $k_2(x,y)$ are kernels, then the following functions are kernels as well
 \begin{align*}
 	k(x,y) &= \langle\theta(x) | \theta(x')\rangle_{\mathcal{F}}\\
 	k(x,y) &= k_1(x,y) + k_2(x,y)\\
@@ -1073,7 +1093,7 @@ The "Curse of Dimensionality" is the problem that inputs are high dimensional wh
 	\label{fig:cursedimensionality}
 \end{figure}
 
-High dimensional data is very sparse: most training instances are likely to be far away from each other making predictions much harder, greater risk of overfitting, joint probabilities are hard to fit.
+High dimensional data is very sparse: most training instances are likely to be far away from each other making predictions much harder, having a greater risk of overfitting, and fitting joint probabilities hard.
 
 \subsection{Dimensionality Reduction}
 Dimensionality reduction is the process of reducing the number of random variables under consideration by obtaining a set of principal variables.
@@ -1106,7 +1126,7 @@ Dimensionality reduction is the process of reducing the number of random variabl
 \subsection{Principal Component Analysis}
 The main linear technique for dimensionality reduction, principal component analysis PCA, performs a linear mapping of the data to a lower-dimensional space in such a way that the variance of the data in the low-dimensional representation is maximized.
 
-The eigenvectors that correspond to the largest eigenvalues (the principal components) can now be used to reconstruct a large fraction of the variance of the original data. PCA identifies the d-dimensional hyperplane that lies closest to the data and then projects the data on it (d is a hyperparameter).
+The eigenvectors that correspond to the largest eigenvalues (the principal components) can now be used to reconstruct a large fraction of the variance of the original data. PCA identifies the $d$-dimensional hyperplane that lies closest to the data and then projects the data on it ($d$ is a hyperparameter).
 
 \begin{center}
 	\includegraphics[width=0.7\linewidth]{img/input_covariance_matrix}
@@ -1657,7 +1677,7 @@ NMI is a good measure for determining the quality of clustering and an external 
 	\item[$H\lbrack C \rbrack$] Entropy of cluster labels
 \end{itemize}
 \begin{minted}[breaklines, fontsize=\small]{python}
-sklearn.metrics.normalized_mutual_info_score(labels_true, labels_pred, average_method=’warn’)
+sklearn.metrics.normalized_mutual_info_score(labels_true, labels_pred, average_method='warn')
 \end{minted}
 
 \subsubsection{Bayesian Information Criterium (BIC)}
@@ -1680,7 +1700,7 @@ lowest_bic = np.infty; bic = []
 n_components_range = range(1, 7)
 for n_components in n_components_range:
 	# Fit a Gaussian mixture with EM
-	gmm =mixture.GaussianMixture(n_components=n_components, covariance_type='full')
+	gmm = mixture.GaussianMixture(n_components=n_components, covariance_type='full')
 	gmm.fit(X)
 	bic.append(gmm.bic(X))
 	if bic[-1] < lowest_bic:
