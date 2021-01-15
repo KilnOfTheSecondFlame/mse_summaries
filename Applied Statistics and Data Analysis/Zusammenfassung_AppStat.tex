@@ -88,19 +88,19 @@ For errors or improvement raise an issue or make a pull request on the \href{htt
 This is module concerns itself with quality control, especially with \textbf{statistical quality control}. Statistical process control is understood to be
 
 \begin{definition}
-	Statistical process control is, first and foremost, a way of thinking which happens to have some tools attached.
+	Statistical process control is, first and foremost, a \textbf{way of thinking}, which happens to have some tools attached.
 \end{definition}
 
 \section{Statistical Process and Quality Control}
 These tools are seven statistical methods for analysing data colloquially known as \textbf{magnificent seven}:
 \begin{enumerate}[noitemsep]
-	\item histogram
-	\item check sheet
-	\item Pareto chart
-	\item defect concentration diagram
-	\item cause-and-effect diagram
-	\item control chart
-	\item scatter diagram
+	\item Histogram
+	\item Check Sheet
+	\item Pareto Chart
+	\item Defect Concentration diagram
+	\item Cause-and-Effect Diagram
+	\item Control Chart
+	\item Scatter Diagram
 \end{enumerate}
 
 \subsubsection{Check Sheet}
@@ -122,21 +122,24 @@ The location plot is also called the defect concentration diagram, and is used t
 \subsubsection{Cause-and-Effect Diagram}
 This tool has the form of a fishbone diagram and is used for the systematic identification of causes resulting in problems.
 
-\subsection{Construction of Control Charts}
-The basis for control charts is the idea that a process can run according to specifications or outside of them. These are upper and lower bound and are derived statistically. The process is then continuously monitored and plotted against these bounds. The range between the limits is called \textbf{control area}.
+\subsection{Control Charts}
+The basis for control charts is the idea that a process can run according to specifications or outside of them. These are upper and lower bound and are derived statistically. The process is then continuously monitored and plotted against these bounds.
 
-\begin{figure}[tbh]
-	\centering
-	\includegraphics[width=0.5\linewidth]{img/control_chart}
-	\caption{Sample control chart with UCL and LCL indicated}
-	\label{fig:controlchart}
-\end{figure}
+\subsubsection{Construction of Control Charts}
+Periodic sampling of fixed sample size $n$ from the current production of the machine. The new parts are then drawn in a scatter plot with a centreline $\mu_0$ and with upper and lower control limit for a given $\alpha$ which defines the \textbf{control area}. The mean values are then continuously plotted against the index of the current measurement in the scatter diagram. The problem is that the process standard deviation is unknown.
 
 The distance between upper control limit (UCL) and lower control limit (LCL) is three times the standard deviation.
 \begin{align*}
 	\text{LCL} &= \mu_0 - z_q \frac{\sigma}{\sqrt{n}}\\
 	\text{UCL} &= \mu_0 + z_q \frac{\sigma}{\sqrt{n}}
 \end{align*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/control_chart}
+	\caption{Sample control chart with UCL and LCL indicated}
+	\label{fig:controlchart}
+\end{figure}
 
 \subsubsection{Shewhart Control Charts}
 The problem with constructing the control chart is that mean and standard deviation of a process are generally unknown. Shewhart solves this by first monitoring the variation and then the mean of a process. Sample the process periodically under the assumption that the process is normally distributed.
@@ -373,7 +376,7 @@ For an undisturbed process where $\mu = \mu_0$ it follows that
 \begin{equation*}
 	g(\mu_0) = \tilde{g}(0) = \alpha
 \end{equation*}
-where $\alpha$ is the error probability. For a disturbed process $g(\mu_1)$ should be as large as possible and thus the probability for an omitted alarm $1-g(\mu_1)$ as small as possible.
+where $\alpha$ is the error probability. In statistical process control $\alpha$ is $0.0027$. For a disturbed process $g(\mu_1)$ should be as large as possible and thus the probability for an omitted alarm $1-g(\mu_1)$ as small as possible. 
 
 \subsubsection{Operating Characteristic}
 The operating characteristic curve is the functional relation between the type II error and the position of $\mu_1$ or $\eta = \frac{\mu_1 - \mu_0}{\sigma}$ respectively
@@ -414,15 +417,149 @@ On the other hand, an immediate indication would be signalled with an ideal char
 \end{equation*}
 where $p$ denotes the intervention probability and an expected value $\ev{I_{\text{RL}}} = \frac{1}{p}$.
 
-\subsubsection{ARL versus Power Function}
-The probability $p$ depends on the actual process mean $\mu_1$ and on the control limits UCL and LCL.
+The probability $p$ to intervene in the process depends on the actual process mean $\mu_1$ and on the control limits UCL and LCL.
+
 \begin{equation*}
-	p = p(\mu_1) = P(\mu\leq LCL)
+	p = p(\mu_1) = P(\mu\leq \text{LCL}) + P(\text{UCL} \leq \mu)
 \end{equation*}
 
-% TODO ARL versus Power Function
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/average_run_length}
+\end{figure}
 
-% TODO Process Capabilites
+
+\subsubsection{ARL versus Power Function}
+The power function of the test is
+\begin{equation*}
+	p = p(\mu_1) = g(\mu_1) =\tilde{g}(\delta)\quad\text{with}\quad \delta=\frac{\mu_1-\mu_0}{\sigma}
+\end{equation*}
+Therefore the average run length is
+\begin{equation*}
+	\text{ARL}(\delta) = \frac{1}{g(\mu_1)} =\frac{1}{\tilde{g}(\delta)}
+\end{equation*}
+Instead of the power function, the average run length is also used to assess and compare different control charts.
+
+\subsection{Process Capability}
+The choice of the error probability $\alpha=0.0027$ implies that $99.73\%$ of all measured values, meaning almost all, lie within the three $\sigma$ range
+\begin{equation*}
+	[\mu_0 - 3\sigma, \mu_0 + 3\sigma]
+\end{equation*}
+However, the \textbf{control limits} $\text{LCL}=\mu_0 - 3\frac{\sigma}{\sqrt{n}}$ and $\text{UCL}=\mu_0 + 3\frac{\sigma}{\sqrt{n}}$ define a narrower zone.
+
+\subsection{Tolerance Limits}
+Technical tolerances for quality characteristics are defined in industry in the form of two tolerance limits
+\begin{itemize}[nosep]
+	\item \textbf{lower specification limit} (LSL), and
+	\item \textbf{upper specification limit} (USL)
+\end{itemize}
+which have to be met in production.
+
+If the measured value $x$ of the random variable $X$ is beyond the tolerance limits, then the part is rejected. And a control chart is only suitable for monitoring if the process produces as few rejects as possible.
+
+The performance of a control chart is measured with so called \textbf{capability process ratios} (PCR). The simplest process capability index is
+\begin{equation*}
+	C_p = \frac{\text{USL} - \text{LSL}}{6\sigma}
+\end{equation*}
+The capability process ratio $C_p$ expresses the ratio of the width of the tolerance range to the width of the process range.
+
+\vspace{1em}
+\noindent
+If the process is under control, that is $\mu_1 = \mu_0$ and $\text{SL} = \mu_0$, then $C_p = 1$ implies a reject rate of $\alpha\cdot100\% = 0.27\%$, $C_p < 1$ implies a reject rate greater than $\alpha\cdot100\% = 0.27\%$ and the process capability is \textbf{not} guaranteed, and $C_p > 1$ implies a reject rate less than $\alpha\cdot100\% = 0.27\%$ and the process capability \textbf{is} guaranteed.
+
+In practice the target value $\mu_0$ and the process standard error $\sigma$ are unknown and estimated from a trial run. This results in an estimate for the process capability ratio, which is very sensitive if the process is not under control or the measured values are not normally distributed.
+
+\subsection{Control Charts with Memory}
+The decision to interfere with the manufacturing process with classical Shewhart control charts is based on the result of the current sample, and no consideration of the development of the manufacturing process in the past is made (except with the \textit{Western Electric rules}). The solutions is \textbf{modern control charts} with memory.
+
+Given a data set with mean and standard deviation
+\begin{tabularx}{\linewidth}{c | c c c c c c | c | c}
+	sample & \multicolumn{6}{c |}{measured values} & mean & standard deviation\\
+	\hline
+	$1$ & $x_{11}$ & $x_{12}$ & $\dots$ & $x_{1j}$ & $\dots$ & $x_{1{\color{red}n_1}}$ & $\samplemean{x}_1$ & $s_1$ \\
+	$2$ & $x_{21}$ & $x_{22}$ & $\dots$ & $x_{2j}$ & $\dots$ & $x_{2{\color{red}n_2}}$ & $\samplemean{x}_2$ & $s_2$ \\
+	$\vdots$ & $\vdots$ & $\vdots$ &  & $\vdots$ & & $\vdots$ & $\vdots$ & $\vdots$ \\
+	$i$ & $x_{i1}$ & $x_{i2}$ & $\dots$ & $x_{ij}$ & $\dots$ & $x_{i{\color{red}n_i}}$ & $\samplemean{x}_i$ & $s_i$ \\
+	$\vdots$ & $\vdots$ & $\vdots$ &  & $\vdots$ & & $\vdots$ & $\vdots$ & $\vdots$ \\
+	$k$ & $x_{k1}$ & $x_{k2}$ & $\dots$ & $x_{kj}$ & $\dots$ & $x_{k{\color{red}n_k}}$ & $\samplemean{x}_k$ & $s_k$ \\
+\end{tabularx}
+\begin{itemize}[nosep]
+	\item Sample sizes $\color{red}n_i$ may be different
+	\item Data comes from a normal distribution
+\end{itemize}
+
+\subsubsection{Memory}
+The idea is to introduce a linear combination of the mean values $\samplemean{x}_j$ of samples from the past
+\begin{equation*}
+	y_i = \alpha_i + \sum_{j=1}^{i}\beta_j\samplemean{x}_j
+\end{equation*}
+where $\alpha_i$ and the weights $\beta_1,\dots,\beta_i$ can be arbitrary real numbers with the sum $\sum_{j=1}^{i}\beta_j = 1$.
+
+\subsubsection{Cumulative Sum Control Chart (CUSUM)}
+The idea being that the CUSUM chart plots the cumulative sums of deviations of measurement values from the target value. Given is the mean $\samplemean{x}_i$ of the $i$-th sample of a process, target value $\mu_0$ and the process standard deviation $\sigma$, which is known or estimated from the data.
+
+The goal is to have a control chart that quickly detects a drift from the target value.
+
+\paragraph{Construction of the Cumulative Sum Control Chart} The construction is a recursive procedure using two statistics $C^+$ and $C-$, which sum up the deviations above and below target value respectively
+\begin{align*}
+	C_i^+ &= \max\left\{0, C_{i-1}^+ + \samplemean{x}_i - (\mu_0 + K)\right\}\\
+	C_i^- &= \max\left\{0, C_{i-1}^- - \samplemean{x}_i + (\mu_0 - K)\right\}
+\end{align*}
+with the starting values $C_0^+ = C_0^- = 0$. If a shift of $\Delta$ is to be detected, set $K=\frac{\Delta}{2}$. This constant $K$ is called \textbf{reference value}.
+
+$C^+$ and $C^-$ only sum up deviations from the target value, which are greater than the reference value $K$. If the process is under control, that is for all $i$
+\begin{equation*}
+	\mu_0 - K \leq \ev{\samplemean{x}_i}\leq\mu_0+K,
+\end{equation*}
+then the expected values of the statistics are both zero.
+\begin{equation*}
+	\ev{C_i^+} = \ev{C_i^-} = 0
+\end{equation*}
+In this case the two random variables $C_i^+$ and $C_i^-$ fluctuate around the line at zero.
+
+If the process is out of control beyond a certain index $i_0$
+\begin{equation*}
+	\ev{\samplemean{x}_i} = \mu \geq \mu_0 + K \forall i\geq i_0
+\end{equation*}
+then the statistic $C^+$ sums up the deviation from $\mu_0 + K$, that is 
+\begin{align*}
+	\ev{C_i^+} &\geq \left(\mu - (\mu_0 + k)\right)\cdot (i - i_0)\\
+	\ev{C_i^-} &= 0
+\end{align*}
+From the moment $i_0$ where the disturbance occurs, the points $(i,C_i^+)$ lie on average above a straight line with slope $\mu - (\mu_0 + K)$. The same happens for $C^-$ if the process is not under control in the other direction.
+
+The process is \textbf{out of control} if either $C^+$ or $C^-$ exceed a constant $H$, which is called the \textbf{decision interval}. If the process is out of control, it is stopped and the cause investigated. After the problem has been resolved, the CUSUM is restarted from zero.
+
+\paragraph{Choice of $K$ and $H$} As the CUSUM should still have a good ARL, this choice is important. As a rule of thumb, with $\hat{\sigma}$ being an estimate of the process standard deviation
+\begin{align*}
+	K &= \frac{\hat{\sigma}}{2} \tag{reference value}\\
+	H &= 5\hat{\sigma} \tag{decision interval}
+\end{align*}
+
+\subsubsection{Exponentially Weighted Moving Average (EWMA)}
+The idea is to still monitor the means but have their weights $\beta_j$ decay exponentially. Given are the mean $\samplemean{x}_i$ of the $i$-th sample of a process, the target value $\mu_0$ and the process standard deviation $\sigma$, which is either known or estimated from the data. The goal is to have a control chart that quickly detects a drift from the target value.
+
+\begin{align*}
+	\lambda&: 0\leq\lambda\leq 1 \tag{smoothing paramater}\\
+	y_i &= \alpha_i + \sum_{j=1}^{i}\beta_j\samplemean{x}_j\\
+	\intertext{\textbf{Weights:}}
+	\alpha_i &= (1 - \lambda)^i \cdot \mu_0\\
+	\beta_j &= \lambda\cdot(1-\lambda)^{i-j}\quad\text{with}\quad j\in\{1,2,\dots,i\}
+	\intertext{\textbf{Statistic:}}
+	y_i &= (1-\lambda)^i \mu_0 + \lambda\sum_{j=1}^{i}(1-\lambda)^{i-j} \samplemean{x}_j
+\end{align*}
+
+\paragraph{Construction of an EWMA Chart} The EWMA chart is constructed in a recursive fashion.
+\begin{align*}
+	y_0 &= \mu_0 \tag{Initialisation}\\
+	y_i &= (1-\lambda)y_{i-1} + \lambda\cdot\samplemean{x}_i \tag{Recursion}
+\end{align*}
+
+The \textbf{smoothing parameter} $\lambda$ determines the influence of the previous sample mean $\samplemean{x}_j$ on the statistic
+\begin{equation*}
+	y_i = (1-\lambda)^i\cdot\mu_0 + \lambda\cdot\sum_{j=1}^{i}(1-\lambda)^{i-j}\samplemean{x}_j
+\end{equation*}
+The smaller this smoothing parameter is the more previous sample means are used for the decision. The EMWA has thus a non-constant, unlimited memory.
 
 \subsection{Acceptance Sampling}
 This is a topic of statistical quality control. Certain products can't all be tested, as they get used up during testing (for example single use syringes or bullets). As a compromise draw random samples and make a decision on the quality of the population based on this information.
