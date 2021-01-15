@@ -909,7 +909,7 @@ $P(t)$ attains its minimum in the interval $[0, 2\beta]$ at $\beta^* = - \frac{b
 	a &= \frac{1}{2\beta^2} \left[ f(x^i) - 2 f\left(x^i - \beta\nabla f(x^i)\right) + f\left(x^i - 2\beta\nabla f(x^i)\right)\right]\\
 	b &= \frac{1}{2\beta} \left[ -3 f(x^i) + 4 f\left(x^i - \beta\nabla f(x^i)\right) - f\left(x^i - 2\beta\nabla f(x^i)\right) \right] \\
 	c &= f(x^i)\\
-	\beta^* &= \frac{-b}{2a} = \frac{\beta}{2} \cdot \frac{-3 f(x^i) - 4 f\left(x^i - \beta\nabla f(x^i)\right) + f\left(x^i - 2\beta\nabla f(x^i)\right)}{f(x^i) - 2 f\left(x^i - \beta\nabla f(x^i)\right) + f\left(x^i - 2\beta\nabla f(x^i)\right)}
+	\beta^* &= \frac{-b}{2a} = \frac{\beta}{2} \cdot \frac{3 f(x^i) - 4 f\left(x^i - \beta\nabla f(x^i)\right) + f\left(x^i - 2\beta\nabla f(x^i)\right)}{f(x^i) - 2 f\left(x^i - \beta\nabla f(x^i)\right) + f\left(x^i - 2\beta\nabla f(x^i)\right)}
 \end{align*}
 
 \subsection{Newton's Method}
@@ -941,7 +941,7 @@ approximates the zeros of the derivative, that is the stationary points of the f
 
 For a multi-dimensional function $f: \mathbb{R}^n \rightarrow \mathbb{R}$ the Newton method is
 \begin{align*}
-	x^{i+1} &= x^i - \frac{\nabla f(x^i)}{H_f(x^i)}\\
+	x^{i+1} &= x^i -(H_f(x^i))^{-1} \nabla f(x^i)\text{,}\\
 	\nabla f(x^i) &= \begin{pmatrix}
 		\frac{\partial f(x^i)}{\partial x_1}\\
 		\frac{\partial f(x^i)}{\partial x_2}
