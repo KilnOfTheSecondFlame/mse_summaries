@@ -172,7 +172,7 @@ With these models the user does not have to specify alternatives, as they are sp
 \subsubsection{Formulation of an Optimisation Model}
 \emph{Sets}:
 \begin{itemize}
-	\item[$I$] Set of locations, $I={1,2,...,n}$
+	\item[$I$] Set of locations, $I={1,2,\dots,n}$
 \end{itemize}
 \noindent
 \emph{Parameters}:
@@ -212,7 +212,7 @@ Optimisation models involve \textbf{mathematical definition of solution space}, 
 	$\{0,1\}^3$ is the set of binary vectors with length 3
 	\item \textbf{vectors} are written in bold face, component in normal face with subscripts
 	\item \textbf{multiple vectors} are written using superscripts\\
-	$\textbf{x}^1,\textbf{x}^2,...,\textbf{x}^i = \begin{pmatrix}
+	$\textbf{x}^1,\textbf{x}^2,\dots,\textbf{x}^i = \begin{pmatrix}
 		x_1^i\\
 		x_2^i\\
 		\vdots\\
@@ -231,7 +231,7 @@ Optimisation models involve \textbf{mathematical definition of solution space}, 
 	\renewcommand{\arraystretch}{1.5}
 	\begin{tabularx}{\linewidth}{l X}
 		\textbf{General Optimisation Problem}: & $\prod: \max\{f(\textbf{x}):\textbf{x}\in S\}$\\
-		Decision variables: & $\textbf{x} = (x_1,x_2,...,x_n)^{\text{T}}\in\mathbb{R}^n$\\
+		Decision variables: & $\textbf{x} = (x_1,x_2,\dots,x_n)^{\text{T}}\in\mathbb{R}^n$\\
 		(Feasible) solution: & $\textbf{x} \in S$\\
 		Solution space: & $s\subseteq\mathbb{R}^n$\\
 		Objective function: & $f: S\rightarrow\mathbb{R}$\\
@@ -256,9 +256,9 @@ Optimisation models involve \textbf{mathematical definition of solution space}, 
 \subsubsection{Definition of Solution Space}
 \begin{enumerate}[label=\roman*)]
 	\item \textbf{Functional Constraints}:\\
-	$S = \{ \textbf{x}\in G_1\times...\times G_n : g_i(\textbf{x})\leq 0, h_j (\textbf{x}) = 0, i=1,...,p,j=1,...,q \}$ where $G_i = \mathbb{R},\mathbb{Z},\{0,1\},...$
+	$S = \{ \textbf{x}\in G_1\times\dots\times G_n : g_i(\textbf{x})\leq 0, h_j (\textbf{x}) = 0, i=1,\dots,p,j=1,\dots,q \}$ where $G_i = \mathbb{R},\mathbb{Z},\{0,1\},\dots$
 	\item \textbf{Non-Functional Constraints}:\\
-	$S = \{ \textbf{x}\in G_1\times...\times G_n : "\textbf{x} \text{ has certain properties}" \} $
+	$S = \{ \textbf{x}\in G_1\times\dots\times G_n : "\textbf{x} \text{ has certain properties}" \} $
 \end{enumerate}
 
 \paragraph{Maximisation and Minimisation} $\max\{f(\textbf{x}):\textbf{x}\in S\} = - \min\{-f(\textbf{x}):\textbf{x}\in S\}$
@@ -283,7 +283,7 @@ To define the concept of a local optimum a notion of a local neighbourhood is ne
 
 Neigbour Solutions: $N(\textbf{x}) \subseteq S$\quad where $x\in N(\textbf{x})$ assumed
 
-\paragraph{Euclidean Neighbourhood, $\varepsilon$-Neighbourhood} $N_\varepsilon (\textbf{x})=\{\textbf{y}\in\mathbb{R}^n:\norm{\textbf{y}-\textbf{x}}<\varepsilon\} \quad \text{where }\varepsilon>0$, Euclidean Norm: $\norm{\textbf{x}} = \sqrt{\textbf{x}^2} = \sqrt{x_1^2+...+x_n^2}$. It's a fundamental neighbourhood concept in analysis, and describes the geometric or topological proximity between points. Local optimality (with respect to $N_\varepsilon$) therefore refers to $\textbf{x}$ being the best solution in the neighbourhood $N_\varepsilon(\textbf{x})$.
+\paragraph{Euclidean Neighbourhood, $\varepsilon$-Neighbourhood} $N_\varepsilon (\textbf{x})=\{\textbf{y}\in\mathbb{R}^n:\norm{\textbf{y}-\textbf{x}}<\varepsilon\} \quad \text{where }\varepsilon>0$, Euclidean Norm: $\norm{\textbf{x}} = \sqrt{\textbf{x}^2} = \sqrt{x_1^2+\dots+x_n^2}$. It's a fundamental neighbourhood concept in analysis, and describes the geometric or topological proximity between points. Local optimality (with respect to $N_\varepsilon$) therefore refers to $\textbf{x}$ being the best solution in the neighbourhood $N_\varepsilon(\textbf{x})$.
 
 \begin{figure}[tbh]
 	\centering
@@ -367,7 +367,7 @@ Geometrically this can be understood as a convex combination of $\textbf{x}^1$ a
 \end{figure}
 
 \noindent
-A convex combination of multiple points $ \textbf{x}^1, \textbf{x}^2,...,\textbf{x}^k\in\mathbb{R}^n$ takes the form:
+A convex combination of multiple points $ \textbf{x}^1, \textbf{x}^2,\dots,\textbf{x}^k\in\mathbb{R}^n$ takes the form:
 \begin{equation*}
 	\textbf{x} = \sum_{i=1}^{k} \lambda_i \textbf{x}^i\qquad \text{for some }\boldsymbol{\lambda}\in\mathbb{R}^k\text{ with }0\leq\lambda\leq 1\text{ and }\sum_{i=1}^{k} \lambda_i = 1
 \end{equation*}
@@ -427,8 +427,8 @@ Assumptions and notation:
 	\item $ \textbf{A}\in\mathbb{R}^{m\times n} $
 	\item $ \textbf{b}\in\mathbb{R}^m $
 	\item $ \textbf{c}\in\mathbb{R}^n $
-	\item $ I = \{1,...,m\} $
-	\item $ J = \{1,...,n\} $
+	\item $ I = \{1,\dots,m\} $
+	\item $ J = \{1,\dots,n\} $
 	\item $ \textbf{a}^i\in\mathbb{R}^n $ is $i$-th row of $\textbf{A}$
 	\item $ \textbf{A}^j\in\mathbb{R}^m $ is $j$-th column of $\textbf{A}$
 \end{itemize}
@@ -523,7 +523,7 @@ The system of linear inequalities $\textbf{A}\textbf{x}\leq\textbf{b}$ is called
 	\noindent
 	The defining hyperplanes of $P$ are:
 	\begin{equation*}
-		\{ \textbf{x}\in\mathbb{R}^n:\textbf{a}^i\textbf{x}=b_i \}, i=1,...,m
+		\{ \textbf{x}\in\mathbb{R}^n:\textbf{a}^i\textbf{x}=b_i \}, i=1,\dots,m
 	\end{equation*}
 \end{minipage}
 \begin{minipage}{0.4\linewidth}
@@ -562,7 +562,7 @@ A polyhedron is a convex set. A point $\textbf{x}\in\mathbb{R}^n$ is a \textbf{v
 \textbf{Corollary}: $\textbf{x}\in\mathbb{R}^n$ is a \textbf{vertex} of a polyhedron $P=\{ \textbf{x}\in\mathbb{R}^n:\textbf{A}\textbf{x}\leq\textbf{b}\}$ if and only if (iff):
 \begin{enumerate}[label=\roman*)]
 	\item $\textbf{x}\in P$
-	\item there exists selection $B \subseteq {1,...,m}$ of $\abs{B} = n$ linearly independent rows of $\textbf{A}$, such that $\textbf{A}_B\textbf{x} = \textbf{b}_B$, or equivalently $\textbf{x} = \textbf{A}_B^{-1} \textbf{b}_B$
+	\item there exists selection $B \subseteq {1,\dots,m}$ of $\abs{B} = n$ linearly independent rows of $\textbf{A}$, such that $\textbf{A}_B\textbf{x} = \textbf{b}_B$, or equivalently $\textbf{x} = \textbf{A}_B^{-1} \textbf{b}_B$
 \end{enumerate}
 
 \noindent
@@ -583,7 +583,7 @@ Given a Linear Program $\prod: \max\{ \textbf{c}^T\textbf{x}:\textbf{x} \in P \}
 	\item If $\textbf{A}\textbf{d}\leq \textbf{0}$ then stop, because the Linear Program is unbounded along the direction $\textbf{d}$
 	\item Otherwise $\textbf{A}\textbf{d}\leq n\textbf{0}$ holds true, determine $\lambda^*$:
 	\begin{equation*}
-		\lambda^* = \min\left\{ \frac{b_i - \textbf{a}_i \textbf{v}}{\textbf{a}^i\textbf{d}} : i\in 1,...,m , \textbf{a}^i\textbf{d}>0 \right\}
+		\lambda^* = \min\left\{ \frac{b_i - \textbf{a}_i \textbf{v}}{\textbf{a}^i\textbf{d}} : i\in 1,\dots,m , \textbf{a}^i\textbf{d}>0 \right\}
 	\end{equation*}
 	\item If a minimum is attained for index $k$ perform a basis change:\\
 	$B' = B - {j}\cup{k}$. Set $B:=B'$ and start anew.
@@ -613,7 +613,7 @@ An example calculation can be found in section \ref{app:sec:simplexalgorithm} in
 	\max\{\textbf{c}^T \textbf{x} : \textbf{x} \in P \cap \mathbb{Z}_K^n\}\text{ with }P = \{\textbf{x} \in \mathbb{R}^n : \textbf{A}\textbf{x} \leq \textbf{b}\}
 \end{equation*}
 
-where $K\subseteq \{1,...,n\}$ and $\mathbb{Z}_K^n=\{ \textbf{x}\in\mathbb{R}^n : x_j \in\mathbb{Z}\text{ for } j\in K \}$.
+where $K\subseteq \{1,\dots,n\}$ and $\mathbb{Z}_K^n=\{ \textbf{x}\in\mathbb{R}^n : x_j \in\mathbb{Z}\text{ for } j\in K \}$.
 
 \begin{center}
 	\includegraphics[width=0.7\linewidth]{img/mixed_integer_programming}
@@ -792,7 +792,7 @@ The Branch-and-Bound method for Integer Linear Programming can be illustrated wi
 \noindent
 \textbf{Sets}:
 \begin{itemize}
-	\item[$J$] Set of items, $J=\{1,2,...,n\}$
+	\item[$J$] Set of items, $J=\{1,2,\dots,n\}$
 \end{itemize}
 
 \noindent
@@ -820,7 +820,7 @@ The Branch-and-Bound method for Integer Linear Programming can be illustrated wi
 \subsubsection{LP Relaxation}
 \begin{enumerate}[label=\roman*.]
 	\item For every item  $j\in J$ determine the utility coefficient $\frac{c_j}{a_j}$
-	\item Sort all items in a decreasing order with regard to the utility coefficient, such that the new order $J = \{1,...,n\}$ becomes
+	\item Sort all items in a decreasing order with regard to the utility coefficient, such that the new order $J = \{1,\dots,n\}$ becomes
 	\begin{equation*}
 		\frac{c_1}{a_1}\geq\frac{c_2}{a_2}\geq\dots\geq\frac{c_n}{a_n}
 	\end{equation*}
@@ -1156,7 +1156,7 @@ Given a graph $G(V,E)$, two vertices $u,v\in V$ with positive weights, interpret
 \begin{enumerate}
 	\item \textbf{Initialisation}: Set $V_0 = \{v_0\}$, $E_0 = \{\}$ and $I(v_0) = 0$
 	\item Do the following $n-1$ times:\\
-	$V_i = \{v_0, ..., v_i\}$ and $E_i = \{e_0, ..., e_i\}$ are the sets of vertices and edges already visited. For each edge ${\color{Blue1} e = (u,v)}$ with ${\color{Blue1} u\in V_i)}$ and ${\color{Blue1} v\in V\setminus V_i}$ compute ${\color{Blue1} l(u) + \text{weight}(e)}$. Choose the edge minimising this as $e_{i+1} = (u_{i+1}, v_{i+1})$.\\
+	$V_i = \{v_0, \dots, v_i\}$ and $E_i = \{e_0, \dots, e_i\}$ are the sets of vertices and edges already visited. For each edge ${\color{Blue1} e = (u,v)}$ with ${\color{Blue1} u\in V_i)}$ and ${\color{Blue1} v\in V\setminus V_i}$ compute ${\color{Blue1} l(u) + \text{weight}(e)}$. Choose the edge minimising this as $e_{i+1} = (u_{i+1}, v_{i+1})$.\\
 	Set $V_{i+1} = V_i \cup \{v_{i+1}\}, E_{i+1} = E_i \cup \{e_{i+1}\}$ and $l(v_{i+1}) = l(u_{u+1}) + \text{weight}(e_{i+1})$.
 \end{enumerate}
 
@@ -1524,7 +1524,7 @@ The larger k, the higher the selection pressure. The advantage of this method is
 \end{minipage}
 
 \subsubsection{Recombination for Permutation - PMX Operator}
-PMX Crossover is a genetic algorithm operator and is a two-point crossover with repair mechanism.. For some problems it offers better performance than most other crossover techniques. Basically, parent 1 donates a swath of genetic material and the corresponding swath from the other parent is sprinkled about in the child. Once that is done, the remaining alleles are copied direct from parent 2.
+PMX Crossover is a genetic algorithm operator and is a two-point crossover with repair mechanism. For some problems it offers better performance than most other crossover techniques. Basically, parent 1 donates a swath of genetic material and the corresponding swath from the other parent is sprinkled about in the child. Once that is done, the remaining alleles are copied direct from parent 2.
 
 \begin{enumerate}
 	\item Randomly select a swath of alleles from parent 1 and copy them directly to the child. Note the indexes of the segment.
