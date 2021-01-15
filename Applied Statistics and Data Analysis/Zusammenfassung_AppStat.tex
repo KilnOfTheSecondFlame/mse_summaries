@@ -559,7 +559,25 @@ The \textbf{smoothing parameter} $\lambda$ determines the influence of the previ
 \begin{equation*}
 	y_i = (1-\lambda)^i\cdot\mu_0 + \lambda\cdot\sum_{j=1}^{i}(1-\lambda)^{i-j}\samplemean{x}_j
 \end{equation*}
-The smaller this smoothing parameter is the more previous sample means are used for the decision. The EMWA has thus a non-constant, unlimited memory.
+The smaller this smoothing parameter is the more previous sample means are used for the decision. The EMWA has thus a non-constant, unlimited memory. If the process is under control, then $\samplemean{x}_i$ comes from a normal distribution with the expected value $\mu_0$ and the standard deviation $\frac{\sigma}{\sqrt{n}}$, whereby the standard deviation is either known or estimated from data. The statistic $y_i$ is then also normally distributed with
+\begin{align*}
+	\ev{y_i} &= \mu_0
+	\intertext{and}
+	\Var{y_i} &= \frac{\lambda}{2-\lambda}\left(1 - (1-\lambda)^{2\cdot i}\right)\frac{\sigma^2}{n}
+\end{align*}
+This results in the $3\sigma$ control limits
+\begin{align*}
+	\text{LCL}_i = \mu_0 - 3\frac{\sigma}{\sqrt{n}}\sqrt{\frac{\lambda}{2-\lambda}\left(1 - (1-\lambda)^{2\cdot i}\right)}
+	\intertext{and}
+	\text{UCL}_i = \mu_0 + 3\frac{\sigma}{\sqrt{n}}\sqrt{\frac{\lambda}{2-\lambda}\left(1 - (1-\lambda)^{2\cdot i}\right)}
+\end{align*}
+A small $i$ results in \textbf{asymptotic control limits}
+\begin{align*}
+	\text{LCL}_i = \mu_0 - 3\frac{\sigma}{\sqrt{n}}\sqrt{\frac{\lambda}{2-\lambda}}
+	\intertext{and}
+	\text{UCL}_i = \mu_0 + 3\frac{\sigma}{\sqrt{n}}\sqrt{\frac{\lambda}{2-\lambda}}
+\end{align*}
+With the \textbf{estimate of the process standard error} $\hat{\sigma}=\frac{\samplemean{s}}{c_4}$ (the factor $c_4$ can be found in table \ref{tbl:FactorsControlCharts}).
 
 \subsection{Acceptance Sampling}
 This is a topic of statistical quality control. Certain products can't all be tested, as they get used up during testing (for example single use syringes or bullets). As a compromise draw random samples and make a decision on the quality of the population based on this information.
@@ -1588,7 +1606,42 @@ However, the solution could be a saddle point, which is more likely the more fac
 	x^T\bm{M}x &> 0 \forall x \tag{positive definiteness of matrix $\bm{M}$}
 \end{align*}
 
-
-
+\clearpage
+\appendix
+\section{Tables}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c c c | c c c | c c c | c}
+		& \multicolumn{3}{c |}{$\samplemean{x}$ chart} & \multicolumn{3}{c |}{$R$ chart} & \multicolumn{3}{c |}{$s$ chart} & \\
+		\hline
+		$n$ & $A_1$ & $A_2$ & $A_3$ & $D_3$ & $D_4$ & $d_2$ & $B_3$ & $B_4$ & $c_4$ & $n$\\
+		\hline
+		$2$ & $3.760$ & $1.880$ & $2.659$ & $0.000$ & $3.267$ & $1.128$ & $0.000$ & $3.267$ & $0.7979$ & $2$ \\
+		$3$ & $2.394$ & $1.023$ & $1.954$ & $0.000$ & $2.575$ & $1.693$ & $0.000$ & $2.568$ & $0.8862$ & $3$ \\
+		$4$ & $1.880$ & $0.729$ & $1.628$ & $0.000$ & $2.282$ & $2.059$ & $0.000$ & $2.266$ & $0.9213$ & $4$ \\
+		$5$ & $1.596$ & $0.577$ & $1.427$ & $0.000$ & $2.115$ & $2.326$ & $0.000$ & $2.089$ & $0.9400$ & $5$ \\
+		$6$ & $1.410$ & $0.483$ & $1.287$ & $0.000$ & $2.004$ & $2.534$ & $0.030$ & $1.970$ & $0.9515$ & $6$ \\
+		$7$ & $1.277$ & $0.419$ & $1.182$ & $0.076$ & $1.924$ & $2.704$ & $0.118$ & $1.882$ & $0.9594$ & $7$ \\
+		$8$ & $1.175$ & $0.373$ & $1.099$ & $0.136$ & $1.864$ & $2.847$ & $0.185$ & $1.815$ & $0.9650$ & $8$ \\
+		$9$ & $1.094$ & $0.337$ & $1.032$ & $0.184$ & $1.816$ & $2.970$ & $0.239$ & $1.761$ & $0.9693$ & $9$ \\
+		$10$ & $1.028$ & $0.308$ & $0.975$ & $0.223$ & $1.777$ & $3.078$ & $0.284$ & $1.716$ & $0.9727$ & $10$ \\
+		$11$ & $0.973$ & $0.285$ & $0.927$ & $0.256$ & $1.744$ & $3.173$ & $0.321$ & $1.679$ & $0.9754$ & $11$ \\
+		$12$ & $0.925$ & $0.266$ & $0.886$ & $0.284$ & $1.716$ & $3.258$ & $0.354$ & $1.646$ & $0.9776$ & $12$ \\
+		$13$ & $0.884$ & $0.249$ & $0.850$ & $0.308$ & $1.692$ & $3.336$ & $0.382$ & $1.618$ & $0.9794$ & $13$ \\
+		$14$ & $0.848$ & $0.235$ & $0.817$ & $0.329$ & $1.671$ & $3.407$ & $0.406$ & $1.594$ & $0.9810$ & $14$ \\
+		$15$ & $0.816$ & $0.223$ & $0.789$ & $0.348$ & $1.652$ & $3.472$ & $0.428$ & $1.572$ & $0.9823$ & $15$ \\
+		$16$ & $0.788$ & $0.212$ & $0.763$ & $0.364$ & $1.636$ & $3.532$ & $0.448$ & $1.552$ & $0.9835$ & $16$ \\
+		$17$ & $0.762$ & $0.203$ & $0.739$ & $0.379$ & $1.621$ & $3.588$ & $0.466$ & $1.534$ & $0.9845$ & $17$ \\
+		$18$ & $0.738$ & $0.194$ & $0.718$ & $0.392$ & $1.608$ & $3.640$ & $0.482$ & $1.518$ & $0.9854$ & $18$ \\
+		$19$ & $0.717$ & $0.187$ & $0.698$ & $0.404$ & $1.596$ & $3.689$ & $0.497$ & $1.503$ & $0.9862$ & $19$ \\
+		$20$ & $0.697$ & $0.180$ & $0.680$ & $0.414$ & $1.586$ & $3.735$ & $0.510$ & $1.490$ & $0.9869$ & $20$ \\
+		$21$ & $0.679$ & $0.173$ & $0.663$ & $0.425$ & $1.575$ & $3.778$ & $0.523$ & $1.477$ & $0.9876$ & $21$ \\
+		$22$ & $0.662$ & $0.167$ & $0.647$ & $0.434$ & $1.566$ & $3.819$ & $0.534$ & $1.466$ & $0.9882$ & $22$ \\
+		$23$ & $0.647$ & $0.162$ & $0.633$ & $0.443$ & $1.557$ & $3.858$ & $0.545$ & $1.455$ & $0.9887$ & $23$ \\
+		$24$ & $0.632$ & $0.157$ & $0.619$ & $0.452$ & $1.548$ & $3.895$ & $0.555$ & $1.445$ & $0.9892$ & $24$ \\
+		$25$ & $0.619$ & $0.153$ & $0.606$ & $0.459$ & $1.541$ & $3.931$ & $0.565$ & $1.435$ & $0.9896$ & $25$
+	\end{tabularx}
+	\caption{Factors for constructing control charts}
+	\label{tbl:FactorsControlCharts}
+\end{table}
 
 \end{document}
