@@ -1047,13 +1047,13 @@ Using this formula, $(A^i)^{-1}$ can be computed directly from $(A^{i-1})^{-1}$
 
 \subsubsection{Algorithm}
 \begin{enumerate}
-	\item \textbf{Initialisation}: Start with ${\color{DodgerBlue4} x^0}$. Compute ${\color{DodgerBlue4} \nabla f(x^0)}$, the inverse of the Hessian Matrix $H_f(x^0)$ and set ${\color{DodgerBlue4} (A^0)^{-1}} = \left(H_f(x^0)\right)^{-1} $. Use this to compute
+	\item \textbf{Initialisation}: Start with $x^0$. Compute $\nabla f(x^0)$, the inverse of the Hessian Matrix $H_f(x^0)$ and set $(A^0)^{-1} = \left(H_f(x^0)\right)^{-1} $. Use this to compute
 	\begin{equation*}
 		x^1 = x^0 - (A^0)^{-1}\nabla f(x^0)
 	\end{equation*}
-	\item \textbf{Iteration step}: To compute $x^{i+1}$ from ${\color{DodgerBlue1} x^i}$, compute ${\color{DodgerBlue1} \nabla f(x^i)}$, $g^i = \nabla f(x^i) - \nabla f(x^{i-1})$ and $d^i = x^i - x^{i-1}$, then
+	\item \textbf{Iteration step}: To compute $x^{i+1}$ from $x^i$, compute $\nabla f(x^i)$, $g^i = \nabla f(x^i) - \nabla f(x^{i-1})$ and $d^i = x^i - x^{i-1}$, then
 	\begin{equation*}
-		{\color{DodgerBlue1}(A^{i})^{-1}} = (A^{i-1})^{-1} - \frac{\left((A^{i-1})^{-1}g^i-d^i\right)(d^i)^T(A^{i-1})^{-1}}{(d^i)^T(A^{i-1})^{-1}g^i}
+		(A^{i})^{-1} = (A^{i-1})^{-1} - \frac{\left((A^{i-1})^{-1}g^i-d^i\right)(d^i)^T(A^{i-1})^{-1}}{(d^i)^T(A^{i-1})^{-1}g^i}
 	\end{equation*}
 	and set
 	\begin{equation*}
