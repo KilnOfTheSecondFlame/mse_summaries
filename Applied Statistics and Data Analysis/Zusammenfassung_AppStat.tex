@@ -601,7 +601,7 @@ Given a lot with $N$ units called a population of which $m$ are defective parts 
 	p = \frac{m}{N}
 \end{equation*}
 In reality the number of defective parts $m$ and thus the percentage of defective parts $p$ are unknown. The goal is thus to estimate $p$ and to decide whether to accept or reject the lot with the help of a random sample of sample size $n\leq N$. Let $x$ be the number of defective units in the the sample with size $n$.
-The acceptance sampling plan consists of the sample size $n$, the acceptance number $c$ and a rule
+The acceptance sampling plan consists of the \textbf{sample size} $n$, the \textbf{acceptance number} $c$ and a \textbf{rule}
 \begin{itemize}[nosep]
 	\item $x\leq c$, then the lot is accepted
 	\item $x>c$ the the lot is rejected
@@ -618,10 +618,16 @@ Reject $H_0$ if $\frac{x}{n}>\frac{c}{n}\Leftrightarrow x>c$. Of course errors c
 	\item Type II Error: $H_1$ is true but $H_0$ is accepted with probability $\alpha = P(x\leq c)$ (consumer's risk)
 \end{itemize}
 
-% TODO Write lecture slides in here
+\begin{itemize}
+	\item \textbf{Probability of Acceptance}: A limit set by the producer $p_{\alpha}$. The producer does not want to take back lots with $p<p_{\alpha}$
+	\item \textbf{Probability of Rejection}: A limit set by the consumer $p_{\beta}$. The consumer wants to reject lots with $p_{\beta}<p$ whenever possible.
+	\item There must be a $p_{\alpha} < p_{\beta}$
+\end{itemize}
+The goal is to minimise producer risk $\alpha$ as well as consumer risk $\beta$, without false decisions.
 
 \subsubsection{Operating Characteristic}
-The operating characteristic curve plots the probability of accepting a lot as a function of the percent defective $p$. $OC(p)$ is the probability of accepting a lot given that the true percent defective is $p$, called the acceptance probability with $P(X\leq c)$ for $p\in[0,1]$ (depends on $n$ and $c$).
+The operating characteristic curve plots the probability of accepting a lot as a function of the percent defective $p$. $OC(p)$ is the probability of accepting a lot given that the true percent defective is $p$, called the acceptance probability with $P(X\leq c)$ for $p\in[0,1]$ (depends on $n$ and $c$). A good acceptance sampling plan ensures that the larger the percent
+defective $p$, the smaller the OC.
 
 \vspace{0.5em}
 \noindent
@@ -630,12 +636,20 @@ The operating characteristic curve plots the probability of accepting a lot as a
 	\item Decreases with $p$
 	\item $OC(0) = 1$ and $OC(1) = 0$
 \end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/operating_characteristic_curve}
+	\caption{Given the quality agreements between producer and consumer ($p_{\alpha}$ and $p_{\beta}$), find the parameters $n$ and $c$ of the acceptance sampling plan}
+	\label{fig:operatingcharacteristiccurve}
+\end{figure}
+
 In the extreme case of total control and complete information $n=N$ one gets the ideal OC curve
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/ideal_OC_curve}
 \end{figure}
-But usually $n<N$ and the ideal OC curve is not achievable, but should be approached as closely as possible.
+But usually $n<N$ and the ideal OC curve is not achievable, but should be approached as closely as possible. In this case, draw random samples and estimate the percent defective $p^\star$.
 \begin{equation*}
 	OC(p) = P(X\leq c) = \sum_{k=0}^c P(X=k) = \sum_{k=0}^c \frac{\binom{pN}{k}\cdot\binom{N-pN}{n - k}}{\binom{N}{n}}
 \end{equation*}
@@ -681,10 +695,15 @@ This model has a single predictor variable which has an effect on the response t
 	\item Random error term $\varepsilon$ with $\ev{\varepsilon} = 0$ and $\Var{\varepsilon} = \sigma^2$
 \end{itemize}
 
-% TODO Write down lecture slide note
+In real applications, the regression equation is only an approximation to the true functional relationship between the variables of interest. This functional relationship depends on the origin of its model
+\begin{itemize}[nosep]
+	\item \textbf{Mechanistic models} are based on first principles, that is some physical, chemical, engineering or scientific theory, where the \textit{functional relationship is known}
+	\item \textbf{Empirical models} are often based on data, especially in economics, management, life and biological sciences and social sciences, where the \textit{functional relationship is unknown}
+\end{itemize}
+Regression models and their equations summarise or describe a data set. Their predictions, forecasts, inter- and extrapolation results always come with a confidence interval. To ensure that a model generalises to another data set from the same domain, the determination of significant variables help by reducing the complexity of a model by omitting unimportant variables.
 
 \subsubsection{Remarks}
-The regression equation is in real applications only an approximation to the true functional relationship between the variables of interest.
+In real applications, the regression equation is only an approximation to the true functional relationship between the variables of interest.
 \begin{itemize}
 	\item The regression equations summarise or describe the data set
 	\item Predictions, forecasts, inter- or extrapolation are always done with a confidence interval
@@ -703,16 +722,30 @@ and the model
 \end{equation*}
 find the parameters $\beta_0$, $\beta_1$ and $\sigma^2$ such that the model fits the data as well as possible.
 
-\vspace{1em}
-\noindent
-Minimise:
+\paragraph{Method of Least Squares} Minimise:
 \begin{equation*}
 	S(\beta_0, \beta_1) = \sum_{i=1}^{n} \left(y - (\beta_0 + \beta_1 x_i)\right)^2
 \end{equation*}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/least_squares_method}
+	\caption{Error between data point $x_i,y_i$ and model $y =\beta_0 + \beta_1 x$}
+	\label{fig:leastsquaresmethod}
+\end{figure}
+
 With $\hat{\beta}_0$ and $\hat{\beta}_1$ being the least-squares estimators of $\beta_0$ and $\beta_1$ respectively, taking the partial derivatives and solving for $0$ results in intercept and slope
 \begin{align*}
 	\hat{\beta}_0 &= \frac{\frac{1}{n}\sum_{i=1}^{n} x_i^2 \sum_{i=1}^{n}y_i - \frac{1}{n}\sum_{i=1}^{n} x_i^2 \sum_{i=1}^{n}x_i y_i}{\sum_{i=1}^{n}x_i^2 - \frac{1}{n}\left(\sum_{i=1}^{n}\right)^2}\\
 	\hat{\beta}_1 &= \frac{\sum_{i=1}^{n}x_i y_i - \frac{1}{n}\sum_{i=1}^{n}x_i\sum_{i=1}^{n}y_i}{\sum_{i=1}^{n}x_i^2 - \frac{1}{n}\left(\sum_{i=1}^{n}\right)^2}
+\end{align*}
+The solution can also be written as
+\begin{align*}
+	\hat{\beta}_0 = \samplemean{y} - \hat{\beta}_1\samplemean{x}\quad\text{with}\quad\hat{\beta}_1=\frac{S_{xy}}{S_{xx}}\\
+	\intertext{where}
+	S_{xx} = \sum_{i=1}^n(x_i - \samplemean{x})^2\quad\text{and}\quad S_{xy} = \sum_{i=1}^{n}(x_i - \samplemean{x})(y_i - \samplemean{y})
+	\intertext{with}
+	\samplemean{x} = \frac{1}{n}\sum_{i=1}^{n}x_i\quad\text{and}\quad\samplemean{y}=\frac{1}{n}\sum_{i=1}^{n}y_i
 \end{align*}
 The residuals are the difference between the observed values and their fitted value
 \begin{equation*}
@@ -731,7 +764,7 @@ The implicit assumption is that all errors $\varepsilon_i$ are normally distribu
 	\hat{\beta}_0 &\sim \N{\beta_0, \sigma^2\left(\frac{1}{n}+\frac{\samplemean{x}^2}{S_{xx}}\right)}\\
 	\hat{\beta}_1 &\sim \N{\beta_1, \frac{\sigma^2}{S_{xx}}}
 \end{align*}
-where $S_{xx} = \sum_{i=1}^{n}(x_i - \samplemean{x})^2$
+where $S_{xx} = \sum_{i=1}^{n}(x_i - \samplemean{x})^2$. Sample size $n$, sum of squares $S_{xx}$ and the variance of the errors $\sigma^2$ affect the precision of the estimators.
 
 \subsubsection{Statistical Test on the Slope}
 Alternative hypotheses:
@@ -745,7 +778,7 @@ Test statistic:
 \end{equation*}
 with the standard error
 \begin{equation*}
-	\se{\hat{\beta}_1} = \sqrt{\frac{\hat{\sigma}=2}{S_{xx}}}\quad\text{with}\quad S_{xx} = \sum_{i=1}^{n}(x_i - \samplemean{x})^2
+	\se{\hat{\beta}_1} = \sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}\quad\text{with}\quad S_{xx} = \sum_{i=1}^{n}(x_i - \samplemean{x})^2
 \end{equation*}
 
 Under the null hypothesis the test statistic $T$ follows a Student's $t$-distribution with $n-2$ degrees of freedom. The $p$-value is the probability, that under the null hypothesis, obtaining a result equal to or more extreme than what was actually estimated. The $p$-value for the two-sided alternative is
@@ -755,6 +788,8 @@ Under the null hypothesis the test statistic $T$ follows a Student's $t$-distrib
 \begin{center}
 	\includegraphics[width=0.8\linewidth]{img/p_value}
 \end{center}
+
+\paragraph{Statistical Test Procedure with $p$-Value} Given a significance level $\alpha$ (often 5\%) and a calculated probability value $p$. The null hypothesis $H_0$ is rejected and the alternative believed if the $p$-value is smaller than the significance level $\alpha$ ($p < \alpha$). This indicates that the data differs significantly from the null hypothesis. Alternatively, the null hypothesis is accepted if $p\geq\alpha$, which means that the data agrees with the null hypothesis.
 
 \paragraph{Remarks} The idea of a statistical test is to determine if a model can be true or not. The test is a rule that decides which scenario is more probable. The most plausible value for the parameters is the \textbf{least squares estimator}, and if a certain value is plausible is based on a statistical hypothesis test. However, a multitude of values are overall plausible, these form the \textbf{confidence interval}.
 
@@ -792,7 +827,8 @@ This gives the confidence interval on the response at the point $x_0$
 \begin{equation*}
 	\hat{y}_0 - t_{\frac{\alpha}{2}, n-2}\cdot\se{\hat{y}_0} \leq \hat{\beta}_0 + \hat{\beta}_1 x_0 \leq \hat{y}_0 + t_{1 - \frac{\alpha}{2}, n-2}\cdot\se{\hat{y}_0}
 \end{equation*}
-with $t_{p,m}$ denoting the critical value of the Student's $t$-distribution to the probability $p$ and with $m$ degrees of freedom.
+with $t_{p,m}$ denoting the critical value of the Student's $t$-distribution to the probability $p$ and with $m$ degrees of freedom. The width of this confidence interval depends on the point $x_0$, and is minimal for $x_0 = \samplemean{x}$ and gets bigger as the distance to the sample mean increases.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/confidence_interval_response_vending_machines}
@@ -811,6 +847,15 @@ Therefore for the two random variables $y_0$ and $\hat{y}_0$
 \begin{align*}
 	\Var{y_0 - \hat{y}_0} &= \Var{y_0} + \Var{\hat{y}_0}\\
 	&= \sigma^2 + \sigma^2\left(\frac{1}{n} + \frac{(x_0 - \samplemean{x})^2}{S_{xx}}\right)
+\end{align*}
+
+\paragraph{Prediction Interval} For these two random variables the prediction interval is calculated as follows
+\begin{align*}
+	\hat{y}_0 - t_{\frac{\alpha}{2}, n-2}\cdot\se{y_0 - \hat{y}_0} \leq \hat{y}_0 \leq \hat{y}_0 + t_{1-\frac{\alpha}{2},n-2}\cdot\se{y_0-\hat{y}_0}\\
+	\intertext{with}
+	\se{y_0-\hat{y}_0} =\hat{\sigma}\cdot\sqrt{1+\frac{1}{n}+\frac{(x_0 - \samplemean{x})^2}{S_{xx}}}\\
+	\intertext{and}
+	S_{xx} = \sum_{i=1}^{n}(x_i-\samplemean{x})^2
 \end{align*}
 
 \begin{figure}[H]
@@ -848,6 +893,16 @@ lines(data.new$Volume, Time.Pred[,"upr"], lty=3)
 legend("topleft", legend=c("best model", "confidence intervals on the response", "prediction intervals"), lty=c(1,2,3), bty="n")
 \end{minted}
 
+\subsubsection{Recapitulation of Confidence and Prediciton Interval}
+\begin{itemize}
+	\item Confidence interval is done on the expected response
+	\item Prediction interval is for a new observation
+\end{itemize}
+The prediction interval will be wider than the confidence interval on the response as the variance of a future observation has to be factored in.
+
+%TODO Check if formatting is still fine
+\clearpage
+
 \subsection{Residual Analysis}
 \begin{equation*}
 	y = \beta_0 + \beta_1 x + \varepsilon
@@ -860,13 +915,13 @@ Model assumptions
 	\item Errors are uncorrelated
 	\item Errors are normally distributed
 \end{itemize}
-The problem is that departures from these underlying assumptions are not detectable through the $t$-statistic or the coefficient of determination $R^2$. Thus, the residuals should be investigated, as violated assumptions in the errors should be visible there. The residuals $r_i$ are estimators of the random errors.
+The problem is that departures from these underlying assumptions are not detectable through the $t$-statistic or the coefficient of determination $R^2$. Thus, the residuals should be investigated, as violated assumptions in the errors should be visible there. The residuals $e_i$ are estimators of the random errors.
 \begin{equation*}
-	r_i = y_i - \hat{y}_i \quad\forall i\in\{1,\dots,n\}
+	e_i = y_i - \hat{y}_i \quad\forall i\in\{1,\dots,n\}
 \end{equation*}
-Standardised residuals
+\textbf{Standardised residuals}
 \begin{equation*}
-	\tilde{r}_{\text{std}, i} = \frac{r_i}{\hat{\sigma} \cdot \sqrt{1-\left(\frac{1}{n} + \frac{(x_i - \samplemean{x})^2}{S_{xx}}\right)}}
+	\tilde{r}_{\text{std}, i} = \frac{e_i}{\hat{\sigma} \cdot \sqrt{1-\left(\frac{1}{n} + \frac{(x_i - \samplemean{x})^2}{S_{xx}}\right)}}
 \end{equation*}
 where $\hat{\sigma}$ is estimated from the data. The goal behind residual analysis is less about justification and more about developing a better model from possible deviations.
 
@@ -890,7 +945,7 @@ The coefficient of determination quantifies the goodness of the fit of the model
 \end{align*}
 Therefore, the coefficient of determination is
 \begin{equation*}
-	R^2 = \hat{\beta}_1^2 \frac{S_{xx}}{S_{yy}}
+	R^2 = \hat{\beta}_1^2\cdot\frac{S_{xx}}{S_{yy}}
 \end{equation*}
 leveraging the fact that $\hat{\beta}_1 = \frac{S_{xy}}{S_xx}$ obtains
 \begin{align*}
@@ -909,11 +964,11 @@ The interpretation being that this measures the linear relationship between resp
 \subsubsection{Diagnostic Tools}
 \label{sssec:DiagnosticPlots}
 \paragraph{Tukey-Anscombe Plot}
-Most powerful and indispensable tool of any residual analysis. It plots the residuals $r_i$ against the fitted values $\hat{y}_i$
+Most powerful and indispensable tool of any residual analysis. It plots the residuals $e_i$ against the fitted values $\hat{y}_i$
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{img/TukeyAnscombe.pdf}
-	\caption{Visual representation of the residuals $r_i = y_i - \hat{y}_i$}
+	\caption{Visual representation of the residuals $e_i = y_i - \hat{y}_i$}
 \end{figure}
 The Tukey-Anscombe plot checks the second model assumption that errors have mean zero, which means that the residuals in any interval of the plot should vary randomly around the horizontal line at zero.
 Smooth the residuals using LOESS\footnote{locally estimated scatterplot smoothing} and inspect if the smoothed line varies around the horizontal at zero. Compare with bootstrapped sample if the smoothed residuals lie inside stochastic fluctuations.
@@ -954,25 +1009,38 @@ Through the use of diagnostic tools \textit{characterise inadequacies} of the mo
 	\item Outliers
 	\item Heavy-tailed distributions
 \end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/outliers}
+	\caption{Example and effect of an outlier}
+	\label{fig:outliers}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/heavy_tailed_distribution}
+	\caption{Example and effect of a heavy tailed distribution}
+	\label{fig:heavytaileddistribution}
+\end{figure}
 
 \subsubsection{Tukey's First Aid Transformations}
 \begin{itemize}
 	\item \textbf{Logarithmic} for continuous positive variables\\
-	\begin{equation*}
-		z \longmapsto \log(z)
-	\end{equation*}
+	\begin{flalign*}
+		\hspace*{5cm} & z \longmapsto \log(z) &
+	\end{flalign*}
 	\item \textbf{Square-root} for continuous and discrete positive variables\\
-	\begin{equation*}
-		z \longmapsto \sqrt{z}
-	\end{equation*}
+	\begin{flalign*}
+		\hspace*{5cm} & z \longmapsto \sqrt{z} &
+	\end{flalign*}
 	\item \textbf{Arcsine} for proportions\\
-	\begin{equation*}
-		z \longmapsto \arcsin(\sqrt{z})
-	\end{equation*}
+	\begin{flalign*}
+		\hspace*{5cm} & z \longmapsto \arcsin(\sqrt{z}) &
+	\end{flalign*}
 	\item \textbf{Logit} for proportions\\
-	\begin{equation*}
-		z \longmapsto \log\left(\frac{z+{\color{gray}\varepsilon_1}}{1+{\color{gray}\varepsilon_2}-z}\right)
-	\end{equation*}
+	\begin{flalign*}
+		\hspace*{5cm} & z \longmapsto \log\left(\frac{z+{\color{gray}\varepsilon_1}}{1+{\color{gray}\varepsilon_2}-z}\right) &
+	\end{flalign*}
 \end{itemize}
 
 \subsubsection{Additive and Multiplicative Error Terms}
@@ -993,7 +1061,47 @@ is transformed to a multiplicative model
 with the multiplicative random error $e^\varepsilon$.
 
 \subsection{Correlation Plots}
-% TODO Write Correlation Plots and assumption of uncorrelated errors
+The fourth model assumption is that errors are independent. However, with chronologically ordered observations like timeseries, errors are correlated, that is neighbour residuals $e_i$ are more similar than residuals far apart.
+
+To find the correlations in the residuals
+\begin{itemize}[nosep,label=-]
+	\item plot residuals $e_i$ versus index $i$
+	\item plot pairs $(e_i,e_{i+1})$ with $i\in \{1,\dots,n-1\}$
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/correlation_plot}
+	\caption{Correlation plot to check the assumption of independent errors}
+	\label{fig:correlationplot}
+\end{figure}
+Interpretation:
+\begin{itemize}[nosep]
+	\vspace{0.5em}
+	\item[] Residuals versus Index
+	\item \textbf{Negative correlation}: Strong alternation of sign of residuals.
+	\item \textbf{No correlation}: No obvious pattern.
+	\item \textbf{Positive correlation}: Residuals show same sign over certain periods.
+	\vspace{0.5em}
+	\item[] Pairs
+	\item \textbf{Negative correlation}: Points in ellipse with negative slope.
+	\item \textbf{No correlation}: Points show no pattern.
+	\item \textbf{Positive correlation}: Points in ellipse with positive slope.
+\end{itemize}
+The smaller is the ellipse the bigger the correlation over time.
+
+\subsubsection{Remarks}
+In many cases the order in the original data set might be lost and the assumption of independence thus can't be validated any more. The problem with correlated errors are that
+\begin{itemize}[label=-,nosep]
+	\item reported $p$-values are grossly erroneous
+	\item confidence intervals are not reliable at all
+\end{itemize}
+
+Solutions:
+\begin{itemize}
+	\item Use \textbf{generalised least squares} (\texttt{gls}, \texttt{nlme})
+	\item Add a factor for seasonal effects in the multiple regression model
+\end{itemize}
 
 \subsection{Multiple Linear Regression}
 \textbf{Multiple Linear Regression Model}
@@ -1077,7 +1185,10 @@ As a conclusion, if the null hypothesis $H_0$ is not rejected, then the regresso
 \begin{equation*}
 	\hat{\beta}_k - t_{\frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{\beta}_k} \leq \beta_k \leq \hat{\beta}_k + t_{1 - \frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{\beta}_k}
 \end{equation*}
-where $\se{\hat{\beta}_k} = \hat{\sigma}\sqrt{\left((\bm{X}^t\bm{X})^{-1}\right)_{kk}}$.
+where $\se{\hat{\beta}_k} = \hat{\sigma}\sqrt{\left((\bm{X}^t\bm{X})^{-1}\right)_{kk}}$, with the residual sum of squares
+\begin{equation*}
+	\hat{\sigma}^2 = \frac{\bm{e}^t\bm{e}}{n-(m+1)}
+\end{equation*}
 
 \subsubsection{Confidence Interval of the Response}
 The estimated value $\hat{y}_0$ is an unbiased, normally distributed estimator
