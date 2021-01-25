@@ -1179,9 +1179,9 @@ and the test statistic
 \begin{equation*}
 	T_k = \frac{\hat{\beta}_k - \beta_{k,0}}{\se{\hat{\beta}_k}}\quad\text{with}\quad\se{\hat{\beta}_k} = \hat{\sigma}\sqrt{\left((\bm{X}^t\bm{X})^{-1}\right)_{kk}}
 \end{equation*}
-with the residual sum of squares $\hat{\sigma}^2 = \frac{\bm{e}^t\bm{e}}{n-(m+1)}$ and $T_k$ following a Student's $t$-distribution with $n-(m+1)$ degrees if freedom.
+with the residual sum of squares $\hat{\sigma}^2 = \frac{\bm{e}^t\bm{e}}{n-(m+1)}$ and $T_k$ following a Student's $t$-distribution with $n-(m+1)$ degrees if freedom. As a conclusion, if the null hypothesis $H_0$ is not rejected, then the regressor $x_k$ can be omitted from the model.
 
-As a conclusion, if the null hypothesis $H_0$ is not rejected, then the regressor $x_k$ can be omitted from the model. The $100\cdot(1-\alpha)$ percent confidence interval on $\beta_k$ is
+The $100\cdot(1-\alpha)$ percent confidence interval on $\beta_k$ is
 \begin{equation*}
 	\hat{\beta}_k - t_{\frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{\beta}_k} \leq \beta_k \leq \hat{\beta}_k + t_{1 - \frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{\beta}_k}
 \end{equation*}
@@ -1195,22 +1195,38 @@ The estimated value $\hat{y}_0$ is an unbiased, normally distributed estimator
 \begin{align*}
 	\hat{y}_0 &= \hat{\beta}_0 + \hat{\beta}_1 x_{0,1} + \hat{\beta}_2 x_{0,2} + \dots + \hat{\beta}_m x_{0,m}\\
 	&=\bm{x}_0^t \hat{\bm{\beta}}\\
-	\Var{\hat{y}_0} = \sigma^2 \bm{x}_0^t(\bm{X}^t\bm{X})^{-1}\bm{x}_0
+	\Var{\hat{y}_0} &= \sigma^2 \bm{x}_0^t(\bm{X}^t\bm{X})^{-1}\bm{x}_0
 \end{align*}
 with a confidence interval on the response
 \begin{equation*}
-	\hat{y}_0 - t_{\frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{y}_0} \leq \beta_k \leq \hat{y}_0 + t_{1 - \frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{y}_0}
+	\hat{y}_0 - t_{\frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{y}_0} \leq \bm{x}_0^t\hat{\bm{\beta}} \leq \hat{y}_0 + t_{1 - \frac{\alpha}{2},n-(m+1)}\cdot\se{\hat{y}_0}
 \end{equation*}
 with the standard error being
 \begin{equation*}
 	\se{\hat{y}_0} = \hat{\sigma}\sqrt{\bm{x}_0^t(\bm{X}^t\bm{X})^{-1}\bm{x}_0}
 \end{equation*}
+and the residual sum of squares
+\begin{equation*}
+	\hat{\sigma}^2 = \frac{\bm{e}^t\bm{e}}{n-(m+1)}
+\end{equation*}
 
-% TODO Confidence Interval Response
+\subsubsection{Prediction Interval}
+The $100(1-\alpha)$ percent prediction interval at the point$(x_{01},x_{02},\dots,x_{0m})$ is
 
-% TODO Prediction Interval
+\begin{align*}
+	\hat{y}_0 - t_{\frac{\alpha}{2},n-(m+1)}\cdot\sqrt{\hat{\sigma}^2+\se{\hat{y}_0}}^2 \leq \bm{x}_0^t\hat{\bm{\beta}} \leq \hat{y}_0 + t_{1 - \frac{\alpha}{2},n-(m+1)}\cdot\sqrt{\hat{\sigma}^2+\se{\hat{y}_0}}^2
+\end{align*}
+with
+\begin{equation*}
+	\se{\hat{y}_0} = \hat{\sigma}\sqrt{\bm{x}_0^t(\bm{X}^t\bm{X})^{-1}\bm{x}_0}
+\end{equation*}
 
-% TODO Coefficient of Determination
+\subsubsection{Coefficient of Determination - Multiple $R$-Squared}
+The coefficient of determination, \textbf{multiple $R$-squared}, is a measure of the linear relationship between the response variable and the fit, and is calculate as follows
+\begin{equation*}
+	R^2 = \Cor{y,\hat{y}}^2 = \frac{\left(\sum_{i=1}^{n}(y_i - \samplemean{y})(\hat{y}_i - \samplemean{\hat{y}})\right)^2}{\sum_{i=1}^n(y_i - \samplemean{y})^2\sum_{i=1}^n(\hat{y}_i - \samplemean{\hat{y}})^2}
+\end{equation*}
+It is identical to the squared correlation between the response variable $y$ and the fitted values $\hat{y}$.
 
 \subsection{Diversity of Modelling Parameters}
 
@@ -1219,7 +1235,11 @@ When there is a curved relationship, low-order polynomial functions can be used.
 \begin{equation*}
 	y = \beta_0 + \beta_1 x + \beta_2 x^2 + \varepsilon
 \end{equation*}
-This is a simple linear regression with a quadratic function.
+This is a simple linear regression with a quadratic function but only one explanatory variable $x$. The multiple linear regression model is mathematically the same, define $\texttt{lin} = x$ and $\texttt{quad} = x^2$
+\begin{equation*}
+	y =\beta_0 + \beta_1\cdot\texttt{lin} + \beta_2\cdot\texttt{quad} + \varepsilon
+\end{equation*}
+Introducing higher powers results in a polynomial regression.
 
 \subsubsection{Non-linear Functions and Linear Regression}
 Transforming the variables to get better fitting results may introduce non-linear relationships.
@@ -1231,16 +1251,23 @@ Transforming the variables to get better fitting results may introduce non-linea
 All these models are linear models, however this is not always possible. Non-linear models can be fitted with the package \mintinline{R}{nls}.
 
 \subsubsection{Binary Explanatory Variables}
-% TODO Binary Explanatory Variables
+A binary variable is discrete with values 0 or 1. A simple binary model would be
+\begin{align*}
+	y &= \beta_0 + \beta_1 x_{\text{b}} + \varepsilon
+	\intertext{then}
+	y &= \beta_0 + \beta_1 + \varepsilon \quad\text{if } x_{\text{b}}=1\\
+	y &= \beta_0 + \varepsilon \quad\text{if } x_{\text{b}}=0
+\end{align*}
+The regression model is equivalent to the model of two independent random samples and the difference of their means. This is the unpaired \textbf{Student's t test}.
 
 \subsubsection{Factor Variables}
 A factor variable is a discrete variable with $s$ levels $\{l_1, l_2,\dots,l_s\}$. These can be transformed to binary dummy variables $x_k^{(j)} = (x_{k,1}^{(j)}, x_{k,2}^{(j)}, \dots, x_{k,n}^{(j)})$ with
 \begin{equation*}
 	x_k^{(j)} \left\{
-		\begin{matrix}
+		\begin{matrix*}[l]
 			1 & \text{if $i$th observation $x_{k,i}$ is equal to $j$th level $l_j$}\\
 			0 & \text{otherwise}
-		\end{matrix}
+		\end{matrix*}
 	\right.
 \end{equation*}
 The regression model then becomes
@@ -1250,7 +1277,23 @@ The regression model then becomes
 To force the uniqueness of the optimisation problem the first level $\beta_{k,1}$ has to be zero, so that there are only $s-1$ dummy variables for a factor variable with $s$ levels.
 
 \subsubsection{Comparison of Multiple Regression Models with an \textit{F}-Test}
-% TODO Write Comparison of Models using F-Test
+The introduction of factors in models was very beneficial for improving accuracy, but it would be nice to have a test which allows to determine if a certain factor has a significant influence. This can be done by comparing two multiple linear regression models.
+
+The complex model is
+\begin{equation*}
+	y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_m x_m + \varepsilon
+\end{equation*}
+with $p=m+1$ coefficients. The small model has $q$ coefficients $\beta_{j_1},\dots,\beta_{j_q}$ put to zero, and thus only $p-q$ coefficients. Then the goodness of fit is tested against the complex model.
+
+\paragraph{\textit{F}-Test to Compare the Two Models} The null hypothesis of the $F$-test is
+\begin{align*}
+	H_0 &: \beta_{j_1} = \beta_{j_2} = \dots = \beta_{j_q} = 0
+	\intertext{And the alternative hypothesis}
+	H_1 &: \beta_{j_k} \neq 0\hspace*{0.5em}\text{for at least one}\hspace*{0.5em}k\in\{1,\dots,q\}
+	\intertext{with the $F$-Statistic}
+	F &= \frac{n-p}{q}\frac{\text{SS}_E^* - \text{SS}_E}{\text{SS}_E}
+\end{align*}
+$\text{SS}_E$ is the sum of squares of the errors of the complex model, and $\text{SS}_E^*$ the sum of squares of the errors of the small model. Under the null hypothesis the $F$-statistic follows an $F$-distribution with $(q,n − p)$ degrees of freedom (see tables \ref{tbl:Fdistribution}-\ref{tbl:FdistributionEnd}).
 
 \subsubsection{Modelling of Two Straight Lines}
 \begin{figure}[H]
@@ -1268,7 +1311,28 @@ To model this relationship a multiple regression model with a factor variable wh
 	\end{matrix}
 	\right.
 \end{equation*}
-% TODO Finish Group Models
+Model: $y = \alpha + \beta x + \Delta\alpha\cdot g + \Delta\beta\cdot x g + \varepsilon$, can also be expressed as
+\begin{equation*}
+	y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + \varepsilon
+\end{equation*}
+with $x_1 = x$, $x_2 = g$, $x_3 = x g$, $\beta_0 =\alpha$, $\beta_1 = \beta$, $\beta_2=\Delta\alpha$ and $\beta_3 = \Delta\beta$.
+
+\paragraph{Comparison of the Two Straight Lines} Null and alternative hypotheses for the difference of intercept and slopes
+\begin{align*}
+	H_{\alpha,0} = 0 &\qquad H_{\beta,0} = 0\\
+	H_{\alpha,1} \neq 0 &\qquad H_{\beta,1} \neq 0\\
+\end{align*}
+Individual test statistics:
+\begin{itemize}[nosep]
+	\item Equal intercepts use the $t$-statistic of the coefficient $\Delta\alpha$
+	\item Equal slopes use the $t$-statistic of the coefficient $\Delta\beta$
+\end{itemize}
+Instead both hypotheses can be tested simultaneously by using the $F$-statistic to compare the models
+\begin{align}
+	y &= \alpha + \beta x + \Delta\alpha\cdot g + \Delta\beta\cdot x g + \varepsilon\\
+	\intertext{and}
+	y &= \alpha + \beta x + \varepsilon
+\end{align}
 
 \subsection{Sensitivity and Robustness}
 In multiple linear regression too many dimensions are involved and the regression model cannot be properly visualised. However, the diagnostic plots introduced in \ref{sssec:DiagnosticPlots} can still be used.
@@ -1306,15 +1370,19 @@ An outlier can be identified by investigating the influence of said data point. 
 \noindent
 \textbf{Cook's distance measure}
 \begin{equation*}
-	d_i  = \frac{(\hat{\bm{y}}_{\\i} - \hat{\bm{y}})^T(\hat{\bm{y}}_{/i} - \hat{\bm{y}})}{p\hat{\sigma}^2}
+	d_i  = \frac{(\hat{\bm{y}}_{\setminus i} - \hat{\bm{y}})^T(\hat{\bm{y}}_{\setminus i} - \hat{\bm{y}})}{p\hat{\sigma}^2}
 \end{equation*}
-where $\hat{\bm{y}}=\bm{X}\hat{\bm{\beta}}$ is the $n\times1$ vector of the fitted values, $\hat{\bm{y}}_{\\i}=\bm{X}\hat{\bm{\beta}}_{\\i}$ the $n\times1$ vector of fitted values without observation $i$, and $p$ the number of estimated parameters.
+where $\hat{\bm{y}}=\bm{X}\hat{\bm{\beta}}$ is the $n\times1$ vector of the fitted values, $\hat{\bm{y}}_{\setminus i}=\bm{X}\hat{\bm{\beta}}_{\setminus i}$ the $n\times1$ vector of fitted values without observation $i$, and $p$ the number of estimated parameters.
 
 Fortunately the analysis does not have to be repeated $n$ times
 \begin{equation*}
 	d_i = \frac{e_i^2}{p\hat{\sigma}^2}\frac{h_{ii}}{(1-h_{ii})^2} = \frac{\tilde{e}_{\text{std}, i}^2}{p}\frac{h_{ii}}{(1-h_{ii})^2}
 \end{equation*}
-where $e_i$ is the $i$th residual and $\tilde{e}_{\text{std},i}$ the standardised residual. The leverages satsify
+where $e_i$ is the $i$th residual and $\tilde{e}_{\text{std},i}$ the standardised residual. Cook's distance measure is a function of the standardised residuals $\tilde{e}_{\text{std},i}$ and the leverages
+\begin{equation*}
+	h_{ii} = \bm{H}_{ii} = \left(\bm{X}\left(\bm{X}^T\bm{X}\right)^{-1}\bm{X}^T\right)_{ii}
+\end{equation*}
+The leverages satisfy
 \begin{equation*}
 	0\leq h_{ii}\leq 1\qquad\text{and}\qquad \bar{h} = \frac{p}{n}
 \end{equation*}
@@ -1359,9 +1427,98 @@ A good rule of thumb is that observations are dangerous if
 	\label{fig:cookdistancecontourplot}
 \end{figure}
 
+\subsubsection{Weighted Linear Regression}
+Define an $n\times n$ diagonal matrix with weights
+\begin{equation*}
+	\bm{W} = \begin{pmatrix}
+		w_1 & 0 & 0 & \cdots & 0\\
+		0 & w_2 & 0 & \cdots & 0\\
+		0 & 0 & w_3 & \cdots & 0\\
+		\vdots & \vdots & \vdots & \ddots & \vdots\\
+		0 & 0 & 0 & \cdots & w_n
+	\end{pmatrix}
+\end{equation*}
+and then minimise the weighted residual sum of squares
+\begin{align*}
+	S(\bm{\beta}) = \sum_{i=1}^{n}w_i\varepsilon_i^2 &= \bm{\varepsilon}^T\bm{\varepsilon}\\
+	&= (\bm{y}-\bm{X\beta})^T\bm{W}(\bm{y}-\bm{X\beta})\\
+	&= \bm{y}^T\bm{Wy} - 2\bm{\beta}^T\bm{X}^T\bm{Wy} + \bm{\beta}^T\bm{X}^T\bm{WX\beta}
+\end{align*}
+The least squares estimators $\hat{\bm{\beta}}$ of $\bm{\beta}$ satisfy the stationary condition
+\begin{equation*}
+	\frac{\partial S}{\partial\bm{\beta}}(\hat{\bm{\beta}}) = -  2\bm{\beta}^T\bm{X}^T\bm{Wy} + 2\bm{X}^T\bm{WX}\hat{\bm{\beta}} = 0
+\end{equation*}
+Weighted least-squares normal equations
+\begin{align*}
+	\bm{X}^T\bm{Wy} &= \bm{X}^T\bm{WX}\hat{\bm{\beta}}\\
+	\hat{\bm{\beta}} &= \left(\bm{X}^T\bm{WX}\right)^-1\bm{X}^T\bm{Wy}
+\end{align*}
+The estimate $\hat{\bm{\beta}}$ is unbiased with covariance
+\begin{equation*}
+	\Cov{\hat{\bm{\beta}}} = \bm{\sigma}^2\left(\bm{X}^T\bm{WX}\right)
+\end{equation*}
+That means, confidence intervals for the coefficients are available
 
+\subsubsection{Robust Regression}
+The aim is to find parameter estimates as if the outliers did not exist. Informal approach to robustness
+\begin{enumerate}[nosep]
+	\item examine the data for obvious outliers
+	\item delete these outliers
+	\item apply the optimal inference procedure for the assumed model to the cleaned data set
+\end{enumerate}
+However, in practice there are several problems
+\begin{itemize}
+	\item Even expert statisticians do not always screen the data
+	\item Difficult or even impossible to identify outliers, particularly in multivariate or highly structured data like multiple linear regression
+	\item Relationships in the data cannot be examined without first fitting a model
+	\item Difficult to formalise this process so that it can be automatised
+	\item Inference based on a standard procedure to the cleaned data is based on distribution theory which ignores the cleaning process and hence will be inapplicable and possibly misleading
+\end{itemize}
 
-% TODO Finish Sensitivity and Robustness
+\subsubsection{Breakdown Point}
+The breakdown point is the minimal proportion of incorrect observations which cause completely unrealistic estimates. The aim is to have a robust estimator with a breakdown point of about $\frac{1}{2}$. The arithmetic mean is an estimator with a breakdown point of $\frac{1}{n}$
+\begin{equation}
+	\samplemean{x} = \frac{1}{n}(x_1 + \dots + x_n)
+\end{equation}
+can be made arbitrarily large by changing any of the $n$ observations.
+
+The median is a robust estimator with a breakdown point of $\frac{1}{2}$, it can handle almost half a dataset of incorrect data.
+
+\subsubsection{Least Squares Regression}
+Minimise
+\begin{equation*}
+	S(\bm{\beta}) = \sum_{i=1}^n(y_i - \bm{x}_i^T\bm{\beta})^2 = \sum_{i=1}^{n}\rho(y_i - \bm{x}_i^T\bm{\beta})
+\end{equation*}
+with $\rho(r) = r^2$ being the loss function
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/loss_function}
+\end{figure}
+
+\subsubsection{Robust Regression with the M-Estimator}
+Observations with large absolute residuals have big influence. Define a new loss function that reduces the  influence of observations with scaled residuals $\frac{e_i}{\hat{\sigma}} > \{c=1.345\}$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/robust_m_estimator.png}
+\end{figure}
+Find the regression M-estimator $\hat{\bm{\beta}}_M$ by the implicit equations
+\begin{equation*}
+	\sum_{i=1}^{n}\psi(\tilde{e}_i)\bm{x}_i = 0\quad\text{and}\quad\tilde{e}=\frac{y_i - \bm{x}_i^T\hat{\bm{\beta}}_M}{\sigma}
+\end{equation*}
+or expressed with weights
+\begin{align*}
+	\sum_{i=1}^{n}w_i e_i\bm{x}_i &= 0\\
+	w_i &= \frac{\psi(\tilde{e}_i)}{\tilde{e}}\\
+	\tilde{e}_i = \frac{y_i -\bm{x}_i^T\hat{\bm{\beta}}_M}{\sigma}
+\end{align*}
+As the weights depend on the residuals $e_i = \bm{x}_i^T\bm{\beta}$, which in turn depend on the parameter $\bm{\beta}$, there is no explicit solution or formula, only iterative algorithms exist.
+
+\subsubsection{Robust Regression with the MM-Estimator}
+Leverage points still have big influence. Thus, further reduce the influence of observations with scaled residuals $\frac{e_i}{\hat{\sigma}} > \{b = 4.685\}$ even more with a redescending $\psi$-function.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/robust_mm_estimator.png}
+\end{figure}
 
 \subsection{Variable Selection and Modelling}
 There are two approaches to modelling, with \textbf{mechanistic models} where the functional relationships are known and the model is used for parameter, confidence and prediction interval estimation. The others are \textbf{empirical models} where the influence of explanatory variables on the response are unknown, and the models are used to investigate the relationship between response and explanatory variables.
@@ -1713,8 +1870,8 @@ and solve this system of $k$ linear equations for the $k$ unknowns $x_1,\dots,x_
 
 However, the solution could be a saddle point, which is more likely the more factors $k$ are involved. If the $k\times k$ Hessian matrix is positive definite for that solution $x_1,\dots,x_k$.
 \begin{align*}
-	\bm{H} f &= {\begin{bmatrix}{\dfrac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\dfrac {\partial ^{2}f}{\partial x_{1}\,\partial x_{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{1}\,\partial x_{n}}}\\[2.2ex]{\dfrac {\partial ^{2}f}{\partial x_{2}\,\partial x_{1}}}&{\dfrac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{2}\,\partial x_{n}}}\\[2.2ex]\vdots &\vdots &\ddots &\vdots \\[2.2ex]{\dfrac {\partial ^{2}f}{\partial x_{n}\,\partial x_{1}}}&{\dfrac {\partial ^{2}f}{\partial x_{n}\,\partial x_{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}} \tag{Hessian matrix of function $f$}\\
-	x^T\bm{M}x &> 0 \forall x \tag{positive definiteness of matrix $\bm{M}$}
+	\bm{H}_f &= {\begin{bmatrix}{\dfrac {\partial ^{2}f}{\partial x_{1}^{2}}}&{\dfrac {\partial ^{2}f}{\partial x_{1}\,\partial x_{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{1}\,\partial x_{n}}}\\[2.2ex]{\dfrac {\partial ^{2}f}{\partial x_{2}\,\partial x_{1}}}&{\dfrac {\partial ^{2}f}{\partial x_{2}^{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{2}\,\partial x_{n}}}\\[2.2ex]\vdots &\vdots &\ddots &\vdots \\[2.2ex]{\dfrac {\partial ^{2}f}{\partial x_{n}\,\partial x_{1}}}&{\dfrac {\partial ^{2}f}{\partial x_{n}\,\partial x_{2}}}&\cdots &{\dfrac {\partial ^{2}f}{\partial x_{n}^{2}}}\end{bmatrix}} \tag{Hessian matrix of function $f$}\\
+	x^T\bm{M}x &> 0\hspace*{0.5em}\forall x \tag{positive definiteness of matrix $\bm{M}$}
 \end{align*}
 
 \clearpage
@@ -1753,6 +1910,452 @@ However, the solution could be a saddle point, which is more likely the more fac
 	\end{tabularx}
 	\caption{Factors for constructing control charts}
 	\label{tbl:FactorsControlCharts}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $9$ & $10$\\
+		\hline
+		$1$ & $0.990$ & $4052$ & $4999$ & $5404$ & $5624$ & $5764$ & $5859$ & $5928$ & $5981$ & $6022$ & $6056$ \\
+		& $0.975$ & $647.8$ & $799.5$ & $864.2$ & $899.6$ & $921.8$ & $937.1$ & $948.2$ & $956.6$ & $963.3$ & $968.6$ \\
+		& $0.950$ & $161.4$ & $199.5$ & $215.7$ & $224.6$ & $230.2$ & $234.0$ & $236.8$ & $238.9$ & $240.5$ & $241.9$ \\
+		& $0.900$ & $39.86$ & $49.50$ & $53.59$ & $55.83$ & $57.24$ & $58.20$ & $58.91$ & $59.44$ & $59.86$ & $60.19$ \\
+		$2$ & $0.990$ & $98.50$ & $99.00$ & $99.16$ & $99.25$ & $99.30$ & $99.33$ & $99.36$ & $99.38$ & $99.39$ & $99.40$ \\
+		& $0.975$ & $38.51$ & $39.00$ & $39.17$ & $39.25$ & $39.30$ & $39.33$ & $39.36$ & $39.37$ & $39.39$ & $39.40$ \\
+		& $0.950$ & $18.51$ & $19.00$ & $19.16$ & $19.25$ & $19.30$ & $19.33$ & $19.35$ & $19.37$ & $19.38$ & $19.40$ \\
+		& $0.900$ & $8.526$ & $9.000$ & $9.162$ & $9.243$ & $9.293$ & $9.326$ & $9.349$ & $9.367$ & $9.381$ & $9.392$ \\
+		$3$ & $0.990$ & $34.12$ & $30.82$ & $29.46$ & $28.71$ & $28.24$ & $27.91$ & $27.67$ & $27.49$ & $27.34$ & $27.23$ \\
+		& $0.975$ & $17.44$ & $16.04$ & $15.44$ & $15.10$ & $14.88$ & $14.73$ & $14.62$ & $14.54$ & $14.47$ & $14.42$ \\
+		& $0.950$ & $10.13$ & $9.552$ & $9.277$ & $9.117$ & $9.013$ & $8.941$ & $8.887$ & $8.845$ & $8.812$ & $8.785$ \\
+		& $0.900$ & $5.538$ & $5.462$ & $5.391$ & $5.343$ & $5.309$ & $5.285$ & $5.266$ & $5.252$ & $5.240$ & $5.230$ \\
+		$4$ & $0.990$ & $21.20$ & $18.00$ & $16.69$ & $15.98$ & $15.52$ & $15.21$ & $14.98$ & $14.80$ & $14.66$ & $14.55$ \\
+		& $0.975$ & $12.22$ & $10.65$ & $9.979$ & $9.604$ & $9.364$ & $9.197$ & $9.074$ & $8.980$ & $8.905$ & $8.844$ \\
+		& $0.950$ & $7.709$ & $6.944$ & $6.591$ & $6.388$ & $6.256$ & $6.163$ & $6.094$ & $6.041$ & $5.999$ & $5.964$ \\
+		& $0.900$ & $4.545$ & $4.325$ & $4.191$ & $4.107$ & $4.051$ & $4.010$ & $3.979$ & $3.955$ & $3.936$ & $3.920$ \\
+		$5$ & $0.990$ & $16.26$ & $13.27$ & $12.06$ & $11.39$ & $10.97$ & $10.67$ & $10.46$ & $10.29$ & $10.16$ & $10.05$ \\
+		& $0.975$ & $10.01$ & $8.434$ & $7.764$ & $7.388$ & $7.146$ & $6.978$ & $6.853$ & $6.757$ & $6.681$ & $6.619$ \\
+		& $0.950$ & $6.608$ & $5.786$ & $5.409$ & $5.192$ & $5.050$ & $4.950$ & $4.876$ & $4.818$ & $4.772$ & $4.735$ \\
+		& $0.900$ & $4.060$ & $3.780$ & $3.619$ & $3.520$ & $3.453$ & $3.405$ & $3.368$ & $3.339$ & $3.316$ & $3.297$ \\
+		$6$ & $0.990$ & $13.75$ & $10.92$ & $9.780$ & $9.148$ & $8.746$ & $8.466$ & $8.260$ & $8.102$ & $7.976$ & $7.874$ \\
+		& $0.975$ & $8.813$ & $7.260$ & $6.599$ & $6.227$ & $5.988$ & $5.820$ & $5.695$ & $5.600$ & $5.523$ & $5.461$ \\
+		& $0.950$ & $5.987$ & $5.143$ & $4.757$ & $4.534$ & $4.387$ & $4.284$ & $4.207$ & $4.147$ & $4.099$ & $4.060$ \\
+		& $0.900$ & $3.776$ & $3.463$ & $3.289$ & $3.181$ & $3.108$ & $3.055$ & $3.014$ & $2.983$ & $2.958$ & $2.937$ \\
+		$7$ & $0.990$ & $12.25$ & $9.547$ & $8.451$ & $7.847$ & $7.460$ & $7.191$ & $6.993$ & $6.840$ & $6.719$ & $6.620$ \\
+		& $0.975$ & $8.073$ & $6.542$ & $5.890$ & $5.523$ & $5.285$ & $5.119$ & $4.995$ & $4.899$ & $4.823$ & $4.761$ \\
+		& $0.950$ & $5.591$ & $4.737$ & $4.347$ & $4.120$ & $3.972$ & $3.866$ & $3.787$ & $3.726$ & $3.677$ & $3.637$ \\
+		& $0.900$ & $3.589$ & $3.257$ & $3.074$ & $2.961$ & $2.883$ & $2.827$ & $2.785$ & $2.752$ & $2.725$ & $2.703$ \\
+		$8$ & $0.990$ & $11.26$ & $8.649$ & $7.591$ & $7.006$ & $6.632$ & $6.371$ & $6.178$ & $6.029$ & $5.911$ & $5.814$ \\
+		& $0.975$ & $7.571$ & $6.059$ & $5.416$ & $5.053$ & $4.817$ & $4.652$ & $4.529$ & $4.433$ & $4.357$ & $4.295$ \\
+		& $0.950$ & $5.318$ & $4.459$ & $4.066$ & $3.838$ & $3.688$ & $3.581$ & $3.500$ & $3.438$ & $3.388$ & $3.347$ \\
+		& $0.900$ & $3.458$ & $3.113$ & $2.924$ & $2.806$ & $2.726$ & $2.668$ & $2.624$ & $2.589$ & $2.561$ & $2.538$ \\
+		$9$ & $0.990$ & $10.56$ & $8.022$ & $6.992$ & $6.422$ & $6.057$ & $5.802$ & $5.613$ & $5.467$ & $5.351$ & $5.257$ \\
+		& $0.975$ & $7.209$ & $5.715$ & $5.078$ & $4.718$ & $4.484$ & $4.320$ & $4.197$ & $4.102$ & $4.026$ & $3.964$ \\
+		& $0.950$ & $5.117$ & $4.256$ & $3.863$ & $3.633$ & $3.482$ & $3.374$ & $3.293$ & $3.230$ & $3.179$ & $3.137$ \\
+		& $0.900$ & $3.360$ & $3.006$ & $2.813$ & $2.693$ & $2.611$ & $2.551$ & $2.505$ & $2.469$ & $2.440$ & $2.416$ \\
+		$10$ & $0.990$ & $10.04$ & $7.559$ & $6.552$ & $5.994$ & $5.636$ & $5.386$ & $5.200$ & $5.057$ & $4.942$ & $4.849$ \\
+		& $0.975$ & $6.937$ & $5.456$ & $4.826$ & $4.468$ & $4.236$ & $4.072$ & $3.950$ & $3.855$ & $3.779$ & $3.717$ \\
+		& $0.950$ & $4.965$ & $4.103$ & $3.708$ & $3.478$ & $3.326$ & $3.217$ & $3.135$ & $3.072$ & $3.020$ & $2.978$ \\
+		& $0.900$ & $3.285$ & $2.924$ & $2.728$ & $2.605$ & $2.522$ & $2.461$ & $2.414$ & $2.377$ & $2.347$ & $2.323$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$1-10$, m:$1-10$}
+	\label{tbl:Fdistribution}
+\end{table}
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $11$ & $12$ & $13$ & $14$ & $15$ & $16$ & $17$ & $18$ & $19$ & $20$\\
+		\hline
+		$1$ & $0.990$ & $6083$ & $6107$ & $6126$ & $6143$ & $6157$ & $6170$ & $6181$ & $6191$ & $6201$ & $6209$ \\
+		& $0.975$ & $973.0$ & $976.7$ & $979.8$ & $982.5$ & $984.9$ & $986.9$ & $988.7$ & $990.3$ & $991.8$ & $993.1$ \\
+		& $0.950$ & $243.0$ & $243.9$ & $244.7$ & $245.4$ & $245.9$ & $246.5$ & $246.9$ & $247.3$ & $247.7$ & $248.0$ \\
+		& $0.900$ & $60.47$ & $60.71$ & $60.90$ & $61.07$ & $61.22$ & $61.35$ & $61.46$ & $61.57$ & $61.66$ & $61.74$ \\
+		$2$ & $0.990$ & $99.41$ & $99.42$ & $99.42$ & $99.43$ & $99.43$ & $99.44$ & $99.44$ & $99.44$ & $99.45$ & $99.45$ \\
+		& $0.975$ & $39.41$ & $39.41$ & $39.42$ & $39.43$ & $39.43$ & $39.44$ & $39.44$ & $39.44$ & $39.45$ & $39.45$ \\
+		& $0.950$ & $19.40$ & $19.41$ & $19.42$ & $19.42$ & $19.43$ & $19.43$ & $19.44$ & $19.44$ & $19.44$ & $19.45$ \\
+		& $0.900$ & $9.401$ & $9.408$ & $9.415$ & $9.420$ & $9.425$ & $9.429$ & $9.433$ & $9.436$ & $9.439$ & $9.441$ \\
+		$3$ & $0.990$ & $27.13$ & $27.05$ & $26.98$ & $26.92$ & $26.87$ & $26.83$ & $26.79$ & $26.75$ & $26.72$ & $26.69$ \\
+		& $0.975$ & $14.37$ & $14.34$ & $14.30$ & $14.28$ & $14.25$ & $14.23$ & $14.21$ & $14.20$ & $14.18$ & $14.17$ \\
+		& $0.950$ & $8.763$ & $8.745$ & $8.729$ & $8.715$ & $8.703$ & $8.692$ & $8.683$ & $8.675$ & $8.667$ & $8.660$ \\
+		& $0.900$ & $5.222$ & $5.216$ & $5.210$ & $5.205$ & $5.200$ & $5.196$ & $5.193$ & $5.190$ & $5.187$ & $5.184$ \\
+		$4$ & $0.990$ & $14.45$ & $14.37$ & $14.31$ & $14.25$ & $14.20$ & $14.15$ & $14.11$ & $14.08$ & $14.05$ & $14.02$ \\
+		& $0.975$ & $8.794$ & $8.751$ & $8.715$ & $8.684$ & $8.657$ & $8.633$ & $8.611$ & $8.592$ & $8.575$ & $8.560$ \\
+		& $0.950$ & $5.936$ & $5.912$ & $5.891$ & $5.873$ & $5.858$ & $5.844$ & $5.832$ & $5.821$ & $5.811$ & $5.803$ \\
+		& $0.900$ & $3.907$ & $3.896$ & $3.886$ & $3.878$ & $3.870$ & $3.864$ & $3.858$ & $3.853$ & $3.848$ & $3.844$ \\
+		$5$ & $0.990$ & $9.963$ & $9.888$ & $9.82$ & $9.77$ & $9.72$ & $9.68$ & $9.64$ & $9.61$ & $9.58$ & $9.55$ \\
+		& $0.975$ & $6.568$ & $6.525$ & $6.488$ & $6.456$ & $6.428$ & $6.403$ & $6.381$ & $6.362$ & $6.344$ & $6.329$ \\
+		& $0.950$ & $4.704$ & $4.678$ & $4.655$ & $4.636$ & $4.619$ & $4.604$ & $4.590$ & $4.579$ & $4.568$ & $4.558$ \\
+		& $0.900$ & $3.282$ & $3.268$ & $3.257$ & $3.247$ & $3.238$ & $3.230$ & $3.223$ & $3.217$ & $3.212$ & $3.207$ \\
+		$6$ & $0.990$ & $7.790$ & $7.718$ & $7.657$ & $7.605$ & $7.559$ & $7.519$ & $7.483$ & $7.451$ & $7.422$ & $7.396$ \\
+		& $0.975$ & $5.410$ & $5.366$ & $5.329$ & $5.297$ & $5.269$ & $5.244$ & $5.222$ & $5.202$ & $5.184$ & $5.168$ \\
+		& $0.950$ & $4.027$ & $4.000$ & $3.976$ & $3.956$ & $3.938$ & $3.922$ & $3.908$ & $3.896$ & $3.884$ & $3.874$ \\
+		& $0.900$ & $2.920$ & $2.905$ & $2.892$ & $2.881$ & $2.871$ & $2.863$ & $2.855$ & $2.848$ & $2.842$ & $2.836$ \\
+		$7$ & $0.990$ & $6.538$ & $6.469$ & $6.410$ & $6.359$ & $6.314$ & $6.275$ & $6.240$ & $6.209$ & $6.181$ & $6.155$ \\
+		& $0.975$ & $4.709$ & $4.666$ & $4.628$ & $4.596$ & $4.568$ & $4.543$ & $4.521$ & $4.501$ & $4.483$ & $4.467$ \\
+		& $0.950$ & $3.603$ & $3.575$ & $3.550$ & $3.529$ & $3.511$ & $3.494$ & $3.480$ & $3.467$ & $3.455$ & $3.445$ \\
+		& $0.900$ & $2.684$ & $2.668$ & $2.654$ & $2.643$ & $2.632$ & $2.623$ & $2.615$ & $2.607$ & $2.601$ & $2.595$ \\
+		$8$ & $0.990$ & $5.734$ & $5.667$ & $5.609$ & $5.559$ & $5.515$ & $5.477$ & $5.442$ & $5.412$ & $5.384$ & $5.359$ \\
+		& $0.975$ & $4.243$ & $4.200$ & $4.162$ & $4.130$ & $4.101$ & $4.076$ & $4.054$ & $4.034$ & $4.016$ & $3.999$ \\
+		& $0.950$ & $3.313$ & $3.284$ & $3.259$ & $3.237$ & $3.218$ & $3.202$ & $3.187$ & $3.173$ & $3.161$ & $3.150$ \\
+		& $0.900$ & $2.519$ & $2.502$ & $2.488$ & $2.475$ & $2.464$ & $2.454$ & $2.446$ & $2.438$ & $2.431$ & $2.425$ \\
+		$9$ & $0.990$ & $5.178$ & $5.111$ & $5.055$ & $5.005$ & $4.962$ & $4.924$ & $4.890$ & $4.860$ & $4.833$ & $4.808$ \\
+		& $0.975$ & $3.912$ & $3.868$ & $3.831$ & $3.798$ & $3.769$ & $3.744$ & $3.722$ & $3.701$ & $3.683$ & $3.667$ \\
+		& $0.950$ & $3.102$ & $3.073$ & $3.048$ & $3.025$ & $3.006$ & $2.989$ & $2.974$ & $2.960$ & $2.948$ & $2.936$ \\
+		& $0.900$ & $2.396$ & $2.379$ & $2.364$ & $2.351$ & $2.340$ & $2.330$ & $2.320$ & $2.312$ & $2.305$ & $2.298$ \\
+		$10$ & $0.990$ & $4.772$ & $4.706$ & $4.650$ & $4.601$ & $4.558$ & $4.520$ & $4.487$ & $4.457$ & $4.430$ & $4.405$ \\
+		& $0.975$ & $3.665$ & $3.621$ & $3.583$ & $3.550$ & $3.522$ & $3.496$ & $3.474$ & $3.453$ & $3.435$ & $3.419$ \\
+		& $0.950$ & $2.943$ & $2.913$ & $2.887$ & $2.865$ & $2.845$ & $2.828$ & $2.812$ & $2.798$ & $2.785$ & $2.774$ \\
+		& $0.900$ & $2.302$ & $2.284$ & $2.269$ & $2.255$ & $2.244$ & $2.233$ & $2.224$ & $2.215$ & $2.208$ & $2.201$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$1-10$, m:$11-20$}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $25$ & $30$ & $40$ & $50$ & $60$ & $80$ & $100$ & $200$ & $500$ & $\infty$\\
+		\hline
+		$1$ & $0.990$ & $6240$ & $6260$ & $6286$ & $6302$ & $6313$ & $6326$ & $6334$ & $6350$ & $6360$ & $6366$ \\
+		& $0.975$ & $998.1$ & $1001$ & $1006$ & $1008$ & $1010$ & $1012$ & $1013$ & $1016$ & $1017$ & $1018$ \\
+		& $0.950$ & $249.3$ & $250.1$ & $251.1$ & $251.8$ & $252.2$ & $252.7$ & $253.0$ & $253.7$ & $254.1$ & $254.3$ \\
+		& $0.900$ & $62.05$ & $62.26$ & $62.53$ & $62.69$ & $62.79$ & $62.93$ & $63.01$ & $63.17$ & $63.26$ & $63.33$ \\
+		$2$ & $0.990$ & $99.46$ & $99.47$ & $99.48$ & $99.48$ & $99.48$ & $99.48$ & $99.49$ & $99.49$ & $99.50$ & $99.50$ \\
+		& $0.975$ & $39.46$ & $39.46$ & $39.47$ & $39.48$ & $39.48$ & $39.49$ & $39.49$ & $39.49$ & $39.50$ & $39.50$ \\
+		& $0.950$ & $19.46$ & $19.46$ & $19.47$ & $19.48$ & $19.48$ & $19.48$ & $19.49$ & $19.49$ & $19.49$ & $19.50$ \\
+		& $0.900$ & $9.451$ & $9.458$ & $9.466$ & $9.471$ & $9.475$ & $9.479$ & $9.481$ & $9.486$ & $9.489$ & $9.491$ \\
+		$3$ & $0.990$ & $26.58$ & $26.50$ & $26.41$ & $26.35$ & $26.32$ & $26.27$ & $26.24$ & $26.18$ & $26.15$ & $26.13$ \\
+		& $0.975$ & $14.12$ & $14.08$ & $14.04$ & $14.01$ & $13.99$ & $13.97$ & $13.96$ & $13.93$ & $13.91$ & $13.90$ \\
+		& $0.950$ & $8.634$ & $8.617$ & $8.594$ & $8.581$ & $8.572$ & $8.561$ & $8.554$ & $8.540$ & $8.532$ & $8.527$ \\
+		& $0.900$ & $5.175$ & $5.168$ & $5.160$ & $5.155$ & $5.151$ & $5.147$ & $5.144$ & $5.139$ & $5.136$ & $5.134$ \\
+		$4$ & $0.990$ & $13.91$ & $13.84$ & $13.75$ & $13.69$ & $13.65$ & $13.61$ & $13.58$ & $13.52$ & $13.49$ & $13.46$ \\
+		& $0.975$ & $8.501$ & $8.461$ & $8.411$ & $8.381$ & $8.360$ & $8.335$ & $8.319$ & $8.288$ & $8.270$ & $8.257$ \\
+		& $0.950$ & $5.769$ & $5.746$ & $5.717$ & $5.699$ & $5.688$ & $5.673$ & $5.664$ & $5.646$ & $5.635$ & $5.628$ \\
+		& $0.900$ & $3.828$ & $3.817$ & $3.804$ & $3.795$ & $3.790$ & $3.782$ & $3.778$ & $3.769$ & $3.764$ & $3.761$ \\
+		$5$ & $0.990$ & $9.449$ & $9.379$ & $9.29$ & $9.24$ & $9.20$ & $9.16$ & $9.13$ & $9.08$ & $9.04$ & $9.02$ \\
+		& $0.975$ & $6.268$ & $6.227$ & $6.175$ & $6.144$ & $6.123$ & $6.096$ & $6.080$ & $6.048$ & $6.028$ & $6.015$ \\
+		& $0.950$ & $4.521$ & $4.496$ & $4.464$ & $4.444$ & $4.431$ & $4.415$ & $4.405$ & $4.385$ & $4.373$ & $4.365$ \\
+		& $0.900$ & $3.187$ & $3.174$ & $3.157$ & $3.147$ & $3.140$ & $3.132$ & $3.126$ & $3.116$ & $3.109$ & $3.105$ \\
+		$6$ & $0.990$ & $7.296$ & $7.229$ & $7.143$ & $7.091$ & $7.057$ & $7.013$ & $6.987$ & $6.934$ & $6.901$ & $6.880$ \\
+		& $0.975$ & $5.107$ & $5.065$ & $5.012$ & $4.980$ & $4.959$ & $4.932$ & $4.915$ & $4.882$ & $4.862$ & $4.849$ \\
+		& $0.950$ & $3.835$ & $3.808$ & $3.774$ & $3.754$ & $3.740$ & $3.722$ & $3.712$ & $3.690$ & $3.678$ & $3.669$ \\
+		& $0.900$ & $2.815$ & $2.800$ & $2.781$ & $2.770$ & $2.762$ & $2.752$ & $2.746$ & $2.734$ & $2.727$ & $2.722$ \\
+		$7$ & $0.990$ & $6.058$ & $5.992$ & $5.908$ & $5.858$ & $5.824$ & $5.781$ & $5.755$ & $5.702$ & $5.671$ & $5.650$ \\
+		& $0.975$ & $4.405$ & $4.362$ & $4.309$ & $4.276$ & $4.254$ & $4.227$ & $4.210$ & $4.176$ & $4.156$ & $4.142$ \\
+		& $0.950$ & $3.404$ & $3.376$ & $3.340$ & $3.319$ & $3.304$ & $3.286$ & $3.275$ & $3.252$ & $3.239$ & $3.230$ \\
+		& $0.900$ & $2.571$ & $2.555$ & $2.535$ & $2.523$ & $2.514$ & $2.504$ & $2.497$ & $2.484$ & $2.476$ & $2.471$ \\
+		$8$ & $0.990$ & $5.263$ & $5.198$ & $5.116$ & $5.065$ & $5.032$ & $4.989$ & $4.963$ & $4.911$ & $4.880$ & $4.859$ \\
+		& $0.975$ & $3.937$ & $3.894$ & $3.840$ & $3.807$ & $3.784$ & $3.756$ & $3.739$ & $3.705$ & $3.684$ & $3.670$ \\
+		& $0.950$ & $3.108$ & $3.079$ & $3.043$ & $3.020$ & $3.005$ & $2.986$ & $2.975$ & $2.951$ & $2.937$ & $2.928$ \\
+		& $0.900$ & $2.400$ & $2.383$ & $2.361$ & $2.348$ & $2.339$ & $2.328$ & $2.321$ & $2.307$ & $2.298$ & $2.293$ \\
+		$9$ & $0.990$ & $4.713$ & $4.649$ & $4.567$ & $4.517$ & $4.483$ & $4.441$ & $4.415$ & $4.363$ & $4.332$ & $4.311$ \\
+		& $0.975$ & $3.604$ & $3.560$ & $3.505$ & $3.472$ & $3.449$ & $3.421$ & $3.403$ & $3.368$ & $3.347$ & $3.333$ \\
+		& $0.950$ & $2.893$ & $2.864$ & $2.826$ & $2.803$ & $2.787$ & $2.768$ & $2.756$ & $2.731$ & $2.717$ & $2.707$ \\
+		& $0.900$ & $2.272$ & $2.255$ & $2.232$ & $2.218$ & $2.208$ & $2.196$ & $2.189$ & $2.174$ & $2.165$ & $2.159$ \\
+		$10$ & $0.990$ & $4.311$ & $4.247$ & $4.165$ & $4.115$ & $4.082$ & $4.039$ & $4.014$ & $3.962$ & $3.930$ & $3.909$ \\
+		& $0.975$ & $3.355$ & $3.311$ & $3.255$ & $3.221$ & $3.198$ & $3.169$ & $3.152$ & $3.116$ & $3.094$ & $3.080$ \\
+		& $0.950$ & $2.730$ & $2.700$ & $2.661$ & $2.637$ & $2.621$ & $2.601$ & $2.588$ & $2.563$ & $2.548$ & $2.538$ \\
+		& $0.900$ & $2.174$ & $2.155$ & $2.132$ & $2.117$ & $2.107$ & $2.095$ & $2.087$ & $2.071$ & $2.062$ & $2.055$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$1-10$, m:$25-\infty$}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $9$ & $10$\\
+		\hline
+		$11$ & $0.990$ & $9.646$ & $7.206$ & $6.217$ & $5.668$ & $5.316$ & $5.069$ & $4.886$ & $4.744$ & $4.632$ & $4.539$ \\
+		& $0.975$ & $6.724$ & $5.256$ & $4.630$ & $4.275$ & $4.044$ & $3.881$ & $3.759$ & $3.664$ & $3.588$ & $3.526$ \\
+		& $0.950$ & $4.844$ & $3.982$ & $3.587$ & $3.357$ & $3.204$ & $3.095$ & $3.012$ & $2.948$ & $2.896$ & $2.854$ \\
+		& $0.900$ & $3.225$ & $2.860$ & $2.660$ & $2.536$ & $2.451$ & $2.389$ & $2.342$ & $2.304$ & $2.274$ & $2.248$ \\
+		$12$ & $0.990$ & $9.330$ & $6.927$ & $5.953$ & $5.412$ & $5.064$ & $4.821$ & $4.640$ & $4.499$ & $4.388$ & $4.296$ \\
+		& $0.975$ & $6.554$ & $5.096$ & $4.474$ & $4.121$ & $3.891$ & $3.728$ & $3.607$ & $3.512$ & $3.436$ & $3.374$ \\
+		& $0.950$ & $4.747$ & $3.885$ & $3.490$ & $3.259$ & $3.106$ & $2.996$ & $2.913$ & $2.849$ & $2.796$ & $2.753$ \\
+		& $0.900$ & $3.177$ & $2.807$ & $2.606$ & $2.480$ & $2.394$ & $2.331$ & $2.283$ & $2.245$ & $2.214$ & $2.188$ \\
+		$13$ & $0.990$ & $9.074$ & $6.701$ & $5.739$ & $5.205$ & $4.862$ & $4.620$ & $4.441$ & $4.302$ & $4.191$ & $4.100$ \\
+		& $0.975$ & $6.414$ & $4.965$ & $4.347$ & $3.996$ & $3.767$ & $3.604$ & $3.483$ & $3.388$ & $3.312$ & $3.250$ \\
+		& $0.950$ & $4.667$ & $3.806$ & $3.411$ & $3.179$ & $3.025$ & $2.915$ & $2.832$ & $2.767$ & $2.714$ & $2.671$ \\
+		& $0.900$ & $3.136$ & $2.763$ & $2.560$ & $2.434$ & $2.347$ & $2.283$ & $2.234$ & $2.195$ & $2.164$ & $2.138$ \\
+		$14$ & $0.990$ & $8.862$ & $6.515$ & $5.564$ & $5.035$ & $4.695$ & $4.456$ & $4.278$ & $4.140$ & $4.030$ & $3.939$ \\
+		& $0.975$ & $6.298$ & $4.857$ & $4.242$ & $3.892$ & $3.663$ & $3.501$ & $3.380$ & $3.285$ & $3.209$ & $3.147$ \\
+		& $0.950$ & $4.600$ & $3.739$ & $3.344$ & $3.112$ & $2.958$ & $2.848$ & $2.764$ & $2.699$ & $2.646$ & $2.602$ \\
+		& $0.900$ & $3.102$ & $2.726$ & $2.522$ & $2.395$ & $2.307$ & $2.243$ & $2.193$ & $2.154$ & $2.122$ & $2.095$ \\
+		$15$ & $0.990$ & $8.683$ & $6.359$ & $5.417$ & $4.893$ & $4.556$ & $4.318$ & $4.142$ & $4.004$ & $3.895$ & $3.805$ \\
+		& $0.975$ & $6.200$ & $4.765$ & $4.153$ & $3.804$ & $3.576$ & $3.415$ & $3.293$ & $3.199$ & $3.123$ & $3.060$ \\
+		& $0.950$ & $4.543$ & $3.682$ & $3.287$ & $3.056$ & $2.901$ & $2.790$ & $2.707$ & $2.641$ & $2.588$ & $2.544$ \\
+		& $0.900$ & $3.073$ & $2.695$ & $2.490$ & $2.361$ & $2.273$ & $2.208$ & $2.158$ & $2.119$ & $2.086$ & $2.059$ \\
+		$16$ & $0.990$ & $8.531$ & $6.226$ & $5.292$ & $4.773$ & $4.437$ & $4.202$ & $4.026$ & $3.890$ & $3.780$ & $3.691$ \\
+		& $0.975$ & $6.115$ & $4.687$ & $4.077$ & $3.729$ & $3.502$ & $3.341$ & $3.219$ & $3.125$ & $3.049$ & $2.986$ \\
+		& $0.950$ & $4.494$ & $3.634$ & $3.239$ & $3.007$ & $2.852$ & $2.741$ & $2.657$ & $2.591$ & $2.538$ & $2.494$ \\
+		& $0.900$ & $3.048$ & $2.668$ & $2.462$ & $2.333$ & $2.244$ & $2.178$ & $2.128$ & $2.088$ & $2.055$ & $2.028$ \\
+		$17$ & $0.990$ & $8.400$ & $6.112$ & $5.185$ & $4.669$ & $4.336$ & $4.101$ & $3.927$ & $3.791$ & $3.682$ & $3.593$ \\
+		& $0.975$ & $6.042$ & $4.619$ & $4.011$ & $3.665$ & $3.438$ & $3.277$ & $3.156$ & $3.061$ & $2.985$ & $2.922$ \\
+		& $0.950$ & $4.451$ & $3.592$ & $3.197$ & $2.965$ & $2.810$ & $2.699$ & $2.614$ & $2.548$ & $2.494$ & $2.450$ \\
+		& $0.900$ & $3.026$ & $2.645$ & $2.437$ & $2.308$ & $2.218$ & $2.152$ & $2.102$ & $2.061$ & $2.028$ & $2.001$ \\
+		$18$ & $0.990$ & $8.285$ & $6.013$ & $5.092$ & $4.579$ & $4.248$ & $4.015$ & $3.841$ & $3.705$ & $3.597$ & $3.508$ \\
+		& $0.975$ & $5.978$ & $4.560$ & $3.954$ & $3.608$ & $3.382$ & $3.221$ & $3.100$ & $3.005$ & $2.929$ & $2.866$ \\
+		& $0.950$ & $4.414$ & $3.555$ & $3.160$ & $2.928$ & $2.773$ & $2.661$ & $2.577$ & $2.510$ & $2.456$ & $2.412$ \\
+		& $0.900$ & $3.007$ & $2.624$ & $2.416$ & $2.286$ & $2.196$ & $2.130$ & $2.079$ & $2.038$ & $2.005$ & $1.977$ \\
+		$19$ & $0.990$ & $8.185$ & $5.926$ & $5.010$ & $4.500$ & $4.171$ & $3.939$ & $3.765$ & $3.631$ & $3.523$ & $3.434$ \\
+		& $0.975$ & $5.922$ & $4.508$ & $3.903$ & $3.559$ & $3.333$ & $3.172$ & $3.051$ & $2.956$ & $2.880$ & $2.817$ \\
+		& $0.950$ & $4.381$ & $3.522$ & $3.127$ & $2.895$ & $2.740$ & $2.628$ & $2.544$ & $2.477$ & $2.423$ & $2.378$ \\
+		& $0.900$ & $2.990$ & $2.606$ & $2.397$ & $2.266$ & $2.176$ & $2.109$ & $2.058$ & $2.017$ & $1.984$ & $1.956$ \\
+		$20$ & $0.990$ & $8.096$ & $5.849$ & $4.938$ & $4.431$ & $4.103$ & $3.871$ & $3.699$ & $3.564$ & $3.457$ & $3.368$ \\
+		& $0.975$ & $5.871$ & $4.461$ & $3.859$ & $3.515$ & $3.289$ & $3.128$ & $3.007$ & $2.913$ & $2.837$ & $2.774$ \\
+		& $0.950$ & $4.351$ & $3.493$ & $3.098$ & $2.866$ & $2.711$ & $2.599$ & $2.514$ & $2.447$ & $2.393$ & $2.348$ \\
+		& $0.900$ & $2.975$ & $2.589$ & $2.380$ & $2.249$ & $2.158$ & $2.091$ & $2.040$ & $1.999$ & $1.965$ & $1.937$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$11-20$, m:$1-10$}
+\end{table}
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $11$ & $12$ & $13$ & $14$ & $15$ & $16$ & $17$ & $18$ & $19$ & $20$\\
+		\hline
+		$11$ & $0.990$ & $4.462$ & $4.397$ & $4.342$ & $4.293$ & $4.251$ & $4.213$ & $4.180$ & $4.150$ & $4.123$ & $4.099$ \\
+		& $0.975$ & $3.474$ & $3.430$ & $3.392$ & $3.359$ & $3.330$ & $3.304$ & $3.282$ & $3.261$ & $3.243$ & $3.226$ \\
+		& $0.950$ & $2.818$ & $2.788$ & $2.761$ & $2.739$ & $2.719$ & $2.701$ & $2.685$ & $2.671$ & $2.658$ & $2.646$ \\
+		& $0.900$ & $2.227$ & $2.209$ & $2.193$ & $2.179$ & $2.167$ & $2.156$ & $2.147$ & $2.138$ & $2.130$ & $2.123$ \\
+		$12$ & $0.990$ & $4.220$ & $4.155$ & $4.100$ & $4.052$ & $4.010$ & $3.972$ & $3.939$ & $3.910$ & $3.883$ & $3.858$ \\
+		& $0.975$ & $3.321$ & $3.277$ & $3.239$ & $3.206$ & $3.177$ & $3.152$ & $3.129$ & $3.108$ & $3.090$ & $3.073$ \\
+		& $0.950$ & $2.717$ & $2.687$ & $2.660$ & $2.637$ & $2.617$ & $2.599$ & $2.583$ & $2.568$ & $2.555$ & $2.544$ \\
+		& $0.900$ & $2.166$ & $2.147$ & $2.131$ & $2.117$ & $2.105$ & $2.094$ & $2.084$ & $2.075$ & $2.067$ & $2.060$ \\
+		$13$ & $0.990$ & $4.025$ & $3.960$ & $3.905$ & $3.857$ & $3.815$ & $3.778$ & $3.745$ & $3.716$ & $3.689$ & $3.665$ \\
+		& $0.975$ & $3.197$ & $3.153$ & $3.115$ & $3.082$ & $3.053$ & $3.027$ & $3.004$ & $2.983$ & $2.965$ & $2.948$ \\
+		& $0.950$ & $2.635$ & $2.604$ & $2.577$ & $2.554$ & $2.533$ & $2.515$ & $2.499$ & $2.484$ & $2.471$ & $2.459$ \\
+		& $0.900$ & $2.116$ & $2.097$ & $2.080$ & $2.066$ & $2.053$ & $2.042$ & $2.032$ & $2.023$ & $2.014$ & $2.007$ \\
+		$14$ & $0.990$ & $3.864$ & $3.800$ & $3.745$ & $3.698$ & $3.656$ & $3.619$ & $3.586$ & $3.556$ & $3.529$ & $3.505$ \\
+		& $0.975$ & $3.095$ & $3.050$ & $3.012$ & $2.979$ & $2.949$ & $2.923$ & $2.900$ & $2.879$ & $2.861$ & $2.844$ \\
+		& $0.950$ & $2.565$ & $2.534$ & $2.507$ & $2.484$ & $2.463$ & $2.445$ & $2.428$ & $2.413$ & $2.400$ & $2.388$ \\
+		& $0.900$ & $2.073$ & $2.054$ & $2.037$ & $2.022$ & $2.010$ & $1.998$ & $1.988$ & $1.978$ & $1.970$ & $1.962$ \\
+		$15$ & $0.990$ & $3.730$ & $3.666$ & $3.612$ & $3.564$ & $3.522$ & $3.485$ & $3.452$ & $3.423$ & $3.396$ & $3.372$ \\
+		& $0.975$ & $3.008$ & $2.963$ & $2.925$ & $2.891$ & $2.862$ & $2.836$ & $2.813$ & $2.792$ & $2.773$ & $2.756$ \\
+		& $0.950$ & $2.507$ & $2.475$ & $2.448$ & $2.424$ & $2.403$ & $2.385$ & $2.368$ & $2.353$ & $2.340$ & $2.328$ \\
+		& $0.900$ & $2.037$ & $2.017$ & $2.000$ & $1.985$ & $1.972$ & $1.961$ & $1.950$ & $1.941$ & $1.932$ & $1.924$ \\
+		$16$ & $0.990$ & $3.616$ & $3.553$ & $3.498$ & $3.451$ & $3.409$ & $3.372$ & $3.339$ & $3.310$ & $3.283$ & $3.259$ \\
+		& $0.975$ & $2.934$ & $2.889$ & $2.851$ & $2.817$ & $2.788$ & $2.761$ & $2.738$ & $2.717$ & $2.698$ & $2.681$ \\
+		& $0.950$ & $2.456$ & $2.425$ & $2.397$ & $2.373$ & $2.352$ & $2.333$ & $2.317$ & $2.302$ & $2.288$ & $2.276$ \\
+		& $0.900$ & $2.005$ & $1.985$ & $1.968$ & $1.953$ & $1.940$ & $1.928$ & $1.917$ & $1.908$ & $1.899$ & $1.891$ \\
+		$17$ & $0.990$ & $3.518$ & $3.455$ & $3.401$ & $3.353$ & $3.312$ & $3.275$ & $3.242$ & $3.212$ & $3.186$ & $3.162$ \\
+		& $0.975$ & $2.870$ & $2.825$ & $2.786$ & $2.753$ & $2.723$ & $2.697$ & $2.673$ & $2.652$ & $2.633$ & $2.616$ \\
+		& $0.950$ & $2.413$ & $2.381$ & $2.353$ & $2.329$ & $2.308$ & $2.289$ & $2.272$ & $2.257$ & $2.243$ & $2.230$ \\
+		& $0.900$ & $1.978$ & $1.958$ & $1.940$ & $1.925$ & $1.912$ & $1.900$ & $1.889$ & $1.879$ & $1.870$ & $1.862$ \\
+		$18$ & $0.990$ & $3.434$ & $3.371$ & $3.316$ & $3.269$ & $3.227$ & $3.190$ & $3.158$ & $3.128$ & $3.101$ & $3.077$ \\
+		& $0.975$ & $2.814$ & $2.769$ & $2.730$ & $2.696$ & $2.667$ & $2.640$ & $2.617$ & $2.596$ & $2.576$ & $2.559$ \\
+		& $0.950$ & $2.374$ & $2.342$ & $2.314$ & $2.290$ & $2.269$ & $2.250$ & $2.233$ & $2.217$ & $2.203$ & $2.191$ \\
+		& $0.900$ & $1.954$ & $1.933$ & $1.916$ & $1.900$ & $1.887$ & $1.875$ & $1.864$ & $1.854$ & $1.845$ & $1.837$ \\
+		$19$ & $0.990$ & $3.360$ & $3.297$ & $3.242$ & $3.195$ & $3.153$ & $3.116$ & $3.084$ & $3.054$ & $3.027$ & $3.003$ \\
+		& $0.975$ & $2.765$ & $2.720$ & $2.681$ & $2.647$ & $2.617$ & $2.591$ & $2.567$ & $2.546$ & $2.526$ & $2.509$ \\
+		& $0.950$ & $2.340$ & $2.308$ & $2.280$ & $2.256$ & $2.234$ & $2.215$ & $2.198$ & $2.182$ & $2.168$ & $2.155$ \\
+		& $0.900$ & $1.932$ & $1.912$ & $1.894$ & $1.878$ & $1.865$ & $1.852$ & $1.841$ & $1.831$ & $1.822$ & $1.814$ \\
+		$20$ & $0.990$ & $3.294$ & $3.231$ & $3.177$ & $3.130$ & $3.088$ & $3.051$ & $3.018$ & $2.989$ & $2.962$ & $2.938$ \\
+		& $0.975$ & $2.721$ & $2.676$ & $2.637$ & $2.603$ & $2.573$ & $2.547$ & $2.523$ & $2.501$ & $2.482$ & $2.464$ \\
+		& $0.950$ & $2.310$ & $2.278$ & $2.250$ & $2.225$ & $2.203$ & $2.184$ & $2.167$ & $2.151$ & $2.137$ & $2.124$ \\
+		& $0.900$ & $1.913$ & $1.892$ & $1.875$ & $1.859$ & $1.845$ & $1.833$ & $1.821$ & $1.811$ & $1.802$ & $1.794$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$11-20$, m:$11-20$}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $25$ & $30$ & $40$ & $50$ & $60$ & $80$ & $100$ & $200$ & $500$ & $\infty$\\
+		\hline
+		$11$ & $0.990$ & $4.005$ & $3.941$ & $3.860$ & $3.810$ & $3.776$ & $3.734$ & $3.708$ & $3.656$ & $3.624$ & $3.603$ \\
+		& $0.975$ & $3.162$ & $3.118$ & $3.061$ & $3.027$ & $3.004$ & $2.974$ & $2.956$ & $2.920$ & $2.898$ & $2.883$ \\
+		& $0.950$ & $2.601$ & $2.570$ & $2.531$ & $2.507$ & $2.490$ & $2.469$ & $2.457$ & $2.431$ & $2.415$ & $2.405$ \\
+		& $0.900$ & $2.095$ & $2.076$ & $2.052$ & $2.036$ & $2.026$ & $2.013$ & $2.005$ & $1.989$ & $1.979$ & $1.972$ \\
+		$12$ & $0.990$ & $3.765$ & $3.701$ & $3.619$ & $3.569$ & $3.535$ & $3.493$ & $3.467$ & $3.414$ & $3.382$ & $3.361$ \\
+		& $0.975$ & $3.008$ & $2.963$ & $2.906$ & $2.871$ & $2.848$ & $2.818$ & $2.800$ & $2.763$ & $2.740$ & $2.725$ \\
+		& $0.950$ & $2.498$ & $2.466$ & $2.426$ & $2.401$ & $2.384$ & $2.363$ & $2.350$ & $2.323$ & $2.307$ & $2.296$ \\
+		& $0.900$ & $2.031$ & $2.011$ & $1.986$ & $1.970$ & $1.960$ & $1.946$ & $1.938$ & $1.921$ & $1.911$ & $1.904$ \\
+		$13$ & $0.990$ & $3.571$ & $3.507$ & $3.425$ & $3.375$ & $3.341$ & $3.298$ & $3.272$ & $3.219$ & $3.187$ & $3.165$ \\
+		& $0.975$ & $2.882$ & $2.837$ & $2.780$ & $2.744$ & $2.720$ & $2.690$ & $2.671$ & $2.634$ & $2.611$ & $2.596$ \\
+		& $0.950$ & $2.412$ & $2.380$ & $2.339$ & $2.314$ & $2.297$ & $2.275$ & $2.261$ & $2.234$ & $2.218$ & $2.206$ \\
+		& $0.900$ & $1.978$ & $1.958$ & $1.931$ & $1.915$ & $1.904$ & $1.890$ & $1.882$ & $1.864$ & $1.853$ & $1.846$ \\
+		$14$ & $0.990$ & $3.412$ & $3.348$ & $3.266$ & $3.215$ & $3.181$ & $3.138$ & $3.112$ & $3.059$ & $3.026$ & $3.004$ \\
+		& $0.975$ & $2.778$ & $2.732$ & $2.674$ & $2.638$ & $2.614$ & $2.583$ & $2.565$ & $2.526$ & $2.503$ & $2.487$ \\
+		& $0.950$ & $2.341$ & $2.308$ & $2.266$ & $2.241$ & $2.223$ & $2.201$ & $2.187$ & $2.159$ & $2.142$ & $2.131$ \\
+		& $0.900$ & $1.933$ & $1.912$ & $1.885$ & $1.869$ & $1.857$ & $1.843$ & $1.834$ & $1.816$ & $1.805$ & $1.797$ \\
+		$15$ & $0.990$ & $3.278$ & $3.214$ & $3.132$ & $3.081$ & $3.047$ & $3.004$ & $2.977$ & $2.923$ & $2.891$ & $2.869$ \\
+		& $0.975$ & $2.689$ & $2.644$ & $2.585$ & $2.549$ & $2.524$ & $2.493$ & $2.474$ & $2.435$ & $2.411$ & $2.395$ \\
+		& $0.950$ & $2.280$ & $2.247$ & $2.204$ & $2.178$ & $2.160$ & $2.137$ & $2.123$ & $2.095$ & $2.078$ & $2.066$ \\
+		& $0.900$ & $1.894$ & $1.873$ & $1.845$ & $1.828$ & $1.817$ & $1.802$ & $1.793$ & $1.774$ & $1.763$ & $1.755$ \\
+		$16$ & $0.990$ & $3.165$ & $3.101$ & $3.018$ & $2.967$ & $2.933$ & $2.889$ & $2.863$ & $2.808$ & $2.775$ & $2.753$ \\
+		& $0.975$ & $2.614$ & $2.568$ & $2.509$ & $2.472$ & $2.447$ & $2.415$ & $2.396$ & $2.357$ & $2.333$ & $2.316$ \\
+		& $0.950$ & $2.227$ & $2.194$ & $2.151$ & $2.124$ & $2.106$ & $2.083$ & $2.068$ & $2.039$ & $2.022$ & $2.010$ \\
+		& $0.900$ & $1.860$ & $1.839$ & $1.811$ & $1.793$ & $1.782$ & $1.766$ & $1.757$ & $1.738$ & $1.726$ & $1.718$ \\
+		$17$ & $0.990$ & $3.068$ & $3.003$ & $2.920$ & $2.869$ & $2.835$ & $2.791$ & $2.764$ & $2.709$ & $2.676$ & $2.653$ \\
+		& $0.975$ & $2.548$ & $2.502$ & $2.442$ & $2.405$ & $2.380$ & $2.348$ & $2.329$ & $2.289$ & $2.264$ & $2.248$ \\
+		& $0.950$ & $2.181$ & $2.148$ & $2.104$ & $2.077$ & $2.058$ & $2.035$ & $2.020$ & $1.991$ & $1.973$ & $1.960$ \\
+		& $0.900$ & $1.831$ & $1.809$ & $1.781$ & $1.763$ & $1.751$ & $1.735$ & $1.726$ & $1.706$ & $1.694$ & $1.686$ \\
+		$18$ & $0.990$ & $2.983$ & $2.919$ & $2.835$ & $2.784$ & $2.749$ & $2.705$ & $2.678$ & $2.623$ & $2.589$ & $2.566$ \\
+		& $0.975$ & $2.491$ & $2.445$ & $2.384$ & $2.347$ & $2.321$ & $2.289$ & $2.269$ & $2.229$ & $2.204$ & $2.187$ \\
+		& $0.950$ & $2.141$ & $2.107$ & $2.063$ & $2.035$ & $2.017$ & $1.993$ & $1.978$ & $1.948$ & $1.929$ & $1.917$ \\
+		& $0.900$ & $1.805$ & $1.783$ & $1.754$ & $1.736$ & $1.723$ & $1.707$ & $1.698$ & $1.678$ & $1.665$ & $1.657$ \\
+		$19$ & $0.990$ & $2.909$ & $2.844$ & $2.761$ & $2.709$ & $2.674$ & $2.630$ & $2.602$ & $2.547$ & $2.512$ & $2.489$ \\
+		& $0.975$ & $2.441$ & $2.394$ & $2.333$ & $2.295$ & $2.270$ & $2.237$ & $2.217$ & $2.176$ & $2.150$ & $2.133$ \\
+		& $0.950$ & $2.106$ & $2.071$ & $2.026$ & $1.999$ & $1.980$ & $1.955$ & $1.940$ & $1.910$ & $1.891$ & $1.878$ \\
+		& $0.900$ & $1.782$ & $1.759$ & $1.730$ & $1.711$ & $1.699$ & $1.683$ & $1.673$ & $1.652$ & $1.639$ & $1.631$ \\
+		$20$ & $0.990$ & $2.843$ & $2.778$ & $2.695$ & $2.643$ & $2.608$ & $2.563$ & $2.535$ & $2.479$ & $2.445$ & $2.421$ \\
+		& $0.975$ & $2.396$ & $2.349$ & $2.287$ & $2.249$ & $2.223$ & $2.190$ & $2.170$ & $2.128$ & $2.103$ & $2.085$ \\
+		& $0.950$ & $2.074$ & $2.039$ & $1.994$ & $1.966$ & $1.946$ & $1.922$ & $1.907$ & $1.875$ & $1.856$ & $1.843$ \\
+		& $0.900$ & $1.761$ & $1.738$ & $1.708$ & $1.690$ & $1.677$ & $1.660$ & $1.650$ & $1.629$ & $1.616$ & $1.607$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$11-20$, m:$25-\infty$}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $9$ & $10$\\
+		\hline
+		$25$ & $0.990$ & $7.770$ & $5.568$ & $4.675$ & $4.177$ & $3.855$ & $3.627$ & $3.457$ & $3.324$ & $3.217$ & $3.129$ \\
+		& $0.975$ & $5.686$ & $4.291$ & $3.694$ & $3.353$ & $3.129$ & $2.969$ & $2.848$ & $2.753$ & $2.677$ & $2.613$ \\
+		& $0.950$ & $4.242$ & $3.385$ & $2.991$ & $2.759$ & $2.603$ & $2.490$ & $2.405$ & $2.337$ & $2.282$ & $2.236$ \\
+		& $0.900$ & $2.918$ & $2.528$ & $2.317$ & $2.184$ & $2.092$ & $2.024$ & $1.971$ & $1.929$ & $1.895$ & $1.866$ \\
+		$30$ & $0.990$ & $7.562$ & $5.390$ & $4.510$ & $4.018$ & $3.699$ & $3.473$ & $3.305$ & $3.173$ & $3.067$ & $2.979$ \\
+		& $0.975$ & $5.568$ & $4.182$ & $3.589$ & $3.250$ & $3.026$ & $2.867$ & $2.746$ & $2.651$ & $2.575$ & $2.511$ \\
+		& $0.950$ & $4.171$ & $3.316$ & $2.922$ & $2.690$ & $2.534$ & $2.421$ & $2.334$ & $2.266$ & $2.211$ & $2.165$ \\
+		& $0.900$ & $2.881$ & $2.489$ & $2.276$ & $2.142$ & $2.049$ & $1.980$ & $1.927$ & $1.884$ & $1.849$ & $1.819$ \\
+		$40$ & $0.990$ & $7.314$ & $5.178$ & $4.313$ & $3.828$ & $3.514$ & $3.291$ & $3.124$ & $2.993$ & $2.888$ & $2.801$ \\
+		& $0.975$ & $5.424$ & $4.051$ & $3.463$ & $3.126$ & $2.904$ & $2.744$ & $2.624$ & $2.529$ & $2.452$ & $2.388$ \\
+		& $0.950$ & $4.085$ & $3.232$ & $2.839$ & $2.606$ & $2.449$ & $2.336$ & $2.249$ & $2.180$ & $2.124$ & $2.077$ \\
+		& $0.900$ & $2.835$ & $2.440$ & $2.226$ & $2.091$ & $1.997$ & $1.927$ & $1.873$ & $1.829$ & $1.793$ & $1.763$ \\
+		$50$ & $0.990$ & $7.171$ & $5.057$ & $4.199$ & $3.720$ & $3.408$ & $3.186$ & $3.020$ & $2.890$ & $2.785$ & $2.698$ \\
+		& $0.975$ & $5.340$ & $3.975$ & $3.390$ & $3.054$ & $2.833$ & $2.674$ & $2.553$ & $2.458$ & $2.381$ & $2.317$ \\
+		& $0.950$ & $4.034$ & $3.183$ & $2.790$ & $2.557$ & $2.400$ & $2.286$ & $2.199$ & $2.130$ & $2.073$ & $2.026$ \\
+		& $0.900$ & $2.809$ & $2.412$ & $2.197$ & $2.061$ & $1.966$ & $1.895$ & $1.840$ & $1.796$ & $1.760$ & $1.729$ \\
+		$60$ & $0.990$ & $7.077$ & $4.977$ & $4.126$ & $3.649$ & $3.339$ & $3.119$ & $2.953$ & $2.823$ & $2.718$ & $2.632$ \\
+		& $0.975$ & $5.286$ & $3.925$ & $3.343$ & $3.008$ & $2.786$ & $2.627$ & $2.507$ & $2.412$ & $2.334$ & $2.270$ \\
+		& $0.950$ & $4.001$ & $3.150$ & $2.758$ & $2.525$ & $2.368$ & $2.254$ & $2.167$ & $2.097$ & $2.040$ & $1.993$ \\
+		& $0.900$ & $2.791$ & $2.393$ & $2.177$ & $2.041$ & $1.946$ & $1.875$ & $1.819$ & $1.775$ & $1.738$ & $1.707$ \\
+		$80$ & $0.990$ & $6.963$ & $4.881$ & $4.036$ & $3.563$ & $3.255$ & $3.036$ & $2.871$ & $2.742$ & $2.637$ & $2.551$ \\
+		& $0.975$ & $5.218$ & $3.864$ & $3.284$ & $2.950$ & $2.730$ & $2.571$ & $2.450$ & $2.355$ & $2.277$ & $2.213$ \\
+		& $0.950$ & $3.960$ & $3.111$ & $2.719$ & $2.486$ & $2.329$ & $2.214$ & $2.126$ & $2.056$ & $1.999$ & $1.951$ \\
+		& $0.900$ & $2.769$ & $2.370$ & $2.154$ & $2.016$ & $1.921$ & $1.849$ & $1.793$ & $1.748$ & $1.711$ & $1.680$ \\
+		$100$ & $0.990$ & $6.895$ & $4.824$ & $3.984$ & $3.513$ & $3.206$ & $2.988$ & $2.823$ & $2.694$ & $2.590$ & $2.503$ \\
+		& $0.975$ & $5.179$ & $3.828$ & $3.250$ & $2.917$ & $2.696$ & $2.537$ & $2.417$ & $2.321$ & $2.244$ & $2.179$ \\
+		& $0.950$ & $3.936$ & $3.087$ & $2.696$ & $2.463$ & $2.305$ & $2.191$ & $2.103$ & $2.032$ & $1.975$ & $1.927$ \\
+		& $0.900$ & $2.756$ & $2.356$ & $2.139$ & $2.002$ & $1.906$ & $1.834$ & $1.778$ & $1.732$ & $1.695$ & $1.663$ \\
+		$200$ & $0.990$ & $6.763$ & $4.713$ & $3.881$ & $3.414$ & $3.110$ & $2.893$ & $2.730$ & $2.601$ & $2.497$ & $2.411$ \\
+		& $0.975$ & $5.100$ & $3.758$ & $3.182$ & $2.850$ & $2.630$ & $2.472$ & $2.351$ & $2.256$ & $2.178$ & $2.113$ \\
+		& $0.950$ & $3.888$ & $3.041$ & $2.650$ & $2.417$ & $2.259$ & $2.144$ & $2.056$ & $1.985$ & $1.927$ & $1.878$ \\
+		& $0.900$ & $2.731$ & $2.329$ & $2.111$ & $1.973$ & $1.876$ & $1.804$ & $1.747$ & $1.701$ & $1.663$ & $1.631$ \\
+		$500$ & $0.990$ & $6.686$ & $4.648$ & $3.821$ & $3.357$ & $3.054$ & $2.838$ & $2.675$ & $2.547$ & $2.443$ & $2.356$ \\
+		& $0.975$ & $5.054$ & $3.716$ & $3.142$ & $2.811$ & $2.592$ & $2.434$ & $2.313$ & $2.217$ & $2.139$ & $2.074$ \\
+		& $0.950$ & $3.860$ & $3.014$ & $2.623$ & $2.390$ & $2.232$ & $2.117$ & $2.028$ & $1.957$ & $1.899$ & $1.850$ \\
+		& $0.900$ & $2.716$ & $2.313$ & $2.095$ & $1.956$ & $1.859$ & $1.786$ & $1.729$ & $1.683$ & $1.644$ & $1.612$ \\
+		$\infty$ & $0.990$ & $6.635$ & $4.605$ & $3.782$ & $3.319$ & $3.017$ & $2.802$ & $2.639$ & $2.511$ & $2.407$ & $2.321$ \\
+		& $0.975$ & $5.024$ & $3.689$ & $3.116$ & $2.786$ & $2.567$ & $2.408$ & $2.288$ & $2.192$ & $2.114$ & $2.048$ \\
+		& $0.950$ & $3.841$ & $2.996$ & $2.605$ & $2.372$ & $2.214$ & $2.099$ & $2.010$ & $1.938$ & $1.880$ & $1.831$ \\
+		& $0.900$ & $2.706$ & $2.303$ & $2.084$ & $1.945$ & $1.847$ & $1.774$ & $1.717$ & $1.670$ & $1.632$ & $1.599$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$25-\infty$, m:$1-10$}
+\end{table}
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $11$ & $12$ & $13$ & $14$ & $15$ & $16$ & $17$ & $18$ & $19$ & $20$\\
+		\hline
+		$25$ & $0.990$ & $3.056$ & $2.993$ & $2.939$ & $2.892$ & $2.850$ & $2.813$ & $2.780$ & $2.751$ & $2.724$ & $2.699$ \\
+		& $0.975$ & $2.560$ & $2.515$ & $2.476$ & $2.441$ & $2.411$ & $2.384$ & $2.360$ & $2.338$ & $2.318$ & $2.300$ \\
+		& $0.950$ & $2.198$ & $2.165$ & $2.136$ & $2.111$ & $2.089$ & $2.069$ & $2.051$ & $2.035$ & $2.021$ & $2.007$ \\
+		& $0.900$ & $1.841$ & $1.820$ & $1.802$ & $1.785$ & $1.771$ & $1.758$ & $1.746$ & $1.736$ & $1.726$ & $1.718$ \\
+		$30$ & $0.990$ & $2.906$ & $2.843$ & $2.789$ & $2.742$ & $2.700$ & $2.663$ & $2.630$ & $2.600$ & $2.573$ & $2.549$ \\
+		& $0.975$ & $2.458$ & $2.412$ & $2.372$ & $2.338$ & $2.307$ & $2.280$ & $2.255$ & $2.233$ & $2.213$ & $2.195$ \\
+		& $0.950$ & $2.126$ & $2.092$ & $2.063$ & $2.037$ & $2.015$ & $1.995$ & $1.976$ & $1.960$ & $1.945$ & $1.932$ \\
+		& $0.900$ & $1.794$ & $1.773$ & $1.754$ & $1.737$ & $1.722$ & $1.709$ & $1.697$ & $1.686$ & $1.676$ & $1.667$ \\
+		$40$ & $0.990$ & $2.727$ & $2.665$ & $2.611$ & $2.563$ & $2.522$ & $2.484$ & $2.451$ & $2.421$ & $2.394$ & $2.369$ \\
+		& $0.975$ & $2.334$ & $2.288$ & $2.248$ & $2.213$ & $2.182$ & $2.154$ & $2.129$ & $2.107$ & $2.086$ & $2.068$ \\
+		& $0.950$ & $2.038$ & $2.003$ & $1.974$ & $1.948$ & $1.924$ & $1.904$ & $1.885$ & $1.868$ & $1.853$ & $1.839$ \\
+		& $0.900$ & $1.737$ & $1.715$ & $1.695$ & $1.678$ & $1.662$ & $1.649$ & $1.636$ & $1.625$ & $1.615$ & $1.605$ \\
+		$50$ & $0.990$ & $2.625$ & $2.563$ & $2.508$ & $2.461$ & $2.419$ & $2.382$ & $2.348$ & $2.318$ & $2.290$ & $2.265$ \\
+		& $0.975$ & $2.263$ & $2.216$ & $2.176$ & $2.140$ & $2.109$ & $2.081$ & $2.056$ & $2.033$ & $2.012$ & $1.993$ \\
+		& $0.950$ & $1.986$ & $1.952$ & $1.921$ & $1.895$ & $1.871$ & $1.850$ & $1.831$ & $1.814$ & $1.798$ & $1.784$ \\
+		& $0.900$ & $1.703$ & $1.680$ & $1.660$ & $1.643$ & $1.627$ & $1.613$ & $1.600$ & $1.588$ & $1.578$ & $1.568$ \\
+		$60$ & $0.990$ & $2.559$ & $2.496$ & $2.442$ & $2.394$ & $2.352$ & $2.315$ & $2.281$ & $2.251$ & $2.223$ & $2.198$ \\
+		& $0.975$ & $2.216$ & $2.169$ & $2.129$ & $2.093$ & $2.061$ & $2.033$ & $2.008$ & $1.985$ & $1.964$ & $1.944$ \\
+		& $0.950$ & $1.952$ & $1.917$ & $1.887$ & $1.860$ & $1.836$ & $1.815$ & $1.796$ & $1.778$ & $1.763$ & $1.748$ \\
+		& $0.900$ & $1.680$ & $1.657$ & $1.637$ & $1.619$ & $1.603$ & $1.589$ & $1.576$ & $1.564$ & $1.553$ & $1.543$ \\
+		$80$ & $0.990$ & $2.478$ & $2.415$ & $2.361$ & $2.313$ & $2.271$ & $2.233$ & $2.199$ & $2.169$ & $2.141$ & $2.115$ \\
+		& $0.975$ & $2.158$ & $2.111$ & $2.071$ & $2.035$ & $2.003$ & $1.974$ & $1.948$ & $1.925$ & $1.904$ & $1.884$ \\
+		& $0.950$ & $1.910$ & $1.875$ & $1.845$ & $1.817$ & $1.793$ & $1.772$ & $1.752$ & $1.734$ & $1.718$ & $1.703$ \\
+		& $0.900$ & $1.653$ & $1.629$ & $1.609$ & $1.590$ & $1.574$ & $1.559$ & $1.546$ & $1.534$ & $1.523$ & $1.513$ \\
+		$100$ & $0.990$ & $2.430$ & $2.368$ & $2.313$ & $2.265$ & $2.223$ & $2.185$ & $2.151$ & $2.120$ & $2.092$ & $2.067$ \\
+		& $0.975$ & $2.124$ & $2.077$ & $2.036$ & $2.000$ & $1.968$ & $1.939$ & $1.913$ & $1.890$ & $1.868$ & $1.849$ \\
+		& $0.950$ & $1.886$ & $1.850$ & $1.819$ & $1.792$ & $1.768$ & $1.746$ & $1.726$ & $1.708$ & $1.691$ & $1.676$ \\
+		& $0.900$ & $1.636$ & $1.612$ & $1.592$ & $1.573$ & $1.557$ & $1.542$ & $1.528$ & $1.516$ & $1.505$ & $1.494$ \\
+		$200$ & $0.990$ & $2.338$ & $2.275$ & $2.220$ & $2.172$ & $2.129$ & $2.091$ & $2.057$ & $2.026$ & $1.997$ & $1.971$ \\
+		& $0.975$ & $2.058$ & $2.010$ & $1.969$ & $1.932$ & $1.900$ & $1.870$ & $1.844$ & $1.820$ & $1.798$ & $1.778$ \\
+		& $0.950$ & $1.837$ & $1.801$ & $1.769$ & $1.742$ & $1.717$ & $1.694$ & $1.674$ & $1.656$ & $1.639$ & $1.623$ \\
+		& $0.900$ & $1.603$ & $1.579$ & $1.558$ & $1.539$ & $1.522$ & $1.507$ & $1.493$ & $1.480$ & $1.468$ & $1.458$ \\
+		$500$ & $0.990$ & $2.283$ & $2.220$ & $2.166$ & $2.117$ & $2.075$ & $2.036$ & $2.002$ & $1.970$ & $1.942$ & $1.915$ \\
+		& $0.975$ & $2.019$ & $1.971$ & $1.929$ & $1.892$ & $1.859$ & $1.830$ & $1.803$ & $1.779$ & $1.757$ & $1.736$ \\
+		& $0.950$ & $1.808$ & $1.772$ & $1.740$ & $1.712$ & $1.686$ & $1.664$ & $1.643$ & $1.625$ & $1.607$ & $1.592$ \\
+		& $0.900$ & $1.583$ & $1.559$ & $1.537$ & $1.518$ & $1.501$ & $1.485$ & $1.471$ & $1.458$ & $1.446$ & $1.435$ \\
+		$\infty$ & $0.990$ & $2.248$ & $2.185$ & $2.130$ & $2.082$ & $2.039$ & $2.000$ & $1.965$ & $1.934$ & $1.905$ & $1.878$ \\
+		& $0.975$ & $1.993$ & $1.945$ & $1.903$ & $1.866$ & $1.833$ & $1.803$ & $1.776$ & $1.751$ & $1.729$ & $1.708$ \\
+		& $0.950$ & $1.789$ & $1.752$ & $1.720$ & $1.692$ & $1.666$ & $1.644$ & $1.623$ & $1.604$ & $1.587$ & $1.571$ \\
+		& $0.900$ & $1.570$ & $1.546$ & $1.524$ & $1.505$ & $1.487$ & $1.471$ & $1.457$ & $1.444$ & $1.432$ & $1.421$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$25-\infty$, m:$11-20$}
+\end{table}
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c | c | c c c c c c c c c c}
+		& & \multicolumn{10}{c}{m}\\
+		\cline{3-12}
+		n & q & $25$ & $30$ & $40$ & $50$ & $60$ & $80$ & $100$ & $200$ & $500$ & $\infty$\\
+		\hline
+		$25$ & $0.990$ & $2.604$ & $2.538$ & $2.453$ & $2.400$ & $2.364$ & $2.317$ & $2.289$ & $2.230$ & $2.194$ & $2.170$ \\
+		& $0.975$ & $2.230$ & $2.182$ & $2.118$ & $2.079$ & $2.052$ & $2.017$ & $1.996$ & $1.952$ & $1.924$ & $1.906$ \\
+		& $0.950$ & $1.955$ & $1.919$ & $1.872$ & $1.842$ & $1.822$ & $1.796$ & $1.779$ & $1.746$ & $1.725$ & $1.711$ \\
+		& $0.900$ & $1.683$ & $1.659$ & $1.627$ & $1.607$ & $1.593$ & $1.576$ & $1.565$ & $1.542$ & $1.527$ & $1.518$ \\
+		$30$ & $0.990$ & $2.453$ & $2.386$ & $2.299$ & $2.245$ & $2.208$ & $2.160$ & $2.131$ & $2.070$ & $2.032$ & $2.006$ \\
+		& $0.975$ & $2.124$ & $2.074$ & $2.009$ & $1.968$ & $1.940$ & $1.904$ & $1.882$ & $1.835$ & $1.806$ & $1.787$ \\
+		& $0.950$ & $1.878$ & $1.841$ & $1.792$ & $1.761$ & $1.740$ & $1.712$ & $1.695$ & $1.660$ & $1.637$ & $1.622$ \\
+		& $0.900$ & $1.632$ & $1.606$ & $1.573$ & $1.552$ & $1.538$ & $1.519$ & $1.507$ & $1.482$ & $1.467$ & $1.456$ \\
+		$40$ & $0.990$ & $2.271$ & $2.203$ & $2.114$ & $2.058$ & $2.019$ & $1.969$ & $1.938$ & $1.874$ & $1.833$ & $1.805$ \\
+		& $0.975$ & $1.994$ & $1.943$ & $1.875$ & $1.832$ & $1.803$ & $1.764$ & $1.741$ & $1.691$ & $1.659$ & $1.637$ \\
+		& $0.950$ & $1.783$ & $1.744$ & $1.693$ & $1.660$ & $1.637$ & $1.608$ & $1.589$ & $1.551$ & $1.526$ & $1.509$ \\
+		& $0.900$ & $1.568$ & $1.541$ & $1.506$ & $1.483$ & $1.467$ & $1.447$ & $1.434$ & $1.406$ & $1.389$ & $1.377$ \\
+		$50$ & $0.990$ & $2.167$ & $2.098$ & $2.007$ & $1.949$ & $1.909$ & $1.857$ & $1.825$ & $1.757$ & $1.713$ & $1.683$ \\
+		& $0.975$ & $1.919$ & $1.866$ & $1.796$ & $1.752$ & $1.721$ & $1.681$ & $1.656$ & $1.603$ & $1.569$ & $1.545$ \\
+		& $0.950$ & $1.727$ & $1.687$ & $1.634$ & $1.599$ & $1.576$ & $1.544$ & $1.525$ & $1.484$ & $1.457$ & $1.438$ \\
+		& $0.900$ & $1.529$ & $1.502$ & $1.465$ & $1.441$ & $1.424$ & $1.402$ & $1.388$ & $1.359$ & $1.340$ & $1.327$ \\
+		$60$ & $0.990$ & $2.098$ & $2.028$ & $1.936$ & $1.877$ & $1.836$ & $1.783$ & $1.749$ & $1.678$ & $1.633$ & $1.601$ \\
+		& $0.975$ & $1.869$ & $1.815$ & $1.744$ & $1.699$ & $1.667$ & $1.625$ & $1.599$ & $1.543$ & $1.507$ & $1.482$ \\
+		& $0.950$ & $1.690$ & $1.649$ & $1.594$ & $1.559$ & $1.534$ & $1.502$ & $1.481$ & $1.438$ & $1.409$ & $1.389$ \\
+		& $0.900$ & $1.504$ & $1.476$ & $1.437$ & $1.413$ & $1.395$ & $1.372$ & $1.358$ & $1.326$ & $1.306$ & $1.292$ \\
+		$80$ & $0.990$ & $2.015$ & $1.944$ & $1.849$ & $1.788$ & $1.746$ & $1.690$ & $1.655$ & $1.579$ & $1.530$ & $1.494$ \\
+		& $0.975$ & $1.807$ & $1.752$ & $1.679$ & $1.632$ & $1.599$ & $1.555$ & $1.527$ & $1.467$ & $1.428$ & $1.400$ \\
+		& $0.950$ & $1.644$ & $1.602$ & $1.545$ & $1.508$ & $1.482$ & $1.448$ & $1.426$ & $1.379$ & $1.347$ & $1.325$ \\
+		& $0.900$ & $1.472$ & $1.443$ & $1.403$ & $1.377$ & $1.358$ & $1.334$ & $1.318$ & $1.284$ & $1.261$ & $1.245$ \\
+		$100$ & $0.990$ & $1.965$ & $1.893$ & $1.797$ & $1.735$ & $1.692$ & $1.634$ & $1.598$ & $1.518$ & $1.466$ & $1.427$ \\
+		& $0.975$ & $1.770$ & $1.715$ & $1.640$ & $1.592$ & $1.558$ & $1.512$ & $1.483$ & $1.420$ & $1.378$ & $1.347$ \\
+		& $0.950$ & $1.616$ & $1.573$ & $1.515$ & $1.477$ & $1.450$ & $1.415$ & $1.392$ & $1.342$ & $1.308$ & $1.283$ \\
+		& $0.900$ & $1.453$ & $1.423$ & $1.382$ & $1.355$ & $1.336$ & $1.310$ & $1.293$ & $1.257$ & $1.232$ & $1.214$ \\
+		$200$ & $0.990$ & $1.868$ & $1.794$ & $1.694$ & $1.629$ & $1.583$ & $1.521$ & $1.481$ & $1.391$ & $1.328$ & $1.279$ \\
+		& $0.975$ & $1.698$ & $1.640$ & $1.562$ & $1.511$ & $1.474$ & $1.425$ & $1.393$ & $1.320$ & $1.269$ & $1.229$ \\
+		& $0.950$ & $1.561$ & $1.516$ & $1.455$ & $1.415$ & $1.386$ & $1.346$ & $1.321$ & $1.263$ & $1.221$ & $1.189$ \\
+		& $0.900$ & $1.414$ & $1.383$ & $1.339$ & $1.310$ & $1.289$ & $1.261$ & $1.242$ & $1.199$ & $1.168$ & $1.144$ \\
+		$500$ & $0.990$ & $1.810$ & $1.735$ & $1.633$ & $1.566$ & $1.517$ & $1.452$ & $1.408$ & $1.308$ & $1.232$ & $1.165$ \\
+		& $0.975$ & $1.655$ & $1.596$ & $1.515$ & $1.462$ & $1.423$ & $1.370$ & $1.336$ & $1.254$ & $1.192$ & $1.137$ \\
+		& $0.950$ & $1.528$ & $1.482$ & $1.419$ & $1.376$ & $1.345$ & $1.303$ & $1.275$ & $1.210$ & $1.159$ & $1.113$ \\
+		& $0.900$ & $1.391$ & $1.358$ & $1.313$ & $1.282$ & $1.260$ & $1.229$ & $1.209$ & $1.160$ & $1.122$ & $1.087$ \\
+		$\infty$ & $0.990$ & $1.773$ & $1.696$ & $1.592$ & $1.523$ & $1.473$ & $1.404$ & $1.358$ & $1.247$ & $1.153$ & $1.000$ \\
+		& $0.975$ & $1.626$ & $1.566$ & $1.484$ & $1.428$ & $1.388$ & $1.333$ & $1.296$ & $1.205$ & $1.128$ & $1.000$ \\
+		& $0.950$ & $1.506$ & $1.459$ & $1.394$ & $1.350$ & $1.318$ & $1.274$ & $1.243$ & $1.170$ & $1.106$ & $1.000$ \\
+		& $0.900$ & $1.375$ & $1.342$ & $1.295$ & $1.263$ & $1.240$ & $1.207$ & $1.185$ & $1.130$ & $1.082$ & $1.000$
+	\end{tabularx}
+	\caption{Critical values of the F-distribution n:$25-\infty$, m:$25-\infty$}
+	\label{tbl:FdistributionEnd}
 \end{table}
 
 \end{document}
