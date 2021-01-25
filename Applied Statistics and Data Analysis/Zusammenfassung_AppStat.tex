@@ -1501,6 +1501,7 @@ Observations with large absolute residuals have big influence. Define a new loss
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/robust_m_estimator.png}
 \end{figure}
+\noindent
 Find the regression M-estimator $\hat{\bm{\beta}}_M$ by the implicit equations
 \begin{equation*}
 	\sum_{i=1}^{n}\psi(\tilde{e}_i)\bm{x}_i = 0\quad\text{and}\quad\tilde{e}=\frac{y_i - \bm{x}_i^T\hat{\bm{\beta}}_M}{\sigma}
@@ -1537,7 +1538,7 @@ or by combination of several observations $u_k, u_l$ like
 \end{equation*}
 The same is true for the response $y$.
 
-\subsubsection{Model Selection Methods}
+\subsubsection{Model Selection Methods - Variable Selection Criteria}
 \begin{quote}
 	\textquotedblleft Plurality must never be posited without necessity\textquotedblright\\
 	\hspace*{2em} -William of Ockham
@@ -1566,6 +1567,7 @@ with $n$ being the number of operations, $\text{SS}_E$ the sum of squares of the
 
 Mallow’s $C_p$ statistic minimises the prediction error.
 
+\subsubsection{Model Selection Methods - Variable Selection Methods}
 \paragraph{Forward Selection}
 \begin{enumerate}
 	\item In the first step choose the trivial model with an intercept only
@@ -1588,7 +1590,7 @@ Mallow’s $C_p$ statistic minimises the prediction error.
 	\item Iterate until no improvement is possible by adding another explanatory variable.
 \end{enumerate}
 
-\paragraph{Forward Selection}
+\paragraph{Both Directions}
 Combination of forward selection and backward elimination
 \begin{enumerate}
 	\item In the first step choose any model
