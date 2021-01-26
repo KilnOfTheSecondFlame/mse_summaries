@@ -1717,8 +1717,8 @@ Basic idea of an experiment is, that primary and secondary variables can be vari
 \begin{itemize}
 	\item For continuous variables $x$ choose values $x_i$ without any condition; choosing $x_i$ equally spaced gives good estimates for the slope and chances to detect deviation from linearity; variance of slope is minimal if sum of squares $S_{xx}$ is maximal (choose wider range of $x$-values)
 	\item For factor variables, record the same number of $y$-values for each level
-	\item For several different variables make an effort to choose them as independent as possible
-	\begin{itemize}
+	\item For several different variables make an effort to choose them as independently as possible
+	\begin{itemize}[nosep]
 		\item For continuous variables choose an orthogonal design
 		\item For factors choose a balanced design
 	\end{itemize}
@@ -1747,11 +1747,267 @@ Basic idea of an experiment is, that primary and secondary variables can be vari
 	\item Replicates are not allowed to be measured consecutively, otherwise they are not independent
 	\item Randomise replicates despite the increased experimental effort
 \end{itemize}
-Alternative: Add more explanatory variables, but beware because many studies fail because of too extensive investigations with too few observations.
+\textbf{Alternative}: Add more explanatory variables, but beware that many studies fail because of too extensive investigations with too few observations.
 
-% TODO Design of Experiments
+\subsubsection{Design of Experiments}
+The basic principle of experiment design
+\begin{itemize}
+	\item The main question defines the response variable and the primary explanatory variables and their relevant value range
+	\item Record as many variables which might have an influence on the response as possible
+	\item Keep secondary variables constant or use them for forming blocks
+	\item All continuous explanatory variables should be orthogonal and the factors balanced
+	\item The assignment of experimental conditions to study units should be randomised
+	\item Independent replicates allow additional model validation
+\end{itemize}
 
-% TODO 13 Factorial Designs
+\subsubsection{Experimental Design}
+An experimental design is a list of experimental conditions that determine how each factor is to be varied and at which levels.
+
+\paragraph{Completely Random Design}
+\begin{itemize}[nosep]
+	\item One multi-level primary factor variable.
+	\item One or more (but always the same number) measurements are made per level
+	\item The design is processed in random order to avoid systematic effects
+\end{itemize}
+
+\paragraph{Complete Block Design}
+\begin{itemize}[nosep]
+	\item A secondary factor influences the target variable in addition to the primary factor
+	\item Every level of the primary factor is used at least once in each block
+\end{itemize}
+
+\paragraph{Complete Factorial Design}
+\begin{itemize}[nosep]
+	\item Examine $k$ factors with $L$ levels each
+	\item Design with $L^k$ measurements is needed
+	\item Often too many measurements
+\end{itemize}
+
+\paragraph{$\bm{2^k}$ Factorial Design}
+\begin{itemize}[nosep]
+	\item In screening experiments, many factors are investigated for their influence on the response variable
+	\item Examine only 2 levels (\textit{high} and \textit{low}) per factor
+\end{itemize}
+
+\paragraph{$\bm{2^k}$ Fractional Factorial Design}
+\begin{itemize}[nosep]
+	\item To save even more resources
+	\item Only a balanced part of the complete $2^k$ design is realised
+\end{itemize}
+
+\subsubsection{Plannin and Conducting a Study}
+\begin{enumerate}
+	\item \textbf{Scientific question}: Avoid situations without precise questions and hypotheses.
+	\item \textbf{Response and explanatory variables}: Find all influential factors, for example with a cause-and-effect diagram.
+	\item \textbf{Preliminary experiments}: Experience with the topic and the measurement equipment is important
+	\item \textbf{Planning}: It is worth going through the question, for example with simulated data. The evaluation of the data in relation to the main questions is clear
+	\item \textbf{Sample size}: The magnitude of the random fluctuations and the size of the expected effects has to be known.\\ Often, the question must be downsized
+	\item \textbf{Data}: It is important to keep a journal that documents the process of data acquisition and highlights any peculiarities and unforeseen circumstances that may later explain unexpected data discrepancies
+	\item \textbf{Data cleanup}: Checking the plausibility of the data and visualising it saves a lot of effort
+	\item \textbf{Evaluation, interpretation}: The methodology for evaluating the data in relation to the main question is clear
+	\item \textbf{Report, presentation}: For whom is the report mainly intended?
+	\item \textbf{Completion}: It is worthwhile to collect and discuss the experiences made with all participants
+\end{enumerate}
+
+\section{Factorial Designs and Analysis of Variance}
+\subsection{One Factor Analysis of Variance}
+Only one statistical test on the linear model
+\begin{equation*}
+	y_{ij} = \mu_i + \varepsilon_{ij}\quad i\in\{1,2,\dots,g\}\quad j\in\{1,2,\dots m\}
+\end{equation*}
+The errors $\varepsilon_{ij}$ are normally and independently distributed with mean zero and variance $\sigma^2$.
+
+\vspace{1em}
+\noindent
+Null and alternative hypothesis:
+\begin{align*}
+	H_0 &: \mu_1 = \mu_2 = \dots = \mu_g\\
+	H_1 &: \mu_i \neq \mu_j\hspace*{0.5em}\text{for at least one pair $i,j$ with $i\neq j$}
+\end{align*}
+
+\vspace{1em}
+\noindent
+Equivalent linear model
+\begin{equation*}
+	y_{ij} = \mu + \tau_i + \varepsilon_{ij}\quad i\in\{1,2,\dots,g\}\quad j\in\{1,2,\dots m\}
+\end{equation*}
+
+\vspace{1em}
+\noindent
+Null and alternative hypothesis:
+\begin{align*}
+	H_0 &: \tau_1 = \tau_2 = \dots = \tau_g\\
+	H_1 &: \tau_i \neq 0\hspace*{0.5em}\text{for at least one $i$}
+\end{align*}
+Where mean $\mu$ is common to all treatments, effect $\tau_i$ associated with the $i$th treatment and a random error component $\varepsilon_{ij}$.
+
+\subsubsection{Analysis of Variance (ANOVA)}
+Look at the $g$ group means
+\begin{equation*}
+	\samplemean{y}_{i.} = \frac{1}{m}\sum_{j=1}^{m}y_{ij}\quad\text{for all groups $i\in\{1,2,\dots,g\}$}
+\end{equation*}
+and compare the variance between group means
+\begin{equation*}
+	S_b^2 = \frac{1}{g-1}\sum_{i=1}^{g}m\left(\samplemean{y}_{i.} - \samplemean{y}_{i..}\right)^2
+\end{equation*}
+with variance of the observation within groups
+\begin{equation*}
+	S_w^2 = \frac{1}{n-g}\sum_{i=1}^{g}\sum_{j=1}^{m}\left(y_{ij} - \samplemean{y}_{i.}\right)^2
+\end{equation*}
+$\samplemean{y}_{i..}$ is the overall mean (over all the groups) and $n=m\cdot g$ the number of observations.
+
+\vspace*{1em}
+\noindent
+\textbf{Test Statistic}:
+\begin{align*}
+	F &= \frac{\text{variance between groups}}{\text{variance within groups}}\\
+	&= \frac{\frac{1}{g-1}\sum_{i=1}^{g}m\left(\samplemean{y}_{i.} - \samplemean{y}_{i..}\right)^2}{\frac{1}{n-g}\sum_{i=1}^{g}\sum_{j=1}^{m}\left(y_{ij} - \samplemean{y}_{i.}\right)^2}
+\end{align*}
+Under the null hypothesis the $F$-statistic follows an $F$-distribution with $(df_G ,df_E ) = (g - 1,n - g)$ degrees of freedom.
+\begingroup
+\renewcommand{\arraystretch}{1.8}
+\begin{tabularx}{\linewidth}{X | p{0.34\linewidth} p{0.2\linewidth} p{0.16\linewidth}}
+	Source of Variation & Sum of Squares & Degrees of Freedom & Mean Squares\\
+	\hline
+	Treatments & $SS_G = \sum_{i=1}^{g}m\left(\samplemean{y}_{i.} - \samplemean{y}_{i..}\right)^2$ & $df_G = g-1$ & $MS_G = \frac{SS_G}{df_G}$\\
+	Error & $SS_E = \sum_{i=1}^{g}\sum_{j=1}^{m}\left(y_{ij} - \samplemean{y}_{i.}\right)^2$ & $df_E = n-g$ & $MS_E = \frac{SS_E}{df_E}$\\
+	\hline
+	Total & $SS_T = \sum_{i=1}^{g}\sum_{j=1}^{m}\left(y_{ij}-\samplemean{y}_{..}\right)^2$ & $df_T = n-1$ & 
+\end{tabularx}
+\endgroup
+\noindent
+It is possible to show
+\begin{equation*}
+	SS_T = SS_G + SS_E
+\end{equation*}
+Test statistic of the analysis of variance test
+\begin{equation*}
+	F = \frac{MS_G}{MS_E}
+\end{equation*}
+
+\subsection{Two Factor Analysis of Variance}
+Linear model for two factors $A$ and $B$ with $a$ and $b$ levels,
+\begin{equation*}
+	y_{ij} = \mu_{ij} + \varepsilon_{ij}\quad i\in\{1,2,\dots,a\}\quad j\in\{1,2,\dots b\}
+\end{equation*}
+Ideal value
+\begin{equation*}
+	\mu_{ij} = \mu + \alpha_i + \beta_j
+\end{equation*}
+where $\mu$ is the overall value, effect $\alpha_i$ describes factor $A$ and effect $\beta_j$ describes factor $B$.
+
+\subsubsection{Parameter Estimation}
+Find estimates for $\mu,\alpha_1,\alpha_2,\dots,\alpha_a,\beta_1,\beta_2,\dots,\beta_b$ with the constraints
+\begin{equation*}
+	\sum_{i=1}^{a}\alpha_i = 0\quad\text{and}\quad\sum_{j=1}^{b}\beta_j = 0
+\end{equation*}
+Model
+\begin{equation*}
+	\mu_{ij} = \mu + \alpha_i + \beta_j + \varepsilon_{ij}
+\end{equation*}
+with the means
+\begin{align*}
+	\samplemean{y}_{i.} &= \frac{1}{b}\sum_{j=1}^{b}\left(\mu + \alpha_i + \beta_j + \varepsilon_{ij}\right) = \mu+\alpha_i\\
+	\samplemean{y}_{.j} &= \frac{1}{a}\sum_{i=1}^{a}\left(\mu + \alpha_i + \beta_j + \varepsilon_{ij}\right) = \mu+\beta_j\\
+	\samplemean{y}_{i.} &= \frac{1}{ab}\sum_{i=1}^{a}\sum_{j=1}^{b}\left(\mu + \alpha_i + \beta_j + \varepsilon_{ij}\right) = \mu
+\end{align*}
+result in the estimated parameters
+\begin{align*}
+	\hat{\mu} &= \samplemean{y}_{..}\\
+	\hat{\alpha}_i &= \samplemean{y}_{i.} -\samplemean{y}_{..}\quad\forall i\in\{1,2,\dots,a\}\\
+	\hat{\beta}_j &= \samplemean{y}_{.j} -\samplemean{y}_{..}\quad\forall j\in\{1,2,\dots,b\}
+\end{align*}
+with the fitted values
+\begin{equation*}
+	\hat{y}_{ij} = \hat{\mu} + \hat{\alpha}_i + \hat{\beta}_j
+\end{equation*}
+and the residuals (differences between observed and fitted values)
+\begin{equation*}
+	e_{ij} = y_{ij} - \hat{y}_ij
+\end{equation*}
+
+\subsubsection{Analysis of Variance for Two Factors}
+\begingroup
+\renewcommand{\arraystretch}{1.8}
+\begin{tabularx}{\linewidth}{X | p{0.16\linewidth} p{0.2\linewidth} p{0.15\linewidth} p{0.15\linewidth}}
+	Source of Variation & Sum of Squares & Degrees of Freedom & Mean Squares & Test Statistic\\
+	\hline
+	Factor A & $SS_A$ & $df_A = a-1$ & $MS_A$ & $\frac{MS_A}{MS_E}$\\
+	Factor B & $SS_B$ & $df_B = b-1$ & $MS_B$ & $\frac{MS_B}{MS_E}$\\
+	Error & $SS_E$ & $df_E = n-a-b+1$ & $MS_E$ & \\
+	\hline
+	Total & $SS_T$ & $df_T = n-1$ & &
+\end{tabularx}
+\endgroup
+Null and alternative hypothesis for factor A (equal for B)
+\begin{align*}
+	H_0 &: \alpha_1=\alpha_2=\dots=\alpha_a=0\\
+	H_1 &: \alpha_i\neq0\hspace*{0.5em}\text{for at least one $i$}
+\end{align*}
+Test statistic
+\begin{equation*}
+	F_A = \frac{MS_A}{MS_E}
+\end{equation*}
+Under the null hypothesis the statistic follows an $F$-distribution with $(df_A,df_E ) = (a - 1,n - a - b + 1)$ degrees of freedom.
+
+\subsection{Two Factor Analysis of Variance with Interaction}
+Model for $c$ observations per combination $(i,j)$ and two factors
+\begin{equation*}
+	y_{ijk} = \mu + \alpha_i + \beta_j + \varepsilon_{ijk}\quad i\in\{1,2,\dots,a\}\quad j\in\{1,2,\dots b\}\quad K\in\{1,2,\dots c\}
+\end{equation*}
+If polygonal lines in the interaction plot are not almost parallel, then an extended model with interaction term $\gamma_{ij}$ is needed
+\begin{equation*}
+	y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_{ij} + \varepsilon_{ijk}
+\end{equation*}
+The parameter estimate of the model with interaction needs more than one observation per combination $(i,j)$. To estimate the parameters some additional constraints are needed
+\begin{equation*}
+	\sum_{i=1}^{a}\gamma_{ij} = 0\quad\text{and}\quad\sum_{j=1}^{b}\gamma_{ij} = 0
+\end{equation*}
+Which gives the following parameter estimates
+\begin{align*}
+	\hat{\mu} &= \samplemean{y}_{...}\\
+	\hat{\alpha}_i &= \samplemean{y}_{i..} - \samplemean{y}_{...}\\
+	\hat{\beta}_i &= \samplemean{y}_{.j.} - \samplemean{y}_{...}\\
+	\hat{\gamma}_{ij} &= \samplemean{y}_{ij.} - \samplemean{y}_{i..} - \samplemean{y}_{.j.} - \samplemean{y}_{...}
+\end{align*}
+
+\subsubsection{Analysis of Variance Table with Interaction}
+\begingroup
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\linewidth}{X | p{0.16\linewidth} p{0.2\linewidth} p{0.15\linewidth} p{0.15\linewidth}}
+	Source of Variation & Sum of Squares & Degrees of Freedom & Mean Squares & Test Statistic\\
+	\hline
+	Factor A & $SS_A$ & $df_A = a-1$ & $MS_A$ & $\frac{MS_A}{MS_E}$\\
+	Factor B & $SS_B$ & $df_B = b-1$ & $MS_B$ & $\frac{MS_B}{MS_E}$\\
+	Interaction I & $SS_I$ & $df_I = (a-1)(b-1)$ & $MS_I$ & $\frac{MS_I}{MS_E}$\\
+	Error & $SS_E$ & $df_E = ab(c-1)$ & $MS_E$ & \\
+	\hline
+	Total & $SS_T$ & $df_T = n-1$ & &
+\end{tabularx}
+\endgroup
+Null and alternative hypothesis for interaction term
+\begin{align*}
+	H_0 &: \gamma_{11} = \gamma_{12} = \gamma_{13} = \dots = \gamma_{ab} =0\\
+	H_1 &: \gamma_{ij}\neq0\hspace*{0.5em}\text{for at least one combination $(i,j)$}
+\end{align*}
+Test statistic
+\begin{equation*}
+	F_I = \frac{MS_I}{MS_E}
+\end{equation*}
+Under the null hypothesis the statistic follows an $F$-distribution with $(df_I,df_E ) = \left(ab(c - 1),(a-1)(b-1)\right)$ degrees of freedom.
+
+\subsubsection{ANOVA with Interaction in \texttt{R}}
+In \texttt{R} it is easy to define models with interactions. The data has a structure with two factors \texttt{A} and \texttt{B} and a response \texttt{Y}. The model formula with an interaction term is
+\begin{align*}
+	\texttt{Y} &\sim \texttt{A} + \texttt{B} + \texttt{A*B}\\
+	\intertext{or equivalently}
+	\texttt{Y} &\sim \texttt{A*B}
+\end{align*}
+Full ANOVA:
+\begin{minted}{R}
+mod <- aov(Y~A+B+A*B, data)
+summary(mod)
+\end{minted}
 
 \subsection{Screening Experiments}
 A process is influenced by many factors, but not all of them may be relevant or significant. The idea is thus to experimentally examine the interaction of factors on the response variable by observing the process under different conditions.
@@ -1773,12 +2029,23 @@ The problem is, that the number of experiments rapidly increases to an unrealist
 	8 & $+1$ & $+1$ & $+1$ & abc \\
 \end{tabularx}
 Design matrix in \textbf{Yates standard order}, but runs of the experiment in randomised order.
-
+\paragraph{Construction of Design Matrix in Plus and Minus Coding Scheme}
+\begin{itemize}[nosep,label=]
+	\item 1. column: Starting with $-1$, create a column of length $2^k$ by alternating $-1$ and $+1$ values.
+	\item 2. column: Create a column of alternating blocks of two $-1$ values and two $+1$ values.
+	\item 3. column: Create a column of alternating blocks of four $-1$ values and four $+1$ values.
+	\item 4. column: Create a column of alternating blocks of eight $-1$ values and eight $+1$ values.
+\end{itemize}
+Continue in this manner, using block sizes that are successive powers of 2, until all k columns have been formed.
 \paragraph{Estimate main effect} The main effect of a factor is the average response value for all test runs at the high level of the factor minus the average response value for runs at the low level of the factor.
 
 The two factor interaction effect is one-half of the difference between the main effects of one factor calculated at the two levels of the other factor.
 
-\paragraph{Half-Normal Plot} Are used to estimate if effects are significant. If effects are zero then estimates are only noise. Estimated effects are realisations of the same noise. Significant effects show up as outliers. Thus, plot the absolute values of effects versus the quantiles of the normal distribution.
+\paragraph{Half-Normal Plot} Are used to estimate if effects are significant. If effects are zero then estimates are only noise. Estimated effects are realisations of the same noise. Significant effects show up as outliers. Thus, plot the absolute values of effects versus the quantiles of the normal distribution. The quantile of the $i$th ordered observation is
+\begin{equation*}
+	q_i = \frac{1}{2}+\frac{1}{2}\frac{i-\frac{3}{8}}{e+\frac{1}{4}}
+\end{equation*}
+with $e$ being the number of estimated effects.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/significant_relevant_effects_factorial_design}
@@ -1787,7 +2054,63 @@ The two factor interaction effect is one-half of the difference between the main
 \end{figure}
 
 \subsubsection{$2^k$ Fractional Factorial Design}
-In the full factorial design the phenomena, that few major effects and few interaction effects are significant, can be observed. The idea is thus to combine higher order interactions with experimental error, which leads to a smaller model used to analyse the data.
+In the full factorial design the phenomena, that few major effects and few interaction effects are significant, can be observed. The idea is thus to combine higher order interactions with experimental error, which leads to a smaller model used to analyse the data. Replace some of the higher-order interactions with additional experimental factors.
+
+\paragraph{Construction} Assign the highest order interaction effect $A:B:C$ to a new main effect $D$. 
+\begin{tabularx}{\linewidth}{c | c c c | c}
+	Run & \multicolumn{4}{c}{Factors} \\
+	& A & B & C & D \\
+	\hline
+	1 & $-1$ & $-1$ & $-1$ & $-1$ \\
+	2 & $+1$ & $-1$ & $-1$ & $+1$ \\
+	3 & $-1$ & $+1$ & $-1$ & $+1$ \\
+	4 & $+1$ & $+1$ & $-1$ & $-1$ \\
+	5 & $-1$ & $-1$ & $+1$ & $+1$ \\
+	6 & $+1$ & $-1$ & $+1$ & $-1$ \\
+	7 & $-1$ & $+1$ & $+1$ & $-1$ \\
+	8 & $+1$ & $+1$ & $+1$ & $+1$ \\
+\end{tabularx}
+This leads to a significant reduction of runs, at the expense of less information (a $2^{4-1}$ design with 8 runs has less information about the 4 factors than a full $2^4$ design with 16 runs). The new factor $A:B:C$ and $D$ have the same column in the design matrix, thus the ability to differentiate between the influence of the factor and their interaction with the response value is lost. The factors $A:B:C$ and $D$ are called aliased.
+
+\paragraph{Construction of Alias Structure}
+\begin{enumerate}
+	\item First, write the $p$ assignments of additional factors in equation form. These $p$ equations are called the design generators.
+	\item Multiply each generator from Step 1 by its left side to put each generator into the form $I = w$, where $w$ is a word composed of several letters representing particular experimental factors (that is $D = ABC$ becomes $I = ABCD$). It is also possible to create words with minus signs, such as $D = −ABC$. If this is done, the resulting design will use a different fraction of the runs from the full $2^k$ design.
+	\item  Denote $I = w_1, I = w_2,\dots,I = w_p$ the $p$ design generators from Step 2, form all possible products of the words $w_i$ (one at a time, two at a time, three at a time, etc.). Use the fact that squares of factors can be eliminated. There will be a total of $2^p$ words formed. This collection is called the \textbf{defining relation} of the design.
+	\item Multiply each word in the defining relation by all $2^{k − 1}$ effects based on k factors. Use the fact that squares of factors cancel out to simplify the products.
+\end{enumerate}
+The result is called the alias structure of the design.
+
+\paragraph{Example of an Alias Structure Design} Find alias structure of the $2^{4−1}$ design where $D$ is aliased with $ABC$.
+\begin{enumerate}
+	\item Only $p = 1$ generator $D = ABC$
+	\item Multiplying both sides by $D$ gives $D \cdot D = D(ABC)$ or $I = ABCD$
+	\item Defining relation $I = ABCD$
+	\item Multiplying each of the $2^{4-1} = 15$ effects by the relation $I = ABCD$ yields to the alias structure.
+\end{enumerate}
+\begin{tabularx}{\linewidth}{l c l l c l l c l}
+	Effect & & Alias & Effect & & Alias & Effect & & Alias \\
+	\hline
+	$A$ & $=$ & $BCD$ & $AB$ & $=$ & $CD$ & $ABC$ & $=$ & $D$ \\
+	$B$ & $=$ & $ACD$ & $AC$ & $=$ & $BD$ & $ABD$ & $=$ & $C$ \\
+	$C$ & $=$ & $ABD$ & $AD$ & $=$ & $BC$ & $ACD$ & $=$ & $B$ \\
+	$D$ & $=$ & $ABC$ & $BC$ & $=$ & $AD$ & $BCD$ & $=$ & $A$ \\
+	    &     &       & $BD$ & $=$ & $AC$ & $ABCD$ &$=$ & $I$ \\
+	    &     &       & $CD$ & $=$ & $AB$ &
+\end{tabularx}
+Eliminating the duplicates yields the final alias structure of the design
+\begin{tabularx}{\linewidth}{l c l l c l }
+	$A$ & $=$ & $BCD$ & $AB$ & $=$ & $CD$ \\
+	$B$ & $=$ & $ACD$ & $AC$ & $=$ & $BD$ \\
+	$C$ & $=$ & $ABD$ & $AD$ & $=$ & $BC$ \\
+	$D$ & $=$ & $ABC$ & $ABCD$ & $=$ & $I$
+\end{tabularx}
+The alias structure can be summarised as follows:
+\begin{itemize}[nosep]
+	\item Each main effect is aliased with a three-factor interaction
+	\item All two factor interactions are aliased with one another
+	\item The single four-factor interaction is aliased with the grand mean of the data
+\end{itemize}
 
 \subsection{Response Surface Methodology}
 The aim of this method is to optimise response which is influenced by several explanatory variables.
@@ -1822,7 +2145,7 @@ of $k$ explanatory variables.
 
 The advantage of this first order design is that the measurement error can be determined without assuming that the first-order linear model approximates the true response sufficiently well, and that the design can be used to detect deviations (curvature) from the first-order linear model.
 
-\subsubsection{Statistical Test of Curvature in a $2^k$ Design}
+\subsubsection{Statistical Test for Curvature in a $2^k$ Design}
 \begin{itemize}[leftmargin=*,label=]
 	\item \textbf{Hypothesis}
 	\begin{itemize}
