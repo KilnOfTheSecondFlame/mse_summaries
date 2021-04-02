@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="164.57591mm"
+   height="167.45503mm"
+   viewBox="0 0 164.57591 167.45503"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="doughnut_model.svg"
+   inkscape:export-filename="C:\Users\Pascal\TeXProjects\mse_summaries\Sustainable Development\img\doughnut_model.png"
+   inkscape:export-xdpi="600"
+   inkscape:export-ydpi="600">
+  <defs
+     id="defs2">
+    <rect
+       x="182.3735"
+       y="78.335564"
+       width="30.994047"
+       height="12.284226"
+       id="rect905" />
+    <rect
+       x="161.8683"
+       y="64.350449"
+       width="45.924107"
+       height="7.9375"
+       id="rect879" />
+    <rect
+       x="42.616817"
+       y="52.444199"
+       width="149.67857"
+       height="20.032738"
+       id="rect860" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="481.87368"
+     inkscape:cy="293.397"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="3440"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="10"
+     fit-margin-left="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10">
+    <sodipodi:guide
+       position="82.287951,82.287945"
+       orientation="1,0"
+       id="guide833" />
+    <sodipodi:guide
+       position="147.29986,82.287945"
+       orientation="0,-1"
+       id="guide835" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-24.301324,-49.959398)">
+    <path
+       id="path854"
+       style="fill:#a05a2c;stroke:none;stroke-width:0.448531;paint-order:stroke fill markers;stop-color:#000000"
+       d="m 106.58928,67.84672 a 67.279772,67.279772 0 0 0 -67.279763,67.27976 67.279772,67.279772 0 0 0 67.279763,67.27976 67.279772,67.279772 0 0 0 67.27976,-67.27976 67.279772,67.279772 0 0 0 -67.27976,-67.27976 z m 0,9.290396 a 57.98873,57.98873 0 0 1 57.98851,57.989364 57.98873,57.98873 0 0 1 -57.98851,57.9885 57.98873,57.98873 0 0 1 -57.988497,-57.9885 57.98873,57.98873 0 0 1 57.988497,-57.989364 z" />
+    <path
+       id="path837"
+       style="fill:#71c837;stroke:none;stroke-width:0.264583;paint-order:stroke fill markers;stop-color:#000000"
+       d="m 106.48903,74.272323 a 60.854155,60.854155 0 0 0 -60.753919,60.854167 60.854155,60.854155 0 0 0 60.854169,60.85417 60.854155,60.854155 0 0 0 60.85417,-60.85417 60.854155,60.854155 0 0 0 -60.85417,-60.854167 60.854155,60.854155 0 0 0 -0.10025,0 z m 0.10025,21.544423 a 39.309526,39.309526 0 0 1 39.30923,39.309744 39.309526,39.309526 0 0 1 -39.30923,39.30923 39.309526,39.309526 0 0 1 -39.309746,-39.30923 39.309526,39.309526 0 0 1 39.309746,-39.309744 z" />
+    <path
+       id="path844"
+       style="fill:#ff0000;stroke:none;stroke-width:0.269623;paint-order:stroke fill markers;stop-color:#000000"
+       d="m 106.58928,94.683031 a 40.44346,40.44346 0 0 0 -40.443451,40.443449 40.44346,40.44346 0 0 0 40.443451,40.44345 40.44346,40.44346 0 0 0 40.44345,-40.44345 40.44346,40.44346 0 0 0 -40.44345,-40.443449 z m 0,5.584669 a 34.858395,34.858395 0 0 1 34.85826,34.85878 34.858395,34.858395 0 0 1 -34.85826,34.85826 34.858395,34.858395 0 0 1 -34.858251,-34.85826 34.858395,34.858395 0 0 1 34.858251,-34.85878 z" />
+    <circle
+       style="fill:none;stroke:none;stroke-width:0.255529;paint-order:stroke fill markers;stop-color:#000000"
+       id="path856"
+       cx="-135.78456"
+       cy="-105.55917"
+       transform="rotate(-166.07891)"
+       r="48.002968" />
+    <text
+       xml:space="preserve"
+       id="text858"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;white-space:pre;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"><textPath
+         xlink:href="#path856"
+         id="textPath864"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none">the safe and just space for humanity</textPath></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;font-variant-east-asian:normal;"
+       x="106.42495"
+       y="133.89807"
+       id="text869"><tspan
+         sodipodi:role="line"
+         id="tspan867"
+         x="106.42495"
+         y="133.89807"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.2333298px;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke-width:0.264583;">critical human</tspan><tspan
+         sodipodi:role="line"
+         x="106.42495"
+         y="139.18973"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.2333298px;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke-width:0.264583;"
+         id="tspan871">deprivation</tspan></text>
+    <text
+       xml:space="preserve"
+       id="text877"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;white-space:pre;fill:#ffffff;fill-opacity:1;stroke:none"><textPath
+         xlink:href="#path886"
+         startOffset="50%"
+         id="textPath888"><tspan
+           id="tspan881"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#ffffff">Ecological Ceiling</tspan></textPath></text>
+    <circle
+       style="fill:none;stroke:none;stroke-width:0.354235;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers;stop-color:#000000"
+       id="path886"
+       cx="136.52957"
+       cy="-104.78606"
+       r="62.761959"
+       transform="rotate(89.239364)" />
+    <text
+       xml:space="preserve"
+       id="text895"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;white-space:pre;fill:#000000;fill-opacity:1;stroke:none;font-variant-east-asian:normal;"><textPath
+         xlink:href="#path897"
+         id="textPath899">critical planetary degradation</textPath></text>
+    <circle
+       style="fill:none;stroke:none;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers;stop-color:#000000"
+       id="path897"
+       cx="-165.52255"
+       cy="47.14576"
+       r="72.287956"
+       transform="rotate(-112.36824)" />
+    <circle
+       style="fill:none;stroke:none;stroke-width:0.196868;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers;stop-color:#000000"
+       id="path901"
+       cx="-171.8219"
+       cy="9.8831177"
+       r="35.531372"
+       transform="rotate(-124.97477)" />
+    <text
+       xml:space="preserve"
+       id="text903"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;white-space:pre;fill:#ffffff;fill-opacity:1;stroke:none"><textPath
+         xlink:href="#path901"
+         id="textPath909"><tspan
+           id="tspan907"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Merriweather;-inkscape-font-specification:'Merriweather, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff">Social Foundation</tspan></textPath></text>
+  </g>
+</svg>

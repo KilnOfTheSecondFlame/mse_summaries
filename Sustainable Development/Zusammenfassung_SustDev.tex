@@ -1,0 +1,640 @@
+\documentclass[11pt]{article}
+
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage[a4paper,margin=1cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{isodate}
+\usepackage{gensymb}
+\usepackage{graphicx}
+\usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{ltablex} % Longtables with tabularx
+\usepackage[x11names,table]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{csquotes}
+\usepackage{lscape}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{mdframed}
+\usepackage{scalerel}
+\usepackage{stackengine}
+\usepackage{mathtools}
+\usepackage{pdfpages}
+
+% Code highlighting
+\usepackage{minted}
+\surroundwithmdframed{minted}
+
+% Be able to caption equations and float them in place
+\usepackage{float}
+
+\newmdtheoremenv{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newmdtheoremenv{definition}{Definition}[section]
+
+
+\geometry{a4paper, margin=2.4cm}
+
+\newcommand\equalhat{\mathrel{\stackon[1.5pt]{=}{\stretchto{\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+\newcommand*\samplemean[1]{\overline{#1}}
+\newcommand*\ev[1]{\mathrel{\text{E}\left[#1\right]}}
+\newcommand*\R{\mathbb{R}}
+\newcommand*\Z{\mathbb{Z}}
+\newcommand*\N[1]{\mathcal{N}\left(#1\right)}
+\newcommand*\Likelihood{\mathcal{L}}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\newcommand*\Exp[1]{\mathop{\text{Exp}}\left(#1\right)}
+\newcommand*\Cov[1]{\mathop{\text{Cov}}\left(#1\right)}
+\newcommand*\Cor[1]{\mathop{\text{Cor}}\left(#1\right)}
+\newcommand*\Var[1]{\mathop{\text{Var}}\left(#1\right)}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\graphicspath{{./img/}}
+
+\begin{document}
+	
+\title{Sustainable Development FS21}
+\author{Pascal Baumann\\pascal.baumann@stud.hslu.ch}
+\maketitle
+
+For errors or improvement raise an issue or make a pull request on the \href{https://github.com/KilnOfTheSecondFlame/mse_summaries}{github repository}.
+
+\tableofcontents
+\newpage
+
+\section{Sustainable Development from a Political Perspective}
+\begin{quote}
+	Sustainable development enables the basic needs of all people to be met and ensures a good quality of life, everywhere in the world, both now and in the future.
+\end{quote}
+
+\paragraph{Five Principles of Sustainable Development}
+\begin{itemize}
+	\item People\\\textit{End poverty and hunger in all forms, and ensure dignity and equality}. Ensuring that all people can be an integral part of society, that justice prevails for all and that social tensions can be kept low
+	\item Prosperity\\\textit{Ensure prosperous and fulfilling lives in harmony with nature}. Ensuring that all people are able to achieve a standard of living that meets at least their basic needs
+	\item Peace\\\textit{Foster peaceful, just and inclusive societies}. Ensuring that peaceful and inclusive societies can emerge
+	\item Partnership\\\textit{Implement the agenda through a solid global partnership}. Ensuring that all interests are taken into account in decision-making processes and that no one is left out or left behind
+	\item Planet\\\textit{Protect our planet's natural resources and climate for future generations}. Ensuring that planetary boundaries are respected
+\end{itemize}
+
+\paragraph{Integrated, Equal and Balanced}
+\begin{itemize}
+	\item \textbf{Integrated}\\
+	Only through intact natural resources an efficient economy can emerge. Only through an intact economy prosperity can be created. This prosperity can only be distributed fairly in a society based on solidarity. Political processes can be designed in such a way that natural resources are preserved in the long term
+	\item \textbf{Equal}\\
+	All three dimensions are of equal importance
+	\item \textbf{Balanced}\\
+	If equal consideration is not possible in specific contexts or in relation to specific problems, deficits in disadvantaged dimensions are to be compensated
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/sustainable_development_goals}
+	\caption{United Nations Sustainable Development Goals}
+	\label{fig:sustainabledevelopmentgoals}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/environmental_impact_switzerland}
+	\caption{Switzerland exports more than 70\% of its environmental impact (BAFU, Umweltfussabdrücke Schweiz, 2018).}
+	\label{fig:environmentalimpactswitzerland}
+\end{figure}
+
+Sustainable development affects almost all areas of our society. The added value of a meta-perspective like the SDG is:
+\begin{itemize}
+	\item Orientation\\
+	Clear objectives indicate where the path should lead and how far it still has to go. They point out the need for action and urgencies, and set priorities.
+	\item Policy coherence\\
+	The goals are interrelated and must be solved together. The meta-strategy helps to see the connections and address them together.
+\end{itemize}
+
+\section{Fundamentals of Sustainable Development}
+
+\begin{quote}
+	\textquotedblleft If the present growth trends in world population, industrialization, pollution, food production, and resource depletion continue unchanged, the limits to growth on this planet will be reached sometime within the next one hundred years. The most probable result will be a rather sudden and uncontrollable decline in both population and industrial capacity.\textquotedblright
+\end{quote}
+
+\begin{quote}
+	\textquotedblleft Sustainable development is development that meets the needs of the present without compromising the ability of future generations to meet their own needs.\textquotedblright
+\end{quote}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/doughnut_model.png}
+	\caption{The doughnut model for sustainable development}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{img/triple_bottom_line.png}
+	\caption{The triple bottom line concept for sustainable development}
+\end{figure}
+
+\subsection{International Debate}
+
+\subsubsection{Six Core Functions of International Conferences on Sustainable Development}
+\begin{itemize}[noitemsep]
+	\item \textbf{Setting Global Agendas}
+	\begin{itemize}
+		\item Providing a relatively open space in which states, international organizations, and NGOs can meet to plan the future trajectory of sustainable development
+		\item Addressing, discussing and resolving global issues of sustainable development
+		\item Creating and increasing political, media and public attention
+	\end{itemize}
+	\item \textbf{'Joining up' Problems}
+	\begin{itemize}
+		\item Bringing together debates on global long-term issues that are often dealt with in a disconnected and ad hoc manner (e.g., poverty, inequality, environmental protection, development priorities)
+		\item Addressing the contradictions between the different target dimensions by developing and promoting integrative concepts
+	\end{itemize}
+	\item \textbf{Endorsing Common Principles}
+	\begin{itemize}
+		\item Signing of (binding) agreements and resolutions that provide guidelines, recommendations and standards
+		\item "Soft law" that in time, hopefully, will become "hard law"
+	\end{itemize}
+	\item \textbf{Providing Leadership}
+	\begin{itemize}
+		\item World leaders meeting to address issues that cannot be adequately dealt with at lower levels of governance
+		\item Defining objectives for action at lower tiers of governance
+	\end{itemize}
+	\item \textbf{Capacity Building}
+	\begin{itemize}
+		\item Creation of new international organizations like the UN Environment Programme (UNEP), UN High-level Political Forum on Sustainable Development (HLPF)
+		\item Stimulating the formation of environmental ministries, action plans etc. at the national level
+		\item Providing key yardsticks to increase engagement at the national level
+		\item Contributing to a process of societal and institutional change
+	\end{itemize}
+	\item \textbf{Fostering Inclusiveness and Legitimacy}
+	\begin{itemize}
+		\item Delegations from all UN member states
+		\item High number of Heads of State and Government
+		\item Participation of “major groups” and other stakeholders
+	\end{itemize}
+\end{itemize}
+
+\subsection{Agenda 2030 for Sustainable Development}
+Signed by all 193 UN member countries with the overarching aim for a fundamental social, economic and environmental transformation. This resolution is not legally binding and only a declaration of intent. There are contradictory goals, promote economic and social development while reducing the impact on the environment at the same time. And scientific and technological innovation is seen as a key enabler of sustainable development. Monitoring and reviewing of target achievement based on a set of indicators on global and national level.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/tripartite_model_sustainability}
+	\caption{Sustainable Development Goals and tripartite model of sustainability}
+	\label{fig:tripartitemodelsustainability}
+\end{figure}
+
+The Paris Agreement is a document with crucial areas necessary to combat climate change, and this commitment is legally binding.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/principles_business_human_rights}
+	\caption{UN guiding principles on business and human rights}
+	\label{fig:principlesbusinesshumanrights}
+\end{figure}
+
+\begin{itemize}
+	\item Protect human rights through effective policies, legislation, regulations and adjudication
+	\item States need to set out the expectation that all business organisations respect human rights throughout their operations
+	\item Companies should avoid infringing on the human rights of others
+	\item Companies should avoid causing or contributing to and seek to prevent or mitigate adverse human rights impacts through their own activities and address such impacts when they occur
+	\item Companies should have policies and processes appropriate to their size and circumstances
+	\item States must take appropriate steps to ensure, through judicial, administrative, legislative or other appropriate means, that when such abuses occur within their territory or jurisdiction those affected have access to effective remedy
+\end{itemize}
+
+\subsection{Guidelines for Businesses}
+\begin{itemize}
+	\item OECD Guidelines for Multinational Enterprises
+	\begin{itemize}
+		\item Published by Organization for Economic Cooperation and Development (OECD)
+		\item Recommendations for responsible business conduct for multinational enterprises
+		\item Topics include information disclosure, human rights, labour relations, the environment, fighting corruption, consumer interests, science and technology, competition and taxation
+		\item Signatory states are required to establish a National Contact Point (NCP) that promotes the implementation of the guidelines and addresses reports of alleged violations
+	\end{itemize}
+	\item OECD Anti-Bribery Convention
+	\begin{itemize}
+		\item Published by Organization for Economic Cooperation and Development (OECD)
+		\item Include legally binding standards to criminalize bribery of foreign public officials
+		\item Focus on the supply side of bribery, that is voluntarily or not give the bribe
+		\item Legally binding and signatories must establish that the bribery of foreign officials is a crime in the national legal framework, and must provide means and measures to prevent, detect, investigate, prosecute and sanction foreign bribery
+	\end{itemize}
+	\item ISO 14001 - Environmental Management
+	\begin{itemize}
+		\item Published by the International Organization for Standardization
+		\item Practical tools to manage environmental responsibilities, to set up an effective environmental management system
+		\item Mentions audits, communications, labelling and life cycle analysis, environmental challenges such as climate change
+		\item Not legally binding but companies can be certified by the ISO
+	\end{itemize}
+	\item ISO 26000 - Social Responsibility
+	\begin{itemize}
+		\item Published by the International Organization for Standardization
+		\item Guiding principles for social responsibility at organizations
+		\item Organization management, human rights, working practices, the environment, fair corporate and business practices, consumer affairs, involvement and development of local communities
+		\item Not legally binding, not certifiable
+	\end{itemize}
+	\item Global Reporting Initiative (GRI) Standards Glossary
+	\begin{itemize}
+		\item Guiding principles for sustainability reporting
+		\item Targeted towards enterprises and other organizations
+		\item Comprehensive framework for sustainability reporting
+		\item Not legally binding
+	\end{itemize}
+\end{itemize}
+
+\subsection{National Debate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/national_decision_making}
+	\caption{The decision making in Switzerland follows a so-called policy cycle}
+	\label{fig:nationaldecisionmaking}
+\end{figure}
+
+\begin{table}[H]
+	\begin{tabularx}{\linewidth}{c c}
+		\cellcolor{DodgerBlue1!40} \textbf{Soft Instruments} & \cellcolor{DodgerBlue1!40} \textbf{Hard Instruments}\\
+		 Education & Legal regulation \\
+		 Support programs & Threshold values, bans \\
+		 Information, awareness raising, advice & Economic coercion \\
+		 Cooperation & Sanctions \\
+		 Participation & Taxes, fees \\
+		 Self-commitment & Certifications
+	\end{tabularx}
+	\caption{Instruments of Environmental and Sustainability Policy}
+\end{table}
+
+\begin{itemize}[nosep]
+	\item \textbf{Absolute Poverty}
+	\begin{itemize}
+		\item Based on assumed minimal needs
+		\item Household income is insufficient to afford basic necessities of life (food, shelter, housing)
+		\item International poverty line: USD 1.90 a day
+		\item Does not change by economic growth (USD 1.25 a day in 2005 prices)
+		\item Possible to compare between countries and over time
+	\end{itemize}
+	\item \textbf{Relative Poverty}
+	\begin{itemize}
+		\item Based on income distribution
+		\item Household income is a certain percentage below median incomes
+		\item Household members cannot afford to actively participate in social activities that most people in a given country take for granted
+		\item European standard concept of relative poverty: cut-off point - 60\% of median equalized disposable income
+		\item Changes with economic growth
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{img/swiss_development_coalition}
+	\caption{Swiss bureaus working on economy development}
+	\label{fig:swissdevelopmentcoalition}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/SDG_targets_SECO.png}
+	\caption{SDGs targeted by the SECO and developed in cooperation with international partners}
+	\label{fig:secosdgtargets}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/people_living_extreme_poverty}
+	\caption{Development of people living in extreme poverty}
+	\label{fig:peoplelivingextremepoverty}
+\end{figure}
+
+\subsection{Swiss Green Economy Action Plan}
+\begin{itemize}
+	\item Six areas contributing towards a green economy
+	\begin{itemize}
+		\item Clean Technologies Master Plan
+		\item Resource-efficient information and communication technologies
+		\item Improving information on the environmental impact of products
+		\item Greening the tax system (making environmental-friendly products having an advantage in the tax system)
+		\item Comprehensive welfare measurement (common indicator is Gross Domestic Product (GDP), but GDP is growth based, and not necessarily reflects population health and welfare)
+		\item Resource efficiency and sustainability in legislative drafts
+	\end{itemize}
+	\item Priority areas of the action plan
+	\begin{itemize}
+		\item Consumption and production (improve efficiency)
+		\item Using fewer raw materials and produce less waste
+		\item Cross-cutting instruments
+		\item Set targets, monitor measures, prepare reports
+	\end{itemize}
+\end{itemize}
+
+\subsection{Swiss Long-Term Climate Strategy}
+\begin{itemize}
+	\item Adopted on January 27, 2021
+	\item Ties in with the revised $\text{CO}_2$ Act
+	\item Obligation under the Paris Agreement
+	\item 50\%-reduction in greenhouse gases by 2030
+	\item Net-zero greenhouse emissions by 2050
+	\item Difficult-to-avoid emissions should be offset by carbon capture and storage (CCS) or by negative emissions technologies (NETs)
+	\item Ten basic strategic principles that will shape Swiss climate policy in the coming years
+	\item Setting strategic targets for buildings, industry, transport, agricultural and food sectors, financial markets, aviation and the waste industry
+\end{itemize}
+
+\subsubsection{Ten Strategic Principles for Swiss Climate Policy}
+These principles will shape the national and international policy of Switzerland in the coming years
+\begin{enumerate}
+	\item Switzerland will take advantage of the opportunities presented by a systematic transition to net zero
+	\item Switzerland will assume its climate policy responsibility
+	\item Priority will be given to reducing domestic emissions
+	\item Emissions will be reduced across entire value chains
+	\item All energy sources will be used effectively taking account of their optimal usage potential
+	\item The Swiss Confederation and the cantons will gear their planning activities to net zero in all climate relevant areas
+	\item The transition to net zero will be carried out in a socially acceptable way
+	\item The transition to net zero will be achieved in an economically viable way
+	\item The transition to net zero will also improve environmental quality
+	\item The Long-Term Climate Strategy is based on openness to all types of technology
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/development_emissions_plan_switzerland}
+	\caption{Development of emissions by 2050 by sectors in tonnes of $\text{CO}_2$-equivalents according to a zero emissions basis scenario of EP2050+, including international aviation.}
+	\label{fig:developmentemissionsplanswitzerland}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/development_remaining_emissions_plan_switzerland}
+	\caption{Development of remaining emissions and contributions of negative emissions technologies (NET) and carbon capture and storage (CCS) in Switzerland and abroad according to the zero emissions basis scenario of EP2050+, including international aviation.}
+	\label{fig:developmentremainingemissionsplanswitzerland}
+\end{figure}
+
+\subsubsection{Swiss National Action Plan on Business and Human Rights}
+\begin{itemize}
+	\item The UN Guiding Principles on Business and Human Rights sets out States' obligations and corporate responsibility regarding the impact of business activities on human rights
+	\item The Federal Council is committed to prevent, mitigate and remediate business-related human rights abuse.
+	\item Priority Actions
+	\begin{itemize}
+		\item Communication, that is the expectation of the federal government from corporations
+		\item Support for business enterprises, mainly in the form of guidance for businesses, exchange of information, and development of expertise at Swiss embassies
+		\item Policy coherence, meaning the improvement of interdepartmental cooperation
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Swiss Anti-Corruption Strategy}
+\begin{itemize}
+	\item Approved on 25 November 2020
+	\item Strategy's objectives
+	\begin{itemize}
+		\item Preventing and prosecuting cases of corruption
+		\item Detection and repression
+		\item International cooperation in the field of corruption
+	\end{itemize}
+	\item Anti-corruption obligations at international level
+\end{itemize}
+
+\subsubsection{Typology of NGOs}
+\begin{tabularx}{\linewidth}{r r |c|c|}
+	\multirow{4}{*}{\large\textbf{Beneficiary}} & \multirow{2}{*}{\textbf{Self}} & Alcoholics Anonymous & Labour Unions\\
+	& & Chess Clubs & Trade Associations\\
+	\cline{2-4}
+	& \multirow{2}{*}{\textbf{Others}} & Salvation Army & WWF\\
+	& & CARE & Amnesty International\\
+	\cline{2-4}
+	& & \textbf{Service} & \textbf{Advocacy}\\
+	\multicolumn{2}{c}{} & \multicolumn{2}{c}{\large \textbf{Type of Activity}}
+\end{tabularx}
+\begin{itemize}
+	\item Operational NGOs
+	\item Advocacy NGOs
+	\begin{itemize}
+		\item Policy analysis and lobbying
+		\item Impact upon government policy-making
+		\item Advocacy Targets
+		\begin{itemize}
+			\item National\\
+			Governments, corporations, other
+			\item International
+			\item Intergovernmental organizations, transnational corporations
+		\end{itemize}
+		\item Advocacy Strategy
+		\begin{itemize}
+			\item Collaborative\\
+			Research, Education, Persuasion
+			\item Adversarial\\
+			Public Pressure, Litigation, Contestation
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/ngo_campaign_architecture}
+	\caption{NGO Campaign Architectures: Strategy, Time Horizon and Levels or Countries}
+	\label{fig:ngocampaignarchitecture}
+\end{figure}
+
+\paragraph{Collaborative Strategies}
+\begin{itemize}
+	\item Short-term Coalitions:\\
+	Mobilize affiliates and allies to shape policy outcomes
+	\item Longer term Partnerships:\\
+	Join forces with key actors to support ongoing policy change and implementation
+\end{itemize}
+
+\paragraph{Adversarial Strategies}
+\begin{itemize}
+	\item Short-term adversarial campaigns:\\
+	Create public pressure, respond quickly to opportunities or threats
+	\begin{itemize}
+		\item Embarrass powerful actors
+		\item Generate wide public visibility
+	\end{itemize}
+	\item Longer term initiatives:\\
+	Mobilize and coordinate resources to sustain multi-year campaigns to change policies and monitor implementation
+\end{itemize}
+
+% TODO Check if formatting is still ok
+\clearpage
+\subsubsection{Goals, Targets and Tactics of NGOs}
+\begin{tabularx}{\linewidth}{l p{0.25\linewidth} p{0.25\linewidth} p{0.25\linewidth}}
+	\cellcolor{DodgerBlue1!40} & \cellcolor{DodgerBlue1!40} \textbf{Mainstream} & \cellcolor{DodgerBlue1!40} \textbf{Moderate} & \cellcolor{DodgerBlue1!40} \textbf{Radical}\\
+	\textbf{Goals} & Enforcement of existing laws and norms & Small change to institutions/ laws or their interpretation & Major change to central tenants of dominant institutions \\
+	\textbf{Targets} & Law Violators & "Bad Boys" representing the "worst" of the dominant institutions & Symbols of dominant institutions\\
+	\textbf{Tactics} & \begin{itemize}[
+			left=0pt,
+			nosep,
+			before={\begin{minipage}[t]{\hsize}},
+			after={\end{minipage}}
+		]
+		\item Use of dominant institutions of enforcement
+		\item Less emotional, more rational appeal
+	\end{itemize} & \begin{itemize}[
+		left=0pt,
+		nosep,
+		before={\begin{minipage}[t]{\hsize}},
+		after={\end{minipage}}
+	]
+		\item Use of dominant institutions that define and refine the laws and norms
+		\item  Appeal to public opinion
+	\end{itemize} & \begin{itemize}[
+	left=0pt,
+	nosep,
+	before={\begin{minipage}[t]{\hsize}},
+		after={\end{minipage}}
+	]
+		\item Counter-institutional tactics attempting to reshape public opinion
+		\item Appeal to Emotions
+\end{itemize}
+\end{tabularx}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/ngo_tactics}
+	\caption{Tactics employed by NGOs}
+	\label{fig:ngotactics}
+\end{figure}
+
+\section{Organisational Response to Environmental Demands}
+
+\begin{quote}
+	\textquotedblleft There is one and \textbf{only one social responsibility of business} -- to use its resources and engage in \textbf{activities designed to increase its profits} so long as it \textbf{stays within the rules of the game}, which is to say, engages in open and free competition \textbf{without deception or fraud}.\textquotedblright\\
+	\hspace*{1em} - Milton Friedman
+\end{quote}
+
+\begin{table}[H]
+	\footnotesize
+	\begin{tabularx}{\linewidth}{p{0.1\linewidth} p{0.25\linewidth} p{0.25\linewidth} p{0.25\linewidth}}
+		\cellcolor{SteelBlue1!75} & \cellcolor{SteelBlue1!75} \textbf{Coercive Isomorphism} & \cellcolor{SteelBlue1!75} \textbf{Mimetic Isomorphism} & \cellcolor{SteelBlue1!75} \textbf{Normative Isomorphism}\\
+		\textbf{Results from} & \begin{itemize}[
+				left=0pt,
+				nosep,
+				before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item Resource dependency
+			\item Formal and informal pressure
+			\item Government mandate
+			\item Cultural expectations in the society
+			\item Monitoring and sanctioning of wrongdoers
+		\end{itemize} & \begin{itemize}[
+				left=0pt,
+				nosep,
+				before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item Environmental uncertainty
+			\item Ambiguous goals, unclear solutions
+			\item Intentionally through consulting firms or industry trade associations
+			\item Unintentionally through employee transfer or turnover
+		\end{itemize} & \begin{itemize}[
+				left=0pt,
+				nosep,
+				before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item Professionalisation through formal education
+			\item Professional networks
+			\item Filtering of personnel through recruitment and promotion practices
+		\end{itemize}
+	\end{tabularx}
+	\caption{The neo-institutional perspective}
+\end{table}
+
+\begin{table}[H]
+	\footnotesize
+	\begin{tabularx}{\linewidth}{p{0.1\linewidth} p{0.25\linewidth} p{0.25\linewidth} p{0.25\linewidth}}
+		\cellcolor{SteelBlue1!75} & \cellcolor{SteelBlue1!75} \textbf{Coercive Isomorphism} & \cellcolor{SteelBlue1!75} \textbf{Mimetic Isomorphism} & \cellcolor{SteelBlue1!75} \textbf{Normative Isomorphism}\\
+		\textbf{Results from} & \begin{itemize}[
+			left=0pt,
+			nosep,
+			before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item  Strategically manipulating external demands without adjusting organisational structures and practices
+		\end{itemize} & \begin{itemize}[
+			left=0pt,
+			nosep,
+			before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item Decoupling organizational responses from actual practices
+			\item Symbolically but not substantially aligning organisational structures and practices to external demands
+		\end{itemize} & \begin{itemize}[
+			left=0pt,
+			nosep,
+			before={\begin{minipage}[t]{\hsize}},
+				after={\end{minipage}}
+			]
+			\item Isomorphically changing organizational structures and practices to conform to external demands
+			\item Two main avenues:
+			\begin{itemize}[nosep, left=1em]
+				\item proactive approach
+				\item reactive approach
+			\end{itemize}
+		\end{itemize}
+	\end{tabularx}
+	\caption{The strategic choice perspective}
+\end{table}
+
+\begin{tabularx}{\linewidth}{l X}
+	\textbf{Defensive} &  Deny practices, outcomes, or responsibilities\\
+	\textbf{Compliance} & Adopt a policy-based compliance approach as a cost of doing business\\
+	\textbf{Managerial} & Embed the societal issue in the core management processes\\
+	\textbf{Strategic} & Integrate the societal issue into the core business strategies\\
+	\textbf{Civil} & Promote broad industry participation in corporate responsibility
+\end{tabularx}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/organisational_approaches_environmental_demands}
+	\caption{Different approaches and focii to respond to environmental demands as an organisation}
+	\label{fig:organisationalapproachesenvironmentaldemands}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/core_elements_sustainability_management}
+	\caption{Core elements of sustainability management processes}
+	\label{fig:coreelementssustainabilitymanagement}
+\end{figure}
+
+\begin{itemize}[label=, left=0pt]
+	\item \textbf{Governance}\\
+	The organisation's governance around sustainability-related risks and opportunities
+	\item \textbf{Strategy}\\
+	The actual and potential impacts of sustainability-related risks and opportunities on the organisation's businesses, strategy, and financial planning
+	\item \textbf{Risk Management}\\
+	The processes used by the organisation to identify, assess, and manage sustainability-related risks
+	\item \textbf{Metrics and Targets}\\
+	The metrics and targets used to assess and manage relevant sustainability-related risks and opportunities
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/sustainability_risks_opportunities_impact}
+	\caption{Sustainability-related risks, opportunities, and financial impact}
+	\label{fig:sustainabilityrisksopportunitiesimpact}
+\end{figure}
+
+\begin{enumerate}
+	\item[] \textbf{Principles for Effective Disclosures}
+	\item Disclosures should represent relevant information
+	\item Disclosures should be specific and complete
+	\item Disclosures should be clear, balanced, and understandable
+	\item Disclosures should be consistent over time
+	\item Disclosures should be comparable among companies within a sector, industry, or portfolio
+	\item Disclosures should be reliable, verifiable, and objective
+	\item Disclosures should be provided on a timely basis
+\end{enumerate}
+
+\end{document}
