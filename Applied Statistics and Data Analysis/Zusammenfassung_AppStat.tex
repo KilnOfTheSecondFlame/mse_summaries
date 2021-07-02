@@ -182,7 +182,7 @@ The assumption is that the $R$ chart is under statistical control and the real v
 \begin{equation*}
 	\hat{\sigma} = \frac{\samplemean{R}}{d_2}
 \end{equation*}
-as it is a reliable estimate for the process deviation. The constant $d_2$ is again dependent on the sample size $n$ and can be found in the table.
+as it is a reliable estimate for the process deviation. The constant $d_2$ is again dependent on the sample size $n$ and can be found in the table \ref{tbl:FactorsControlCharts}.
 
 Any samples excluded for the construction of the $R$ chart, should also be disregarded for the construction of the $\samplemean{x}$ chart. This results in a data set of $k^\star$ valid samples and a corrected estimate for $\mu$
 \begin{equation*}
@@ -238,7 +238,7 @@ The process standard deviation can be estimated from the arithmetic mean of the 
 	\hat{\sigma} = \frac{\samplemean{MR}}{d_2}
 \end{equation*}
 With $d_2$ dependent on the sample size $n$, which would be two in this case as two neighbouring samples were used to calculate the moving range.
-The centreline $samplemean{x}$ is the arithmetic mean of the measured values
+The centreline $\samplemean{x}$ is the arithmetic mean of the measured values
 \begin{equation*}
 	\samplemean{x} = \frac{1}{n}\sum_{i=1}^{n}x_i
 \end{equation*}
@@ -371,6 +371,11 @@ This variable is a measure for the deviation of the observed, disturbed process 
 \end{equation*}
 and is a measure for the probability of intervening in a process.
 
+\begin{equation*}
+	\tilde{g}(\delta) = \varPhi(\delta\sqrt{n} - z_{q,0,1}) + \varPhi(-\delta\sqrt{n} - z_{q,0,1})
+\end{equation*}
+with $z_{q,0,1}$ being the two-sided q-quantile of the standard normal distribution.
+
 \subsubsection{Ideal Power Function}
 For an undisturbed process where $\mu = \mu_0$ it follows that
 \begin{equation*}
@@ -392,7 +397,7 @@ The operating characteristic curve is the functional relation between the type I
 \end{figure}
 
 \subsubsection{Average Run Length}
-At every time $t_i$ with $i\in\{1,2,\dots,k\}$ a statistical test based on a random sample is made for the control chart. The assumption is to take $n$ random samples at fixed intervals and independent from the production process. The run length $I_{\text{RL}}$ is the time until an intervention in the production process is signalled. The run length is a discrete random variable, which takes values $k\in\{1,2,3,\dots\}$ with the probability
+At every time $t_i$ with $i\in\{1,2,\dots,k\}$ a statistical test based on a random sample is made for the control chart. The assumption is to take $n$ random samples at fixed intervals and independent from the production process. The run length $I_{\text{RL}}$ (intervention run length) is the time until an intervention in the production process is signalled. The run length is a discrete random variable, which takes values $k\in\{1,2,3,\dots\}$ with the probability
 \begin{equation*}
 	p_k = P(I_{\text{RL}} = k)
 \end{equation*}
@@ -1585,9 +1590,9 @@ Mallow’s $C_p$ statistic minimises the prediction error.
 	\begin{equation*}
 		y=\beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_m x_m + \varepsilon
 	\end{equation*}
-	\mintinline{R}{formula = y ~ 1}
-	\item In the following steps, the explanatory variable that leads to the largest improvement of the selected model selection criteria is added in the model.
-	\item Iterate until no improvement is possible by adding another explanatory variable.
+	\mintinline{R}{formula = y ~ .}
+	\item In the following steps, the explanatory variable that leads to the largest improvement of the selected model selection criteria is removed from the model.
+	\item Iterate until no improvement is possible by removing another explanatory variable.
 \end{enumerate}
 
 \paragraph{Both Directions}
@@ -1618,7 +1623,7 @@ Then the \textbf{variance inflation factor} of explanatory variable $x_k$ is
 This factor is problematic if $\text{VIF} > 5$ (rule of thumb).
 
 \subsubsection{Modelling Strategies}
-Humans do modelling not machines!
+Humans do modelling, not machines!
 \begin{itemize}
 	\item Automated variable selection depends on chance.\\
 	Consider models that are nearly optimal in terms of the selected criteria.
@@ -1795,7 +1800,7 @@ An experimental design is a list of experimental conditions that determine how e
 	\item Only a balanced part of the complete $2^k$ design is realised
 \end{itemize}
 
-\subsubsection{Plannin and Conducting a Study}
+\subsubsection{Planning and Conducting a Study}
 \begin{enumerate}
 	\item \textbf{Scientific question}: Avoid situations without precise questions and hypotheses.
 	\item \textbf{Response and explanatory variables}: Find all influential factors, for example with a cause-and-effect diagram.
@@ -1803,7 +1808,7 @@ An experimental design is a list of experimental conditions that determine how e
 	\item \textbf{Planning}: It is worth going through the question, for example with simulated data. The evaluation of the data in relation to the main questions is clear
 	\item \textbf{Sample size}: The magnitude of the random fluctuations and the size of the expected effects has to be known.\\ Often, the question must be downsized
 	\item \textbf{Data}: It is important to keep a journal that documents the process of data acquisition and highlights any peculiarities and unforeseen circumstances that may later explain unexpected data discrepancies
-	\item \textbf{Data cleanup}: Checking the plausibility of the data and visualising it saves a lot of effort
+	\item \textbf{Data clean-up}: Checking the plausibility of the data and visualising it saves a lot of effort
 	\item \textbf{Evaluation, interpretation}: The methodology for evaluating the data in relation to the main question is clear
 	\item \textbf{Report, presentation}: For whom is the report mainly intended?
 	\item \textbf{Completion}: It is worthwhile to collect and discuss the experiences made with all participants
@@ -2075,13 +2080,13 @@ This leads to a significant reduction of runs, at the expense of less informatio
 \paragraph{Construction of Alias Structure}
 \begin{enumerate}
 	\item First, write the $p$ assignments of additional factors in equation form. These $p$ equations are called the design generators.
-	\item Multiply each generator from Step 1 by its left side to put each generator into the form $I = w$, where $w$ is a word composed of several letters representing particular experimental factors (that is $D = ABC$ becomes $I = ABCD$). It is also possible to create words with minus signs, such as $D = −ABC$. If this is done, the resulting design will use a different fraction of the runs from the full $2^k$ design.
+	\item Multiply each generator from Step 1 by its left side to put each generator into the form $I = w$, where $w$ is a word composed of several letters representing particular experimental factors (that is $D = ABC$ becomes $I = ABCD$). It is also possible to create words with minus signs, such as $D = - ABC$. If this is done, the resulting design will use a different fraction of the runs from the full $2^k$ design.
 	\item  Denote $I = w_1, I = w_2,\dots,I = w_p$ the $p$ design generators from Step 2, form all possible products of the words $w_i$ (one at a time, two at a time, three at a time, etc.). Use the fact that squares of factors can be eliminated. There will be a total of $2^p$ words formed. This collection is called the \textbf{defining relation} of the design.
-	\item Multiply each word in the defining relation by all $2^{k − 1}$ effects based on k factors. Use the fact that squares of factors cancel out to simplify the products.
+	\item Multiply each word in the defining relation by all $2^{k - 1}$ effects based on k factors. Use the fact that squares of factors cancel out to simplify the products.
 \end{enumerate}
 The result is called the alias structure of the design.
 
-\paragraph{Example of an Alias Structure Design} Find alias structure of the $2^{4−1}$ design where $D$ is aliased with $ABC$.
+\paragraph{Example of an Alias Structure Design} Find alias structure of the $2^{4 - 1}$ design where $D$ is aliased with $ABC$.
 \begin{enumerate}
 	\item Only $p = 1$ generator $D = ABC$
 	\item Multiplying both sides by $D$ gives $D \cdot D = D(ABC)$ or $I = ABCD$
@@ -2113,7 +2118,7 @@ The alias structure can be summarised as follows:
 \end{itemize}
 
 \subsection{Response Surface Methodology}
-The aim of this method is to optimise response which is influenced by several explanatory variables.
+The aim of this method is to optimise a response which is influenced by several explanatory variables.
 \begin{itemize}
 	\item Detect important factors with a $2^k$ (fractional) factorial design
 	\item Estimate main effects, determine direction of steepest ascent
@@ -2137,7 +2142,7 @@ The idea behind the response surface methodology is to find the optimal settings
 \end{equation*}
 
 \subsubsection{First-Order Design}
-The initial settings of process variables are often far away from optimum. To tackle this problem, start with a first-order $2^k$ factorial design with additional measurements in the centre if the test conditions. Approximate the date with the linear model
+The initial settings of process variables are often far away from the optimum. To tackle this problem, start with a first-order $2^k$ factorial design with additional measurements in the centre of the test conditions. Approximate the data with the linear model
 \begin{equation*}
 	y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k
 \end{equation*}
@@ -2161,7 +2166,7 @@ The advantage of this first order design is that the measurement error can be de
 
 Under the null hypothesis the test statistic $t_{\text{curv}}$ follows a $t$-distribution with $n_c-1$ degrees of freedom.
 
-\subsubsection{Method of Steepest Ascent to find Optimum Setting}
+\subsubsection{Method of Steepest Ascent to find Optimal Setting}
 Gradient of response function
 \begin{align*}
 	f(x_1, x_2) &= \beta_0 + \beta_1\cdot x_1 + \beta_2\cdot x_2\\
